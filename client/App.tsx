@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Button, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 
 export interface User {
@@ -33,15 +33,21 @@ const App: React.FC = (): React.JSX.Element => {
   });
 
   const onSubmit = async ({email, password}: Inputs) => {
-    const res = await fetch("http://localhost:3000/auth/registration", {
+    try {
+      const sendData = {email, password};
+      const res = await fetch("http://localhost:3000/auth/registration", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=utf-8'
       },
-      body: JSON.stringify({email, password})
+      body: JSON.stringify(sendData)
     });
-    console.log(res);
+    const data = await res.json();
     reset();
+    } catch (error) {
+      const e = error as Error;
+      console.log(e);
+    }
   };
 
   useEffect(() => {
@@ -102,7 +108,7 @@ const App: React.FC = (): React.JSX.Element => {
         )}
         name="repeatPassword"
       />
-      <Pressable  onPress={handleSubmit(onSubmit)}>
+      <Pressable onPress={handleSubmit(onSubmit)}>
           <Text>Send</Text>
       </Pressable>
     </View>
