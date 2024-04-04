@@ -1,0 +1,23 @@
+{
+  "name": "taskpro_2.0",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "pg": "^8.11.5",
+    "redux-form": "^8.3.10"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
