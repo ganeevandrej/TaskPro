@@ -28,9 +28,10 @@ export const FormRegistration: React.FC = (): React.JSX.Element => {
   const { handleSubmit, reset } = methods;
 
   const onSubmit = async ({ email, password }: Inputs) => {
+    console.log(email, password);
     try {
       const sendData = { email, password };
-      const res = await fetch("http://192.168.1.67:3000/auth/registration", {
+      const res = await fetch("http://192.168.1.67:5000/api/registration", {
         method: "POST",
         headers: {
           "Content-Type": "application/json;charset=utf-8",
@@ -38,7 +39,7 @@ export const FormRegistration: React.FC = (): React.JSX.Element => {
         body: JSON.stringify(sendData),
       });
       const data = await res.json();
-      setRes(data.message);
+      console.log(data);
       reset();
     } catch (error) {
       const e = error as Error;
