@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
 import { PaperProvider } from "react-native-paper";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { RegistrationScreen } from "./src/components/screens/RegistrationScreen";
 import { LoginScreen } from "./src/components/screens/LoginScreen";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Scheduler } from "./src/components/screens/Scheduler";
 
 export interface User {
   username: string;
@@ -16,6 +15,7 @@ export interface User {
 export type RootStackParamList = {
   Registration: undefined;
   Login: undefined;
+  Scheduler: undefined,
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -24,7 +24,7 @@ const App: React.FC = (): React.JSX.Element => {
   return (
     <PaperProvider>
         <NavigationContainer>
-          <Stack.Navigator>
+          <Stack.Navigator initialRouteName="Scheduler">
             <Stack.Screen
               name="Registration"
               component={RegistrationScreen}
@@ -34,6 +34,11 @@ const App: React.FC = (): React.JSX.Element => {
               name="Login"
               component={LoginScreen}
               options={{ title: "login" }}
+            />
+            <Stack.Screen
+              name="Scheduler"
+              component={Scheduler}
+              options={{ title: "Планировщик" }}
             />
           </Stack.Navigator>
         </NavigationContainer>

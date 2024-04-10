@@ -26,21 +26,22 @@ export const FormLogin: React.FC = (): React.JSX.Element => {
   const onSubmit = async ({ email, password }: InputsLogin) => {
     console.log(email, password);
     reset();
-    // try {
-    //   const sendData = { email, password };
-    //   const res = await fetch("http://localhost:3000/auth/registration", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json;charset=utf-8",
-    //     },
-    //     body: JSON.stringify(sendData),
-    //   });
-    //   const data = await res.json();
-    //   reset();
-    // } catch (error) {
-    //   const e = error as Error;
-    //   console.log(e);
-    // }
+    try {
+      const sendData = { email, password };
+      const res = await fetch("http://localhost:3000/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify(sendData),
+      });
+      const data = await res.json();
+      console.log(data);
+      reset();
+    } catch (error) {
+      const e = error as Error;
+      console.log(e);
+    }
   };
 
   return (
