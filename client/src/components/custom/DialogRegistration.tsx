@@ -23,8 +23,8 @@ export const DialogRegistration: React.FC<IVerificationProps> = ({
         `http://192.168.1.67:5000/api/activate/${code}`
       );
       setVisible(false);
-      setCode("");
-      navigation.navigate("Scheduler");
+      // setCode("");
+      // navigation.navigate("Scheduler");
     } catch (error) {
       const e = error as Error;
     }

@@ -16,6 +16,24 @@ class TokenService {
     };
   }
 
+  validateAccessToken(token) {
+    try {
+      const userData = jwt.verify(token, process.env.JWT_ACCESS_TOKEN);
+      return userData;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  validateRefreshToken() {
+    try {
+      const userData = jwt.verify(token, process.env.JWT_REFRESH_TOKEN);
+      return userData;
+    } catch (error) {
+      return null;
+    }
+  }
+
   async saveToken(user_id, refresh) {
     const tokenData = await db.query(
       "SELECT * FROM tokens WHERE user_id = $1",
@@ -32,6 +50,13 @@ class TokenService {
     await db.query(
       "INSERT INTO tokens(user_id, refresh_token) VALUES($1, $2)",
       [user_id, refresh]
+    );
+  }
+
+  async removeToken(refreshToken) {
+    await db.query(
+      "DELETE FROM tokens WHERE refresh_token = $1",
+      [refreshToken]
     );
   }
 }
