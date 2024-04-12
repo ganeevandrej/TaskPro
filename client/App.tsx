@@ -4,6 +4,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { RegistrationScreen } from "./src/screens/RegistrationScreen";
 import { LoginScreen } from "./src/screens/LoginScreen";
 import { Scheduler } from "./src/screens/Scheduler";
+import { Provider } from "react-redux";
+import { store } from "./src/store/store";
 
 export interface User {
   username: string;
@@ -15,14 +17,15 @@ export interface User {
 export type RootStackParamList = {
   Registration: undefined;
   Login: undefined;
-  Scheduler: undefined,
+  Scheduler: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const App: React.FC = (): React.JSX.Element => {
   return (
-    <PaperProvider>
+    <Provider store={store}>
+      <PaperProvider>
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Scheduler">
             <Stack.Screen
@@ -42,7 +45,8 @@ const App: React.FC = (): React.JSX.Element => {
             />
           </Stack.Navigator>
         </NavigationContainer>
-    </PaperProvider>
+      </PaperProvider>
+    </Provider>
   );
 };
 

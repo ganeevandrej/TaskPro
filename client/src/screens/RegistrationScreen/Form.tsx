@@ -1,11 +1,13 @@
-import { View, StyleSheet, Dimensions } from "react-native";
+import { View } from "react-native";
 import { FormProvider, UseFormProps, useForm } from "react-hook-form";
 import { Button, TouchableRipple, Text } from "react-native-paper";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { useState } from "react";
 import { RootStackParamList } from "../../../App";
 import { CustomInput } from "../../components/custom/TextInput";
-import { DialogRegistration } from "../../components/custom/DialogRegistration";
+import { fetchRegistration } from "../../store/reducers/auth/ActionCreators";
+import { styles } from "./styles";
+import { WithErrorAndLoadingProps, withErrorAndLoading } from "../../HOKs/withErrorAndLoading ";
+import { userSlice } from "../../store/reducers/auth/AuthSlice";
 
 export interface Inputs {
   email: string;
@@ -22,39 +24,29 @@ const configFormRegistration: UseFormProps<Inputs> = {
   },
 };
 
-export const FormRegistration: React.FC = (): React.JSX.Element => {
-  const [res, setRes] = useState<string>("");
-  const [visible, setVisible] = useState(false);
+const FormRegistration: React.FC<WithErrorAndLoadingProps> = ({
+  error,
+  dispatch,
+}): React.JSX.Element => {
   const methods = useForm<Inputs>(configFormRegistration);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const { handleSubmit, reset } = methods;
 
-  const onSubmit = async ({ email, password }: Inputs) => {
-    try {
-      const sendData = { email, password };
-      const res = await fetch("http://192.168.1.67:5000/api/registration", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json;charset=utf-8",
-        },
-        body: JSON.stringify(sendData),
-      });
-      
-      const data = await res.json();
-      console.log(data);
-      setVisible(true);
-      reset();
-    } catch (error) {
-      const e = error as Error;
-      console.log(e);
+  const onSubmit = ({ email, password, passwordRepeat }: Inputs) => {
+    if (password === passwordRepeat) {
+      dispatch(userSlice.actions.authFetchingError(""));
+      dispatch(fetchRegistration(email, password));
+      // navigation.navigate("Scheduler");
+    } else {
+      dispatch(userSlice.actions.authFetchingError("Пароли не совпадают!"));
     }
   };
 
   return (
     <FormProvider {...methods}>
       <View style={styles.container}>
-        <Text>{res}</Text>
+        <Text>{error}</Text>
         <CustomInput rules={{ required: "Обязательное поле!" }} name="email" />
         <CustomInput
           rules={{ required: "Обязательное поле!" }}
@@ -72,24 +64,9 @@ export const FormRegistration: React.FC = (): React.JSX.Element => {
             Уже сеть аккаунт? Войдите в приложение
           </Text>
         </TouchableRipple>
-        <DialogRegistration visible={visible} setVisible={setVisible} />
       </View>
     </FormProvider>
   );
 };
 
-const { width } = Dimensions.get("window");
-const width_2 = width - 80;
-
-const styles = StyleSheet.create({
-  container: {
-    width: width_2,
-    marginHorizontal: 40,
-    // marginTop: "50%",
-  },
-  link: {
-    textDecorationLine: "underline",
-    textAlign: "center",
-    marginTop: 20,
-  },
-});
+export default withErrorAndLoading(FormRegistration);

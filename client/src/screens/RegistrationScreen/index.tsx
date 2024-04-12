@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import { FormRegistration } from "./FormRegistration";
+import FormRegistration from "./Form";
 
 export const RegistrationScreen: React.FC = (): React.JSX.Element => {
   return (
