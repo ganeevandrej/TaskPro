@@ -4,6 +4,9 @@ import { Button, TouchableRipple, Text } from "react-native-paper";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { CustomInput } from "../../components/custom/TextInput";
 import { RootStackParamList } from "../../../App";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { fetchLogin } from "../../store/reducers/auth/ActionCreators";
+import { useEffect } from "react";
 
 export interface InputsLogin {
   email: string;
@@ -20,32 +23,29 @@ const configFormLogin: UseFormProps<InputsLogin> = {
 
 export const FormLogin: React.FC = (): React.JSX.Element => {
   const methods = useForm<InputsLogin>(configFormLogin);
+  const { isLoading, error, user } = useAppSelector((state) => state.authReducer);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const { handleSubmit, reset } = methods;
+  const dispatch = useAppDispatch();
 
-  const onSubmit = async ({ email, password }: InputsLogin) => {
+  const { handleSubmit } = methods;
 
-    reset();
-    try {
-      const sendData = { email, password };
-      const res = await fetch("http://192.168.1.67:5000/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json;charset=utf-8",
-        },
-        body: JSON.stringify(sendData),
-      });
-      const data = await res.json();
-      navigation.navigate("Scheduler");
-      reset();
-    } catch (error) {
-      const e = error as Error;
-      console.log(e);
-    }
+  const onSubmit = (fields: InputsLogin) => {
+    dispatch(fetchLogin(fields));
   };
+
+  useEffect(() => {
+    if(user.id) {
+      navigation.navigate("Scheduler");
+    }
+  }, [user]);
+
+  if (isLoading) {
+    return <Text>Loading</Text>;
+  }
 
   return (
     <FormProvider {...methods}>
+      <Text>{error}</Text>
       <View style={styles.container}>
         <CustomInput 
           rules={{ required: "Обязательное поле!" }} 

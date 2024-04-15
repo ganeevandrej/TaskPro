@@ -13,7 +13,7 @@ class UserService {
     ]);
 
     if (user.rows.length > 0) {
-      throw ApiError.BadRequest(`Пользователь с таким ${email} уже зарегестрирован!`);
+      throw ApiError.BadRequest(`Пользователь с email ${email} уже зарегестрирован!`);
     }
 
     const hashPassword = bcrypt.hashSync(password, 7);
@@ -89,7 +89,9 @@ class UserService {
     if(!refreshToken) {
       throw ApiError.UnathorizedError();
     }
+
     const userData = tokenService.validateRefreshToken(refreshToken);
+
     const tokenFromDb = await db.query(
       "SELECT * FROM tokens WHERE refresh_token = $1",
       [refreshToken]

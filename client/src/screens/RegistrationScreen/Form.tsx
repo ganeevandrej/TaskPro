@@ -6,8 +6,8 @@ import { RootStackParamList } from "../../../App";
 import { CustomInput } from "../../components/custom/TextInput";
 import { fetchRegistration } from "../../store/reducers/auth/ActionCreators";
 import { styles } from "./styles";
-import { WithErrorAndLoadingProps, withErrorAndLoading } from "../../HOKs/withErrorAndLoading ";
-import { userSlice } from "../../store/reducers/auth/AuthSlice";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { useEffect } from "react";
 
 export interface Inputs {
   email: string;
@@ -24,24 +24,28 @@ const configFormRegistration: UseFormProps<Inputs> = {
   },
 };
 
-const FormRegistration: React.FC<WithErrorAndLoadingProps> = ({
-  error,
-  dispatch,
-}): React.JSX.Element => {
+export const FormRegistration: React.FC = (): React.JSX.Element => {
+  const { isLoading, error, user } = useAppSelector((state) => state.authReducer);
   const methods = useForm<Inputs>(configFormRegistration);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const dispatch = useAppDispatch();
 
   const { handleSubmit, reset } = methods;
 
-  const onSubmit = ({ email, password, passwordRepeat }: Inputs) => {
-    if (password === passwordRepeat) {
-      dispatch(userSlice.actions.authFetchingError(""));
-      dispatch(fetchRegistration(email, password));
-      // navigation.navigate("Scheduler");
-    } else {
-      dispatch(userSlice.actions.authFetchingError("Пароли не совпадают!"));
-    }
+  const onSubmit = (fields: Inputs) => {
+    dispatch(fetchRegistration(fields));
   };
+
+  useEffect(() => {
+    if(user.id) {
+      navigation.navigate("Scheduler");
+    }
+    
+  }, [user]);
+
+  if (isLoading) {
+    return <Text>Loading</Text>;
+  }
 
   return (
     <FormProvider {...methods}>
@@ -68,5 +72,3 @@ const FormRegistration: React.FC<WithErrorAndLoadingProps> = ({
     </FormProvider>
   );
 };
-
-export default withErrorAndLoading(FormRegistration);
