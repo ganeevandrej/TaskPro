@@ -1,8 +1,8 @@
 import { AxiosResponse } from "axios";
 import { AuthResponse } from "../models/response/AuthResponse";
 import { $api } from "../http";
-import { Inputs } from "../screens/RegistrationScreen/Form";
-import { InputsLogin } from "../screens/LoginScreen/Form";
+import { Inputs } from "../screens/Registration/Form";
+import { InputsLogin } from "../screens/Login/Form";
 
 
 export default class AuthService {

@@ -38,7 +38,7 @@ export const FormRegistration: React.FC = (): React.JSX.Element => {
 
   useEffect(() => {
     if(user.id) {
-      navigation.navigate("Scheduler");
+      navigation.navigate("Home");
     }
     
   }, [user]);
