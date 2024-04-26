@@ -1,54 +1,39 @@
-import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { View, Text } from "react-native";
-import { TouchableRipple } from "react-native-paper";
-// import { RootStackParamList } from "../../../App";
+import { Button } from "react-native-paper";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import {
-  checkAuth,
-  fetchLogout,
-} from "../../store/reducers/auth/ActionCreators";
+import { fetchLogout } from "../../store/reducers/auth/ActionCreators";
+import { DrawerNavigationProp } from "@react-navigation/drawer";
+import { DrawerParamList } from "../../NavigationContaners/DrawerContainer";
 import { useEffect } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation';
+import { Header } from "../../components/Header";
 
-const Tab = createMaterialBottomTabNavigator();
-
-export const SchedulerScreen: React.FC = (): React.JSX.Element => {
-  // const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const { isLoading, error, user, isAuth } = useAppSelector(
-    (state) => state.authReducer
-  );
+export const SchedulerScreen = (): React.JSX.Element => {
+  const navigation = useNavigation<DrawerNavigationProp<DrawerParamList>>();
+  const { isLoading, isAuth } = useAppSelector((state) => state.authReducer);
   const dispatch = useAppDispatch();
 
   // useEffect(() => {
-  //   const refresh = async () => {
-  //     const accessToken = await AsyncStorage.getItem("accessToken");
-
-  //     if (accessToken) {
-  //       dispatch(checkAuth());
-  //     } else {
-  //       navigation.navigate("Login");
-  //     }
-  //   };
-
-  //   refresh();
-  // }, []);
-
-  // useEffect(() => {
-  //   if (!isAuth) {
+  //   if(!isAuth) {
   //     navigation.navigate("Login");
   //   }
-  // }, [isAuth]);
+  // }, [isAuth])
 
-  // if (isLoading) {
-  //   return <Text>Loading</Text>;
-  // }
+  const logout = () => {
+    dispatch(fetchLogout());
+    // navigation.navigate("Login");
+  };
+
+  if (isLoading) {
+    return <Text>Loading...</Text>;
+  }
 
   return (
     <View>
-      <TouchableRipple onPress={() => dispatch(fetchLogout())}>
-        <Text>Выйти</Text>
-      </TouchableRipple>
+      <Header navigation={navigation} />
+      <Button mode="outlined" onPress={logout}>
+        Выйти
+      </Button>
     </View>
   );
 };

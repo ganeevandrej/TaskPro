@@ -3,10 +3,10 @@ import { FormProvider, UseFormProps, useForm } from "react-hook-form";
 import { Button, TouchableRipple, Text } from "react-native-paper";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { CustomInput } from "../../components/custom/TextInput";
-import { RootStackParamList } from "../../../App";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { fetchLogin } from "../../store/reducers/auth/ActionCreators";
 import { useEffect } from "react";
+import { RootStackParamList } from "../../NavigationContaners/RootContainer";
 
 export interface InputsLogin {
   email: string;
@@ -23,7 +23,7 @@ const configFormLogin: UseFormProps<InputsLogin> = {
 
 export const FormLogin: React.FC = (): React.JSX.Element => {
   const methods = useForm<InputsLogin>(configFormLogin);
-  const { isLoading, error, user } = useAppSelector((state) => state.authReducer);
+  const { isLoading, isAuth, error } = useAppSelector((state) => state.authReducer);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const dispatch = useAppDispatch();
 
@@ -34,10 +34,10 @@ export const FormLogin: React.FC = (): React.JSX.Element => {
   };
 
   useEffect(() => {
-    if(user.id) {
+    if(isAuth) {
       navigation.navigate("Home");
     }
-  }, [user]);
+  }, [isAuth]);
 
   if (isLoading) {
     return <Text>Loading</Text>;

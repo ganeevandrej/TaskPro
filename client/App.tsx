@@ -1,54 +1,41 @@
-import { PaperProvider } from "react-native-paper";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { RegistrationScreen } from "./src/screens/Registration";
-import { LoginScreen } from "./src/screens/Login";
-import { Provider } from "react-redux";
-import { store } from "./src/store/store";
-import React from "react";
-import { HomeScreen } from "./src/screens/Home";
+import { PaperProvider, MD3DarkTheme, Text } from "react-native-paper";
+import React, { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { checkAuth } from "./src/store/reducers/auth/ActionCreators";
+import { useAppDispatch } from "./src/hooks/redux";
+import { RootNavigationConatiner } from "./src/NavigationContaners/RootContainer";
 
-export interface User {
-  username: string;
-  id: number;
-  email: string;
-  phone: string;
-}
+export const App: React.FC = (): React.JSX.Element => {
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const dispatch = useAppDispatch();
 
-export type RootStackParamList = {
-  Home: undefined;
-  Registration: undefined;
-  Login: undefined;
-};
+  useEffect(() => {
+    const getInitialPage = async () => {
+      try {
+        const accessToken = await AsyncStorage.getItem("accessToken");
+        if (accessToken) {
+          dispatch(checkAuth());
+          setIsLoggedIn(true);
+          setIsLoading(false);
+        }
+      } catch {
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
+    getInitialPage();
+  }, []);
 
-const App: React.FC = (): React.JSX.Element => {
+  if (isLoading) {
+    return <Text>Loading</Text>;
+  }
+
   return (
-    <Provider store={store}>
-      <PaperProvider>
-        <NavigationContainer>
-          <Stack.Navigator initialRouteName="Home">
-            <Stack.Screen
-              name="Home"
-              component={HomeScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Registration"
-              component={RegistrationScreen}
-              options={{ title: "Регистрация" }}
-            />
-            <Stack.Screen
-              name="Login"
-              component={LoginScreen}
-              options={{ title: "Вход в систему" }}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </PaperProvider>
-    </Provider>
+    <PaperProvider theme={MD3DarkTheme}>
+      <RootNavigationConatiner isLoggedIn={isLoggedIn} />
+    </PaperProvider>
   );
 };
 
-export default App;

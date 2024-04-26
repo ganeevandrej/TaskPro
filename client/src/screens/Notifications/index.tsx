@@ -1,9 +1,19 @@
 import { View, Text } from "react-native";
+import { Header } from "../../components/Header";
+import { Button } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
+import { DrawerNavigationProp } from "@react-navigation/drawer";
+import { DrawerParamList } from "../../NavigationContaners/DrawerContainer";
 
 export const NotificationsScreen: React.FC = (): React.JSX.Element => {
+  const navigation = useNavigation<DrawerNavigationProp<DrawerParamList>>();
+
   return (
     <View>
-        <Text>Уведомления</Text>
+      <Header navigation={navigation} />
+      <Button mode="outlined">
+        Уведомления
+      </Button>
     </View>
   );
 };
