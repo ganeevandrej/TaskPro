@@ -1,20 +1,23 @@
 import db from "../db/index.js";
-import fs from "fs";
 
 class UserController {
-  async setUserAvatar(req, res, next) {
-    console.log("ghjgjgj");
+  async getAvatar(req, res, next) {
     try {
-      const userId = req.body.userId;
-      const imageData = req.file.buffer;
-      console.log(imageData);
+      const userId = req.params.userId;
+      console.log(userId);
 
-      await db.query(
-        "INSERT INTO user_images(image_data, user_id) VALUES($1, $2);",
-        [imageData, userId]
+      const imageData = await db.query(
+        "SELECT * FROM user_images WHERE user_id = $1",
+        [userId]
       );
 
-      return res.status(200).send("hello");
+      if(imageData.rows.length === 0) {
+        throw new Error("Аватар пользователя не найден!");
+      }
+
+      const imageUrl = `data:image/jpeg;base64,${imageData.rows[0].image_data.toString('base64')}`;
+      
+      return res.send(imageUrl);
     } catch (error) {
       next(error);
     }

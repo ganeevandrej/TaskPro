@@ -1,5 +1,5 @@
 import { validationResult } from "express-validator";
-import userService from "../service/user-service.js";
+import userService from "../service/auth-service.js";
 import { ApiError } from "../exceptions/api-error.js";
 
 class AuthController {

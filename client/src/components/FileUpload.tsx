@@ -1,14 +1,36 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, Text } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { Avatar, Button, Modal, Portal } from "react-native-paper";
+import {
+  Avatar,
+  Text as TextPaper,
+  Card,
+  Icon,
+  IconButton,
+  Modal,
+  Portal,
+  TouchableRipple,
+} from "react-native-paper";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { setUserAvatar } from "../store/reducers/auth/ActionCreators";
+import {
+  deleteAvatarFromDb,
+  getAvatar,
+  sendAvatarToBackend,
+} from "../store/reducers/auth/ActionCreators";
 
 export const ImagePickerExample = () => {
   const dispatch = useAppDispatch();
-  const { avatar, user, isLoading } = useAppSelector((state) => state.authReducer);
+  const { avatar, user, isLoading } = useAppSelector(
+    (state) => state.authReducer
+  );
   const [visible, setVisible] = useState<boolean>(false);
+
+  useEffect(() => {
+    const getUserAvatar = async () => {
+      dispatch(getAvatar(user.id));
+    };
+    getUserAvatar();
+  }, []);
 
   const uploadImage = async (mode: string = "") => {
     try {
@@ -22,9 +44,7 @@ export const ImagePickerExample = () => {
         });
 
         if (!result.canceled) {
-          const response = await fetch(result.assets[0].uri);
-          const blob = await response.blob();
-          await saveImage(blob);
+          await sendToBackend(result.assets[0].uri);
         }
       } else {
         await ImagePicker.requestCameraPermissionsAsync();
@@ -36,9 +56,7 @@ export const ImagePickerExample = () => {
         });
 
         if (!result.canceled) {
-          const response = await fetch(result.assets[0].uri);
-          const blob = await response.blob();
-          await saveImage(blob);
+          await sendToBackend(result.assets[0].uri);
         }
       }
     } catch (error) {
@@ -46,44 +64,137 @@ export const ImagePickerExample = () => {
     }
   };
 
-  const saveImage = async (blob: Blob) => {
-    const formData = new FormData();
-    console.log(user)
-    const userId = String(user.id);
-
-    formData.append("image", blob);
-    formData.append("userId", userId);
-    dispatch(setUserAvatar(formData));
+  const sendToBackend = async (uri: string) => {
+    dispatch(sendAvatarToBackend({ uriImage: uri, userId: user.id }));
     setVisible(false);
   };
 
-  if(isLoading) {
-    return <Text>loading ...</Text>
+  const deleteAvatar = async () => {
+    dispatch(deleteAvatarFromDb(user.id));
+    setVisible(false);
+  };
+
+  if (isLoading) {
+    return <Text>loading ...</Text>;
   }
 
   return (
     <View>
-      <Button mode="outlined" onPress={() => setVisible(true)}>
-        Загрузить автар
-      </Button>
-      <Avatar.Image
-        size={200}
-        source={
-          avatar ? { uri: avatar } : require("../../assets/empty-avatar.jpg")
-        }
-      />
+      <View
+        style={{
+          alignItems: "center",
+          justifyContent: "center",
+          marginTop: 20,
+        }}
+      >
+        <Avatar.Image
+          size={150}
+          source={
+            avatar ? { uri: avatar } : require("../../assets/empty-avatar.jpg")
+          }
+        />
+        <IconButton
+          style={{
+            position: "absolute",
+            bottom: 0,
+            right: 100,
+            backgroundColor: "white",
+          }}
+          icon="camera"
+          size={20}
+          onPress={() => setVisible(true)}
+        />
+      </View>
       <Text>{user.email ? user.email : "Черт"}</Text>
       <Portal>
         <Modal visible={visible} onDismiss={() => setVisible(false)}>
-          <Button mode="outlined" onPress={() => uploadImage()}>
-            Камера
-          </Button>
-          <Button mode="outlined" onPress={() => uploadImage("gallery")}>
-            Галлерея
-          </Button>
-          <Button mode="outlined" onPress={() => uploadImage()}>
-            Удалить
-          </Button>
+          <View
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <View
+              style={{
+                width: "90%",
+                backgroundColor: "white",
+                padding: 20,
+                borderRadius: 10,
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <TextPaper variant="titleLarge">Загрузите Аватарку</TextPaper>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  width: "100%",
+                  marginTop: 20,
+                }}
+              >
+                <Card>
+                  <Card.Content>
+                    <TouchableRipple
+                      style={{ borderRadius: 50 }}
+                      onPress={() => uploadImage()}
+                    >
+                      <View
+                        style={{
+                          flexDirection: "column",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Icon source="camera" size={30} />
+                        <Text style={{ width: 50, fontSize: 12 }}>Камера</Text>
+                      </View>
+                    </TouchableRipple>
+                  </Card.Content>
+                </Card>
+                <Card>
+                  <Card.Content>
+                    <TouchableRipple
+                      style={{ borderRadius: 50 }}
+                      onPress={() => uploadImage("gallery")}
+                    >
+                      <View
+                        style={{
+                          flexDirection: "column",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Icon source="image" size={30} />
+                        <Text style={{ width: 60, fontSize: 12 }}>
+                          Галлерея
+                        </Text>
+                      </View>
+                    </TouchableRipple>
+                  </Card.Content>
+                </Card>
+                <Card>
+                  <Card.Content>
+                    <TouchableRipple
+                      style={{ borderRadius: 50 }}
+                      onPress={() => deleteAvatar()}
+                    >
+                      <View
+                        style={{
+                          flexDirection: "column",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Icon source="delete" size={30} />
+                        <Text style={{ width: 60, fontSize: 12 }}>Удалить</Text>
+                      </View>
+                    </TouchableRipple>
+                  </Card.Content>
+                </Card>
+              </View>
+            </View>
+          </View>
         </Modal>
       </Portal>
     </View>

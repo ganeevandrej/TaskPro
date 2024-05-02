@@ -89,10 +89,49 @@ export const checkAuth = () => async (dispatch: AppDispatch) => {
     }
 }
 
-export const setUserAvatar = (formdata: FormData) => async (dispatch: AppDispatch) => {
+export interface ISendAvatarToBackendProprs {
+    userId: number,
+    uriImage: string
+}
+
+export const sendAvatarToBackend = (data: ISendAvatarToBackendProprs) => async (dispatch: AppDispatch) => {
     try {
         dispatch(userSlice.actions.authFetching());
-        const res = await UserService.setUserAvatar(formdata);
+        const res = await UserService.setUserAvatar(data);
+        dispatch(userSlice.actions.setUserAvatar(res.body));
+    } catch (error) {
+        console.log(error);
+        if ((error as AxiosError).response) {
+            const axiosError = error as AxiosError<IResponsDataError>;
+            const message = axiosError.response?.data.message;
+            if (message) {
+                dispatch(userSlice.actions.authFetchingError(message));
+            }
+        }
+    }
+}
+
+export const deleteAvatarFromDb = (userId: number) => async (dispatch: AppDispatch) => {
+    try {
+        dispatch(userSlice.actions.authFetching());
+        await UserService.deleteAvatar(userId);
+        dispatch(userSlice.actions.setUserAvatar(''));
+    } catch (error) {
+        console.log(error);
+        if ((error as AxiosError).response) {
+            const axiosError = error as AxiosError<IResponsDataError>;
+            const message = axiosError.response?.data.message;
+            if (message) {
+                dispatch(userSlice.actions.authFetchingError(message));
+            }
+        }
+    }
+}
+
+export const getAvatar = (userId: number) => async (dispatch: AppDispatch) => {
+    try {
+        dispatch(userSlice.actions.authFetching());
+        const res = await UserService.getAvatar(userId);
         dispatch(userSlice.actions.setUserAvatar(res.data));
     } catch (error) {
         console.log(error);

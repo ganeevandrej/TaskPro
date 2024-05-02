@@ -1,12 +1,11 @@
 import db from "../db/index.js";
 import bcrypt from "bcryptjs";
-import { v4 } from "uuid";
 import { createUserDto } from "../dtos/user-dto.js";
 import mailService from "./mail-service.js";
 import tokenService from "./token-service.js";
 import { ApiError } from "../exceptions/api-error.js";
 
-class UserService {
+class AuthService {
   async registration(email, password) {
     const user = await db.query("SELECT * FROM users WHERE email = $1", [
       email,
@@ -111,11 +110,6 @@ class UserService {
 
     return {...tokens, user: userDto};
   }
-
-  async getAllUsers() {
-    const users = await db.query("SELECT * FROM users");
-    return users.rows;
-  }
 }
 
-export default new UserService();
+export default new AuthService();

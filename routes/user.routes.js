@@ -4,7 +4,6 @@ import { authMiddleware } from "../middlewares/auth-middleware.js";
 
 const router = new Router();
 
-router.post("/upload/avatar", authMiddleware, userController.setUserAvatar);
+router.get("/avatar/:userId", userController.getAvatar);
 
 export default router;
-
