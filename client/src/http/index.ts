@@ -32,9 +32,8 @@ $api.interceptors.response.use(
         const originalRequest = error.config;
         if(error.response.status == 401 && error.config && !error.config._isRetry) {
             originalRequest._isRetry = true;
-            console.log("ghjfgfj")
             try {
-                const res = await axios.get<AuthResponse>(`${API_URL}/refresh`, { withCredentials: true });
+                const res = await axios.get<AuthResponse>(`${API_URL}/auth/refresh`, { withCredentials: true });
                 await AsyncStorage.setItem('accessToken', res.data.accessToken);
                 return $api.request(originalRequest);
             } catch (error) {

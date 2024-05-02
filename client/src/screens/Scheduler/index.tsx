@@ -1,4 +1,4 @@
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { View, Text } from "react-native";
 import { Button } from "react-native-paper";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
@@ -7,11 +7,17 @@ import { DrawerNavigationProp } from "@react-navigation/drawer";
 import { DrawerParamList } from "../../NavigationContaners/DrawerContainer";
 import { useEffect } from "react";
 import { Header } from "../../components/Header";
+import { RootStackParamList } from "../../NavigationContaners/RootContainer";
 
 export const SchedulerScreen = (): React.JSX.Element => {
-  const navigation = useNavigation<DrawerNavigationProp<DrawerParamList>>();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const nav = useNavigation<DrawerNavigationProp<DrawerParamList>>();
   const { isLoading, isAuth } = useAppSelector((state) => state.authReducer);
   const dispatch = useAppDispatch();
+
+  // useEffect(() => {
+  //   dispatch(fetchLogout());
+  // }, [])
 
   // useEffect(() => {
   //   if(!isAuth) {
@@ -21,7 +27,7 @@ export const SchedulerScreen = (): React.JSX.Element => {
 
   const logout = () => {
     dispatch(fetchLogout());
-    // navigation.navigate("Login");
+    navigation.navigate("Login");
   };
 
   if (isLoading) {
@@ -30,7 +36,7 @@ export const SchedulerScreen = (): React.JSX.Element => {
 
   return (
     <View>
-      <Header navigation={navigation} />
+      <Header navigation={nav} />
       <Button mode="outlined" onPress={logout}>
         Выйти
       </Button>

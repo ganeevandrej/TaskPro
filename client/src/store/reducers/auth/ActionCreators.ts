@@ -7,6 +7,8 @@ import { InputsLogin } from "../../../screens/Login/Form";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { $api, API_URL } from "../../../http";
 import { AuthResponse } from "../../../models/response/AuthResponse";
+import UserService from "../../../services/UserService";
+import { IUser } from "../../../models/IUser";
 
 export interface IResponsDataError {
     message: string
@@ -72,10 +74,28 @@ export const fetchActivate = () => async (dispatch: AppDispatch) => {
 export const checkAuth = () => async (dispatch: AppDispatch) => {
     try {
         dispatch(userSlice.actions.authFetching());
-        const res = await axios.get<AuthResponse>(`${API_URL}/refresh`, { withCredentials: true });
+        const res = await axios.get<AuthResponse>(`${API_URL}/auth/refresh`, { withCredentials: true });
         await AsyncStorage.setItem('accessToken', res.data.accessToken);
         dispatch(userSlice.actions.authFetchingSuccess(res.data.user));
     } catch (error) {
+        console.log(error)
+        if ((error as AxiosError).response) {
+            const axiosError = error as AxiosError<IResponsDataError>;
+            const message = axiosError.response?.data.message;
+            if (message) {
+                dispatch(userSlice.actions.authFetchingError(message));
+            }
+        }
+    }
+}
+
+export const setUserAvatar = (formdata: FormData) => async (dispatch: AppDispatch) => {
+    try {
+        dispatch(userSlice.actions.authFetching());
+        const res = await UserService.setUserAvatar(formdata);
+        dispatch(userSlice.actions.setUserAvatar(res.data));
+    } catch (error) {
+        console.log(error);
         if ((error as AxiosError).response) {
             const axiosError = error as AxiosError<IResponsDataError>;
             const message = axiosError.response?.data.message;

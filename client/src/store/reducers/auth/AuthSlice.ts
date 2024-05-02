@@ -5,14 +5,16 @@ interface UserState {
     user: IUser,
     isAuth: boolean,
     isLoading: boolean,
-    error: string
+    error: string,
+    avatar: string
 }
 
 const initialState: UserState = {
     user: {} as IUser,
     isAuth: false,
     isLoading: false,
-    error: ""
+    error: "",
+    avatar: ""
 }
 
 export const userSlice = createSlice({
@@ -39,6 +41,11 @@ export const userSlice = createSlice({
         },
         activate(state) {
             state.user.isActivated = true;
+        },
+        setUserAvatar(state, action: PayloadAction<string>) {
+            state.isLoading = false;
+            state.avatar = action.payload;
+            state.error = '';
         }
     }
 })

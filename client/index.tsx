@@ -4,21 +4,20 @@ import { store } from "./src/store/store";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { App } from "./App";
-import 'react-native-gesture-handler';
+import "react-native-gesture-handler";
 
 const RootComponent: React.FC = (): React.JSX.Element => {
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        paddingTop: 10,
-        backgroundColor: MD3DarkTheme.colors.background,
-      }}
-    >
-      <Provider store={store}>
+    <Provider store={store}>
+      <SafeAreaView
+        style={{
+          flex: 1,
+          paddingTop: 10,
+        }}
+      >
         <App />
-      </Provider>
-    </SafeAreaView>
+      </SafeAreaView>
+    </Provider>
   );
 };
 

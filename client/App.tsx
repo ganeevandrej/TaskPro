@@ -4,6 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { checkAuth } from "./src/store/reducers/auth/ActionCreators";
 import { useAppDispatch } from "./src/hooks/redux";
 import { RootNavigationConatiner } from "./src/NavigationContaners/RootContainer";
+import ThemeProvider from "./src/contexts/theme-context";
 
 export const App: React.FC = (): React.JSX.Element => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -33,9 +34,9 @@ export const App: React.FC = (): React.JSX.Element => {
   }
 
   return (
-    <PaperProvider theme={MD3DarkTheme}>
+    <ThemeProvider>
       <RootNavigationConatiner isLoggedIn={isLoggedIn} />
-    </PaperProvider>
+    </ThemeProvider>
   );
 };
 

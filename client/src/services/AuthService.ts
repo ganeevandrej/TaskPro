@@ -7,14 +7,14 @@ import { InputsLogin } from "../screens/Login/Form";
 
 export default class AuthService {
     static async login(body: InputsLogin): Promise<AxiosResponse<AuthResponse>> {
-        return $api.post<AuthResponse>("/login", body);
+        return $api.post<AuthResponse>("/auth/login", body);
     }
 
     static async registration(body: Inputs): Promise<AxiosResponse<AuthResponse>> {
-        return $api.post<AuthResponse>("/registration", body);
+        return $api.post<AuthResponse>("/auth/registration", body);
     }
 
     static async logout(): Promise<void> {
-        return $api.post("/logout");
+        return $api.post("/auth/logout");
     }
 }

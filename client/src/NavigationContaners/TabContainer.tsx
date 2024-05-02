@@ -1,4 +1,3 @@
-import { DarkTheme, NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NotificationsScreen } from "../screens/Notifications";
 import { SchedulerScreen } from "../screens/Scheduler";
@@ -10,7 +9,6 @@ import {
   } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { ProfileScreen } from "../screens/Profile";
-// import { Header } from "../components/Header";
 
 export type TabStackParamList = {
   Categories: undefined;
@@ -64,6 +62,8 @@ export const TabNavigationConatiner = (screen: TabNavigationConatinerProps) => {
           name="Profile"
           component={ProfileScreen}
           options={{
+            // headerShown: true,
+            headerTitle: 'Профиль',
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons
                 name="account"

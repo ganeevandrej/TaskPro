@@ -1,4 +1,3 @@
-import { DarkTheme, NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { RegistrationScreen } from "../screens/Registration";
 import { LoginScreen } from "../screens/Login";
@@ -19,8 +18,8 @@ interface RootNavigationConatinerProps {
 export const RootNavigationConatiner: React.FC<
   RootNavigationConatinerProps
 > = ({ isLoggedIn }) => {
+
   return (
-    <NavigationContainer theme={DarkTheme}>
       <Stack.Navigator initialRouteName={isLoggedIn ? "Home" : "Login"}>
         <Stack.Screen
           name="Home"
@@ -40,6 +39,5 @@ export const RootNavigationConatiner: React.FC<
           options={{ title: "Авторизация" }}
         />
       </Stack.Navigator>
-    </NavigationContainer>
   );
 };
