@@ -15,6 +15,7 @@ export const App: React.FC = (): React.JSX.Element => {
     const getInitialPage = async () => {
       try {
         const accessToken = await AsyncStorage.getItem("accessToken");
+        
         if (accessToken) {
           dispatch(checkAuth());
           setIsLoggedIn(true);

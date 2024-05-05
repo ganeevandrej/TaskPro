@@ -2,6 +2,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -16,6 +17,7 @@ import {
   Provider as PaperProvider,
 } from "react-native-paper";
 import merge from "deepmerge";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface ThemeContextType {
   isThemeDark: boolean;
@@ -40,8 +42,18 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
   const [isThemeDark, setIsThemeDark] = useState(false);
   let theme = isThemeDark ? CombinedDarkTheme : CombinedDefaultTheme;
 
-  const toggleTheme = useCallback(() => {
-    return setIsThemeDark(!isThemeDark);
+  useEffect(() => {
+    const getTheme = async () => {
+      const isDarkTheme = await AsyncStorage.getItem('isDarkTheme');
+      setIsThemeDark(isDarkTheme ? true : false);
+    }
+
+    getTheme();
+  });
+
+  const toggleTheme = useCallback(async () => {
+    setIsThemeDark(!isThemeDark);
+    await AsyncStorage.setItem('isDarkTheme', isThemeDark ? "" : "true");
   }, [isThemeDark]);
 
   const preferences = useMemo(

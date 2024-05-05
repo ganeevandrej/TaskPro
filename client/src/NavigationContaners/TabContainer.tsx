@@ -31,6 +31,8 @@ export const TabNavigationConatiner = (screen: TabNavigationConatinerProps) => {
           name="Categories"
           component={CategoriesStack}
           options={{
+            title: "Категории",
+            headerTitle: "Категории",
             tabBarIcon: ({ color, size }) => (
               <Feather name="list" size={size} color={color} />
             ),
@@ -40,6 +42,8 @@ export const TabNavigationConatiner = (screen: TabNavigationConatinerProps) => {
           name="Планировщик"
           component={SchedulerScreen}
           options={{
+            title: "Планировщик",
+            headerTitle: "Планировщик",
             tabBarIcon: ({ color, size }) => (
               <Feather name="clock" size={size} color={color} />
             ),
@@ -49,6 +53,8 @@ export const TabNavigationConatiner = (screen: TabNavigationConatinerProps) => {
           name="Notification"
           component={NotificationsScreen}
           options={{
+            title: "Уведомления",
+            headerTitle: 'Уведомления',
             tabBarIcon: ({ color, size }) => (
               <Ionicons
                 name="notifications-outline"
@@ -62,6 +68,7 @@ export const TabNavigationConatiner = (screen: TabNavigationConatinerProps) => {
           name="Profile"
           component={ProfileScreen}
           options={{
+            title: "Профиль",
             // headerShown: true,
             headerTitle: 'Профиль',
             tabBarIcon: ({ color, size }) => (

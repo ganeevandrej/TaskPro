@@ -2,13 +2,11 @@ import axios, { AxiosError } from "axios";
 import AuthService from "../../../services/AuthService";
 import { AppDispatch } from "../../store";
 import { userSlice } from "./AuthSlice";
-import { Inputs } from "../../../screens/Registration/Form";
-import { InputsLogin } from "../../../screens/Login/Form";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { $api, API_URL } from "../../../http";
+import { API_URL } from "../../../http";
 import { AuthResponse } from "../../../models/response/AuthResponse";
 import UserService from "../../../services/UserService";
-import { IUser } from "../../../models/IUser";
+import { Inputs, InputsLogin, InputsUpdateUserInfo } from "../../../components/Forms/models";
 
 export interface IResponsDataError {
     message: string
@@ -51,23 +49,49 @@ export const fetchLogin = (requestBody: InputsLogin) => async (dispatch: AppDisp
 export const fetchLogout = () => async (dispatch: AppDispatch) => {
     try {
         dispatch(userSlice.actions.authFetching());
-        const res = await AuthService.logout();
+        await AuthService.logout();
         await AsyncStorage.removeItem('accessToken');
         dispatch(userSlice.actions.logout());
     } catch (error) {
-        const e = error as Error;
-        dispatch(userSlice.actions.authFetchingError(e.message));
+        if ((error as AxiosError).response) {
+            const axiosError = error as AxiosError<IResponsDataError>;
+            const message = axiosError.response?.data.message;
+            if (message) {
+                dispatch(userSlice.actions.authFetchingError(message));
+            }
+        }
     }
 }
 
-export const fetchActivate = () => async (dispatch: AppDispatch) => {
+export const fetchActivate = (code: string) => async (dispatch: AppDispatch) => {
     try {
         dispatch(userSlice.actions.authFetching());
-        // const user = await AuthService.registration();
-        // dispatch(userSlice.actions.authFetchingSuccess(res.data.user));
+        await AuthService.activate(code);
+        dispatch(userSlice.actions.activate());
     } catch (error) {
-        const e = error as Error;
-        dispatch(userSlice.actions.authFetchingError(e.message));
+        if ((error as AxiosError).response) {
+            const axiosError = error as AxiosError<IResponsDataError>;
+            const message = axiosError.response?.data.message;
+            if (message) {
+                dispatch(userSlice.actions.authFetchingError(message));
+            }
+        }
+    }
+}
+
+export const fetchSendLetter = (userId: number) => async (dispatch: AppDispatch) => {
+    try {
+        dispatch(userSlice.actions.authFetching());
+        await AuthService.sendLetter(userId);
+        dispatch(userSlice.actions.activateSuccess());
+    } catch (error) {
+        if ((error as AxiosError).response) {
+            const axiosError = error as AxiosError<IResponsDataError>;
+            const message = axiosError.response?.data.message;
+            if (message) {
+                dispatch(userSlice.actions.authFetchingError(message));
+            }
+        }
     }
 }
 
@@ -97,7 +121,7 @@ export interface ISendAvatarToBackendProprs {
 export const sendAvatarToBackend = (data: ISendAvatarToBackendProprs) => async (dispatch: AppDispatch) => {
     try {
         dispatch(userSlice.actions.authFetching());
-        const res = await UserService.setUserAvatar(data);
+        const res = await UserService.uploadAvatar(data);
         dispatch(userSlice.actions.setUserAvatar(res.body));
     } catch (error) {
         console.log(error);
@@ -133,6 +157,23 @@ export const getAvatar = (userId: number) => async (dispatch: AppDispatch) => {
         dispatch(userSlice.actions.authFetching());
         const res = await UserService.getAvatar(userId);
         dispatch(userSlice.actions.setUserAvatar(res.data));
+    } catch (error) {
+        console.log(error);
+        if ((error as AxiosError).response) {
+            const axiosError = error as AxiosError<IResponsDataError>;
+            const message = axiosError.response?.data.message;
+            if (message) {
+                dispatch(userSlice.actions.authFetchingError(message));
+            }
+        }
+    }
+}
+
+export const updateInfo = (body: InputsUpdateUserInfo, userId: number) => async (dispatch: AppDispatch) => {
+    try {
+        dispatch(userSlice.actions.authFetching());
+        const res = await UserService.updateInfoUser(body, userId);
+        dispatch(userSlice.actions.authFetchingSuccess(res.data));
     } catch (error) {
         console.log(error);
         if ((error as AxiosError).response) {

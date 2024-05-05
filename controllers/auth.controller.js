@@ -1,5 +1,5 @@
 import { validationResult } from "express-validator";
-import userService from "../service/auth-service.js";
+import authService from "../service/auth-service.js";
 import { ApiError } from "../exceptions/api-error.js";
 
 class AuthController {
@@ -13,7 +13,7 @@ class AuthController {
         );
       }
 
-      const userData = await userService.registration(email, password);
+      const userData = await authService.registration(email, password);
       res.cookie("refreshToken", userData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
@@ -28,7 +28,7 @@ class AuthController {
   async login(req, res, next) {
     try {
       const { email, password } = req.body;
-      const userData = await userService.login(email, password);
+      const userData = await authService.login(email, password);
       res.cookie("refreshToken", userData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
@@ -43,7 +43,7 @@ class AuthController {
   async logout(req, res, next) {
     try {
       const { refreshToken } = req.cookies;
-      await userService.logout(refreshToken);
+      await authService.logout(refreshToken);
       res.clearCookie("refreshToken");
 
       return res.json();
@@ -55,9 +55,24 @@ class AuthController {
   async activate(req, res, next) {
     try {
       const code = req.params.code;
-      await userService.activate(code);
 
-      return res.redirect(process.env.CLIENT_URL);
+      await authService.activate(code);
+
+      console.log("Ваш email успешно подтвержден!");
+
+      return res.send("Ваш email успешно подтвержден!");
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async sendLatterByEmail(req, res, next) {
+    try {
+      const userId = req.params.userId;
+
+      await authService.sendLatter(userId);
+
+      return res.send("Письмо успешно отправлено!");
     } catch (error) {
       next(error);
     }
@@ -66,7 +81,7 @@ class AuthController {
   async refresh(req, res, next) {
     try {
       const { refreshToken } = req.cookies;
-      const userData = await userService.refresh(refreshToken);
+      const userData = await authService.refresh(refreshToken);
 
       res.cookie("refreshToken", userData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -81,7 +96,7 @@ class AuthController {
 
   async getUsers(req, res, next) {
     try {
-      const users = await userService.getAllUsers();
+      const users = await authService.getAllUsers();
       res.json(users);
     } catch (error) {
       next(error);

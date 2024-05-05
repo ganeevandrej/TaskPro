@@ -29,6 +29,7 @@ export const ImagePickerExample = () => {
     const getUserAvatar = async () => {
       dispatch(getAvatar(user.id));
     };
+    
     getUserAvatar();
   }, []);
 
@@ -105,7 +106,6 @@ export const ImagePickerExample = () => {
           onPress={() => setVisible(true)}
         />
       </View>
-      <Text>{user.email ? user.email : "Черт"}</Text>
       <Portal>
         <Modal visible={visible} onDismiss={() => setVisible(false)}>
           <View

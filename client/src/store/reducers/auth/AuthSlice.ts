@@ -34,13 +34,19 @@ export const userSlice = createSlice({
             state.isLoading = false;
             state.error = action.payload;
         },
+        activateSuccess(state) {
+            state.isLoading = false;
+        },
         logout(state) {
             state.isLoading = false;
             state.user = {} as IUser;
             state.isAuth = false;
+            state.error = '';
         },
         activate(state) {
+            state.isLoading = false;
             state.user.isActivated = true;
+            state.error = '';
         },
         setUserAvatar(state, action: PayloadAction<string>) {
             state.isLoading = false;

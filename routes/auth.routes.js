@@ -13,7 +13,8 @@ router.post(
 );
 router.post("/login", authController.login);
 router.post("/logout", authController.logout);
-router.get("/activate/:code", authController.activate);
+router.get("/activate/:code", authMiddleware, authController.activate);
+router.get("/activate/latter/:userId", authController.sendLatterByEmail);
 router.get("/refresh", authController.refresh);
 router.get("/users", authMiddleware, authController.getUsers);
 

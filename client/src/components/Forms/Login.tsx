@@ -7,11 +7,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { fetchLogin } from "../../store/reducers/auth/ActionCreators";
 import { useEffect } from "react";
 import { RootStackParamList } from "../../NavigationContaners/RootContainer";
-
-export interface InputsLogin {
-  email: string;
-  password: string;
-}
+import { InputsLogin } from "./models";
 
 const configFormLogin: UseFormProps<InputsLogin> = {
   mode: "onBlur",

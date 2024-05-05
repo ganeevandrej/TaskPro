@@ -3,5 +3,7 @@ export interface IUser {
     isActivated: boolean,
     id: number,
     phone: string | null,
-    name: string | null
+    name: string | null,
+    dateBirth: string | null,
+
 }

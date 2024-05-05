@@ -5,6 +5,12 @@ import mailService from "./mail-service.js";
 import tokenService from "./token-service.js";
 import { ApiError } from "../exceptions/api-error.js";
 
+export const generateConfirmationCode = () => {
+  const min = 100000;
+  const max = 999999;
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
 class AuthService {
   async registration(email, password) {
     const user = await db.query("SELECT * FROM users WHERE email = $1", [
@@ -16,13 +22,6 @@ class AuthService {
     }
 
     const hashPassword = bcrypt.hashSync(password, 7);
-    
-    const generateConfirmationCode = () => {
-      const min = 100000;
-      const max = 999999;
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    };
-
     const code = generateConfirmationCode();
 
     await db.query(
@@ -30,7 +29,7 @@ class AuthService {
       [email, hashPassword, code]
     );
 
-    mailService.sendActivationMail(email, code);
+    mailService.sendActivationMailRegistration(email, code);
 
     const userData = await db.query("SELECT * FROM users WHERE email = $1", [
       email,
@@ -71,7 +70,7 @@ class AuthService {
     ]);
 
     if (user.rows.length === 0) {
-      throw ApiError.BadRequest(`Неккоректная ссылка активации!`);
+      throw ApiError.BadRequest(`Код активации не верный!`);
     }
 
     await db.query(
@@ -109,6 +108,25 @@ class AuthService {
     await tokenService.saveToken(userDto.id, tokens.refreshToken);
 
     return {...tokens, user: userDto};
+  }
+
+  async sendLatter(userId) {
+    const code = generateConfirmationCode();
+
+    const user = await db.query("SELECT * FROM users WHERE id = $1", [
+      userId,
+    ]);
+
+    if(user.rows.length === 0) {
+      throw ApiError.BadRequest("Произошла ошибка при отправке письма!");
+    }
+
+    await db.query(
+      "UPDATE users SET activation_code=$1 WHERE id=$2",
+      [code, userId]
+    );
+
+    mailService.sendActivationMail(user.rows[0].email, code);
   }
 }
 

@@ -1,7 +1,4 @@
-import { DarkTheme, NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { CategoriesScreen } from "../screens/Сategories";
-import { NotificationsScreen } from "../screens/Notifications";
 import { CustomDrawerContent } from "../components/custom/DriwerContent";
 import { TabNavigationConatiner, TabStackParamList } from "./TabContainer";
 

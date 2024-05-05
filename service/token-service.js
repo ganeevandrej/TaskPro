@@ -6,6 +6,7 @@ class TokenService {
     const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_TOKEN, {
       expiresIn: "30m",
     });
+    
     const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_TOKEN, {
       expiresIn: "60d",
     });
@@ -27,8 +28,7 @@ class TokenService {
 
   validateRefreshToken(token) {
     try {
-      const userData = jwt.verify(token, process.env.JWT_REFRESH_TOKEN);
-      return userData;
+      return jwt.verify(token, process.env.JWT_REFRESH_TOKEN);
     } catch (error) {
       console.log(error);
       return null;

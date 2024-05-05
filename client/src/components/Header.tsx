@@ -4,20 +4,31 @@ import { DrawerNavigationProp } from "@react-navigation/drawer";
 import { useRoute } from "@react-navigation/native";
 
 interface HeaderProps {
-    navigation: DrawerNavigationProp<DrawerParamList>,
+  navigation: DrawerNavigationProp<DrawerParamList>;
 }
 
-export const Header: React.FC<HeaderProps> = ({navigation}): React.JSX.Element => {
-    const route = useRoute();
+const data = {
+  Profile: "Профиль",
+  Notification: "Уведомления",
 
-    return (
-        <>
-        <Appbar>
-            <Appbar.Action icon="menu" onPress={() => navigation.openDrawer()} />
-            <Appbar.Content
-                title={route.name}
-                titleStyle={{ textAlign: "center" }} />
-        </Appbar>
-        </>
-    );
 }
+
+export const Header: React.FC<HeaderProps> = ({
+  navigation,
+}): React.JSX.Element => {
+  const route = useRoute();
+
+  return (
+      <Appbar.Header mode="center-aligned">
+        <Appbar.Action icon="menu" onPress={() => navigation.openDrawer()} />
+        <Appbar.Content
+          title={route.name}
+          titleStyle={{ textAlign: "center" }}
+        />
+        <Appbar.Action
+          icon="account-edit"
+          onPress={() => console.log("profile")}
+        />
+      </Appbar.Header>
+  );
+};

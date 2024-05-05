@@ -21,6 +21,22 @@ class MailService {
       subject: "Активация аккаунта",
       html: `
           <div>
+            <h2>Здравствуйте!</h2>
+            <div>Для активации вашего аккаунта, пожалуйста, используйте следующий код.</div>
+            <p>Код активации:</p>
+            <h3>${code}</h3>
+          </div>
+        `,
+    });
+  }
+
+  async sendActivationMailRegistration(to, code) {
+    await this.transporter.sendMail({
+      from: process.env.SMTP_USER,
+      to,
+      subject: "Активация аккаунта",
+      html: `
+          <div>
             <h2>Поздравляю вы успешно зарегистрировались в приложении TaskPro!</h2>
             <div>Введите 6-ти значный код в приложении, для подтверждения электронной почты.</div>
             <p>Код подтверждения:</p>
