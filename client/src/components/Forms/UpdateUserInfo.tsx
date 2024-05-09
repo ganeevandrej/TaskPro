@@ -8,7 +8,7 @@ import { InputsUpdateUserInfo } from "./models";
 import { CustomDateInput } from "../custom/DateInput";
 import { MyPhoneInput } from "../custom/PhoneInput";
 
-const configFormLogin: UseFormProps<InputsUpdateUserInfo> = {
+const configFormUserInfo: UseFormProps<InputsUpdateUserInfo> = {
   mode: "onBlur",
   defaultValues: {
     phone: "",
@@ -24,7 +24,7 @@ export interface FormUpdateUserInfoProps {
 export const FormUpdateUserInfo: React.FC<FormUpdateUserInfoProps> = ({
   hideDialog,
 }): React.JSX.Element => {
-  const methods = useForm<InputsUpdateUserInfo>(configFormLogin);
+  const methods = useForm<InputsUpdateUserInfo>(configFormUserInfo);
   const dispatch = useAppDispatch();
   const { isLoading, error, user } = useAppSelector(
     (state) => state.authReducer

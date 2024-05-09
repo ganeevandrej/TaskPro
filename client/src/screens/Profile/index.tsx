@@ -1,9 +1,11 @@
-import { View, ScrollView, Alert } from "react-native";
+import { View, ScrollView, Alert, SafeAreaView } from "react-native";
 import { Header } from "../../components/Header";
 import { Card, List, Switch, Text, TouchableRipple } from "react-native-paper";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
+import {
+  CompositeNavigationProp,
+  useNavigation,
+} from "@react-navigation/native";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
-import { DrawerParamList } from "../../NavigationContaners/DrawerContainer";
 import { useTheme } from "../../contexts/theme-context";
 import { ImagePickerExample } from "../../components/FileUpload";
 import { PieChart } from "react-native-chart-kit";
@@ -12,8 +14,12 @@ import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { useState } from "react";
 import { DialogUpdateUserInfo } from "../../components/Dialogs/UpdateUserInfo";
 import { fetchLogout } from "../../store/reducers/auth/ActionCreators";
-import { RootStackParamList } from "../../NavigationContaners/RootContainer";
 import { DialogActivateEmail } from "../../components/Dialogs/ActivateEmail";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../NavigationContaners/RootContainer";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { TabStackParamList } from "../../NavigationContaners/TabContainer";
+import { DrawerParamList } from "../../NavigationContaners/DrawerContainer";
 const screenWidth = Dimensions.get("window").width;
 
 const data = [
@@ -33,6 +39,14 @@ const data = [
   },
 ];
 
+type ProfileScreenProps = CompositeNavigationProp<
+  BottomTabNavigationProp<TabStackParamList>,
+  CompositeNavigationProp<
+    DrawerNavigationProp<DrawerParamList>,
+    NativeStackNavigationProp<RootStackParamList>
+  >
+>;
+
 export const ProfileScreen: React.FC = (): React.JSX.Element => {
   const { name, email, phone, dateBirth, isActivated } = useAppSelector(
     (state) => state.authReducer.user
@@ -41,10 +55,9 @@ export const ProfileScreen: React.FC = (): React.JSX.Element => {
   const { toggleTheme, isThemeDark } = useTheme();
   const [visibleDialogUpdateData, setVisibleDialogUpdateData] =
     useState<boolean>(false);
-    const [visibleDialogActivate, setVisibleDialogActivate] =
+  const [visibleDialogActivate, setVisibleDialogActivate] =
     useState<boolean>(false);
-  const navigationRoot = useNavigation<NavigationProp<RootStackParamList>>();
-  const navigation = useNavigation<DrawerNavigationProp<DrawerParamList>>();
+  const navigation = useNavigation<ProfileScreenProps>();
 
   const logout = () => {
     Alert.alert(
@@ -60,7 +73,7 @@ export const ProfileScreen: React.FC = (): React.JSX.Element => {
           text: "Выйти",
           onPress: () => {
             dispatch(fetchLogout());
-            navigationRoot.navigate("Login");
+            navigation.navigate("Home");
           },
         },
       ]
@@ -68,13 +81,13 @@ export const ProfileScreen: React.FC = (): React.JSX.Element => {
   };
 
   const OpenDialogActivate = () => {
-    if(isActivated) return;
+    if (isActivated) return;
     setVisibleDialogActivate(true);
-  }
+  };
 
   return (
     <View style={{ paddingBottom: 64 }}>
-      <Header navigation={navigation} />
+      {/* <Header navigation={navigation} /> */}
       <ScrollView>
         <ImagePickerExample />
         <Text
@@ -93,25 +106,27 @@ export const ProfileScreen: React.FC = (): React.JSX.Element => {
           }}
         >
           <Card.Content style={{ paddingHorizontal: 0, paddingVertical: 0 }}>
-          <TouchableRipple onPress={OpenDialogActivate}>
-            <List.Item
-              titleStyle={{ fontSize: 14, marginBottom: 5 }}
-              title="Email"
-              left={(props) => (
-                <List.Icon
-                  {...props}
-                  icon={isActivated ? "check-circle" : "alert-circle-check"}
-                />
-              )}
-              right={(props) => (
-                <Text variant="bodyMedium" {...props}>
-                  {email}
-                </Text>
-              )}
-            />
+            <TouchableRipple onPress={OpenDialogActivate}>
+              <List.Item
+                titleStyle={{ fontSize: 14, marginBottom: 5 }}
+                title="Email"
+                left={(props) => (
+                  <List.Icon
+                    {...props}
+                    icon={isActivated ? "check-circle" : "alert-circle-check"}
+                  />
+                )}
+                right={(props) => (
+                  <Text variant="bodyMedium" {...props}>
+                    {email}
+                  </Text>
+                )}
+              />
             </TouchableRipple>
-            <DialogActivateEmail visible={visibleDialogActivate}
-              setVisible={setVisibleDialogActivate} />
+            <DialogActivateEmail
+              visible={visibleDialogActivate}
+              setVisible={setVisibleDialogActivate}
+            />
           </Card.Content>
         </Card>
         <Card

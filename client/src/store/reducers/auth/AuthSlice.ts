@@ -42,6 +42,7 @@ export const userSlice = createSlice({
             state.user = {} as IUser;
             state.isAuth = false;
             state.error = '';
+            state.avatar = '';
         },
         activate(state) {
             state.isLoading = false;

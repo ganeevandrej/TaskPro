@@ -11,13 +11,13 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { ProfileScreen } from "../screens/Profile";
 
 export type TabStackParamList = {
-  Categories: undefined;
+  Категории: undefined;
   Планировщик: undefined;
-  Notification: undefined;
-  Profile: undefined;
+  Уведомления: undefined;
+  Профиль: undefined;
 };
 
-type TabNavigationConatinerProps = "Categories" | "Notification" | "Profile" | "Планировщик";
+type TabNavigationConatinerProps = "Категории" | "Уведомления" | "Профиль" | "Планировщик";
 
 const Tab = createBottomTabNavigator<TabStackParamList>();
 
@@ -28,11 +28,11 @@ export const TabNavigationConatiner = (screen: TabNavigationConatinerProps) => {
         screenOptions={{ headerShown: false }}
       >
         <Tab.Screen
-          name="Categories"
-          component={CategoriesStack}
+          name="Категории"
+          component={CategoriesScreen}
           options={{
             title: "Категории",
-            headerTitle: "Категории",
+            // headerTitle: "Категории",
             tabBarIcon: ({ color, size }) => (
               <Feather name="list" size={size} color={color} />
             ),
@@ -43,18 +43,18 @@ export const TabNavigationConatiner = (screen: TabNavigationConatinerProps) => {
           component={SchedulerScreen}
           options={{
             title: "Планировщик",
-            headerTitle: "Планировщик",
+            // headerTitle: "Планировщик",
             tabBarIcon: ({ color, size }) => (
               <Feather name="clock" size={size} color={color} />
             ),
           }}
         />
         <Tab.Screen
-          name="Notification"
+          name="Уведомления"
           component={NotificationsScreen}
           options={{
             title: "Уведомления",
-            headerTitle: 'Уведомления',
+            // headerTitle: 'Уведомления',
             tabBarIcon: ({ color, size }) => (
               <Ionicons
                 name="notifications-outline"
@@ -65,12 +65,12 @@ export const TabNavigationConatiner = (screen: TabNavigationConatinerProps) => {
           }}
         />
         <Tab.Screen
-          name="Profile"
+          name="Профиль"
           component={ProfileScreen}
           options={{
             title: "Профиль",
             // headerShown: true,
-            headerTitle: 'Профиль',
+            // headerTitle: 'Профиль',
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons
                 name="account"
@@ -84,29 +84,29 @@ export const TabNavigationConatiner = (screen: TabNavigationConatinerProps) => {
   );
 };
 
-export type StackParamListSheduler = {
-    Планировщик: undefined;
-  };
+// export type StackParamListSheduler = {
+//     Планировщик: undefined;
+//   };
   
-  export type StackParamListCategories = {
-    Категории: undefined;
-  };
+//   export type StackParamListCategories = {
+//     Категории: undefined;
+//   };
 
-const Stack_1 = createNativeStackNavigator<StackParamListCategories>();
-const Stack_2 = createNativeStackNavigator<StackParamListSheduler>();
+// const Stack_1 = createNativeStackNavigator<StackParamListCategories>();
+// const Stack_2 = createNativeStackNavigator<StackParamListSheduler>();
 
-const CategoriesStack = () => (
-  <Stack_1.Navigator
-    initialRouteName="Категории"
-    screenOptions={{ headerShown: false }}
-  >
-    <Stack_1.Screen
-      name="Категории"
-      component={CategoriesScreen}
-      options={{ title: "Категории" }}
-    />
-  </Stack_1.Navigator>
-);
+// const CategoriesStack = () => (
+//   <Stack_1.Navigator
+//     initialRouteName="Категории"
+//     screenOptions={{ headerShown: false }}
+//   >
+//     <Stack_1.Screen
+//       name="Категории"
+//       component={CategoriesScreen}
+//       options={{ title: "Категории" }}
+//     />
+//   </Stack_1.Navigator>
+// );
 
 // const ShedulerStack = () => (
 //   <Stack_2.Navigator

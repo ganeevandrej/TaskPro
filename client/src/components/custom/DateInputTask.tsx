@@ -1,5 +1,5 @@
 import { FieldValues, useController, useFormContext } from "react-hook-form";
-import { TextInput, Text } from "react-native-paper";
+import { TextInput, Text, TouchableRipple, List } from "react-native-paper";
 import { useState } from "react";
 import RNDateTimePicker, {
   DateTimePickerEvent,
@@ -13,7 +13,7 @@ export interface CustomInputProps {
   };
 }
 
-export const CustomDateInput: React.FC<CustomInputProps> = ({
+export const CustomDateInputTask: React.FC<CustomInputProps> = ({
   name,
   rules,
 }): React.JSX.Element => {
@@ -23,7 +23,7 @@ export const CustomDateInput: React.FC<CustomInputProps> = ({
   const { field, fieldState } = useController({ control, rules, name });
 
   const onChangeDate = (event: DateTimePickerEvent, selectedDate?: Date) => {
-    const currentDate = (selectedDate || date);
+    const currentDate = selectedDate || date;
     setDate(currentDate);
     field.onChange(currentDate.toLocaleDateString());
     setShowDatePicker(false);
@@ -35,17 +35,19 @@ export const CustomDateInput: React.FC<CustomInputProps> = ({
 
   return (
     <View>
-      <TextInput
-        style={styles.input}
-        mode="outlined"
-        onBlur={field.onBlur}
-        label="дата выполнения"
-        onFocus={openDatePicker}
-        value={field.value}
-        error={fieldState.invalid ? true : false}
-        right={<TextInput.Icon onPress={openDatePicker} icon="calendar" />}
-      />
-      <Text>{fieldState.error?.message}</Text>
+      <TouchableRipple onPress={openDatePicker}>
+        <List.Item
+          style={{ justifyContent: "space-between" }}
+          titleStyle={{ fontSize: 15, marginBottom: 5 }}
+          title="Дата"
+          left={(props) => <List.Icon {...props} icon="calendar" />}
+          right={(props) => (
+            <Text variant="bodyMedium" {...props}>
+              {field.value}
+            </Text>
+          )}
+        />
+      </TouchableRipple>
       {showDatePicker && (
         <RNDateTimePicker
           testID="dateTimePicker"

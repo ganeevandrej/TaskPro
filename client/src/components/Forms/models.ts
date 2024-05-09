@@ -15,3 +15,12 @@ export interface InputsUpdateUserInfo {
     userName:string,
     dataBirth: string,
 }
+
+type PriorityValueType = "Высокий" | "Низкий" | "Средний";
+
+export interface InputsCreateTask {
+    name: string,
+    description:string,
+    priority: PriorityValueType,
+    category: string,
+}
