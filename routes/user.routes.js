@@ -10,7 +10,10 @@ router.delete("/tasks/:taskId/delete", authMiddleware, userController.deleteTask
 router.get("/:userId/categories/all", authMiddleware, userController.getCategories);
 router.get("/priorities/all", authMiddleware, userController.getPriorities);
 router.post("/tasks/new", authMiddleware, userController.createTask);
-router.put("/tasks/:taskId/complete", authMiddleware, userController.completeTask);
+router.post("/categories/new", authMiddleware, userController.createCategory);
+router.put("/categories/:categoryId/uplate", authMiddleware, userController.updateCategory);
+router.delete("/categories/new", authMiddleware, userController.deleteCategory);
+router.put("/tasks/:taskId/:categoryId/complete", authMiddleware, userController.completeTask);
 router.put("/tasks/:taskId/update", userController.updateTask);
 router.put("/:userId/update", authMiddleware, userController.updateUserInfo);
 

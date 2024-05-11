@@ -52,8 +52,8 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
   });
 
   const toggleTheme = useCallback(async () => {
-    setIsThemeDark(!isThemeDark);
     await AsyncStorage.setItem('isDarkTheme', isThemeDark ? "" : "true");
+    setIsThemeDark(!isThemeDark);
   }, [isThemeDark]);
 
   const preferences = useMemo(

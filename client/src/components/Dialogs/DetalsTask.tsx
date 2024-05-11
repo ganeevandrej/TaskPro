@@ -1,8 +1,18 @@
-import { Portal, Dialog, List, Button, Text } from "react-native-paper";
+import {
+  Portal,
+  Dialog,
+  List,
+  Button,
+  Text,
+  useTheme,
+} from "react-native-paper";
 import { View, StyleSheet } from "react-native";
 import { ITask } from "../../store/reducers/taskManager/TaskManagerSlice";
 import { useAppDispatch } from "../../hooks/redux";
-import { fetchCompleteTask, fetchDeleteTask } from "../../store/reducers/taskManager/ActionCreators";
+import {
+  fetchCompleteTask,
+  fetchDeleteTask,
+} from "../../store/reducers/taskManager/ActionCreators";
 
 export interface IVerificationProps {
   visible: boolean;
@@ -16,6 +26,7 @@ export const DialogDetalsTask: React.FC<IVerificationProps> = ({
   task,
 }): React.JSX.Element => {
   const dispatch = useAppDispatch();
+  const { colors } = useTheme();
 
   const hideDialog = async () => {
     setVisible(false);
@@ -29,7 +40,7 @@ export const DialogDetalsTask: React.FC<IVerificationProps> = ({
   const completeTask = () => {
     dispatch(fetchCompleteTask(task.id));
     setVisible(false);
-  }
+  };
 
   return (
     <View>
@@ -45,7 +56,7 @@ export const DialogDetalsTask: React.FC<IVerificationProps> = ({
               </List.Subheader>
               <View
                 style={{
-                  backgroundColor: "white",
+                  backgroundColor: colors.secondaryContainer,
                   marginBottom: 5,
                   borderTopLeftRadius: 10,
                   borderTopRightRadius: 10,
@@ -64,7 +75,12 @@ export const DialogDetalsTask: React.FC<IVerificationProps> = ({
                   )}
                 />
               </View>
-              <View style={{ backgroundColor: "white", marginBottom: 5 }}>
+              <View
+                style={{
+                  backgroundColor: colors.secondaryContainer,
+                  marginBottom: 5,
+                }}
+              >
                 <List.Item
                   titleStyle={{ fontSize: 14 }}
                   title="Дедлайн"
@@ -76,7 +92,12 @@ export const DialogDetalsTask: React.FC<IVerificationProps> = ({
                   )}
                 />
               </View>
-              <View style={{ backgroundColor: "white", marginBottom: 5 }}>
+              <View
+                style={{
+                  backgroundColor: colors.secondaryContainer,
+                  marginBottom: 5,
+                }}
+              >
                 <List.Item
                   titleStyle={{ fontSize: 14, marginBottom: 5 }}
                   title="Приоритет"
@@ -96,7 +117,7 @@ export const DialogDetalsTask: React.FC<IVerificationProps> = ({
               </View>
               <View
                 style={{
-                  backgroundColor: "white",
+                  backgroundColor: colors.secondaryContainer,
                   borderBottomLeftRadius: 10,
                   borderBottomRightRadius: 10,
                 }}

@@ -10,7 +10,7 @@ export const NotificationsScreen: React.FC = (): React.JSX.Element => {
 
   return (
     <View>
-      <Header navigation={navigation} />
+      {/* <Header navigation={navigation} /> */}
       <Button mode="outlined">
         Уведомления
       </Button>

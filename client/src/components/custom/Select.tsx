@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useController, useFormContext } from "react-hook-form";
 import RNPickerSelect from "react-native-picker-select";
 import { View, StyleSheet  } from "react-native";
-import { Icon } from "react-native-paper";
+import { Icon, useTheme } from "react-native-paper";
 
 export type ItemSelect = {
   label: string;
@@ -27,6 +27,7 @@ export const CustomSelect: React.FC<CustomInputProps> = ({
 }) => {
   const [value, setValue] = useState<number>(1);
   const { control } = useFormContext();
+  const { colors } = useTheme();
   const { field, fieldState } = useController({ control, rules, name });
 
   const changeValueSelect = (value: number) => {
@@ -37,12 +38,21 @@ export const CustomSelect: React.FC<CustomInputProps> = ({
   return (
     <View style={styles.container}>
       <RNPickerSelect
-        style={pickerSelectStyles}
+        style={{inputAndroid: {
+          fontSize: 16,
+          paddingHorizontal: 10,
+          paddingVertical: 8,
+          // borderWidth: 1,
+          borderColor: 'gray',
+          borderRadius: 8,
+          paddingRight: 30,
+          backgroundColor: colors.secondaryContainer
+        }}}
         onValueChange={changeValueSelect}
         useNativeAndroidPickerStyle={false}
-        Icon={() => (
+        Icon={(props) => (
           <View style={styles.iconContainer}>
-            <Icon source="chevron-down" size={20} />
+            <Icon source="chevron-down" {...props} size={20} />
           </View>
         )}
         placeholder={{ label: label }}
@@ -66,14 +76,14 @@ const styles = StyleSheet.create({
 });
 
 const pickerSelectStyles = StyleSheet.create({
-  inputAndroid: {
-    fontSize: 16,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    // borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 8,
-    paddingRight: 30,
-    backgroundColor: "white"
-  },
+  // inputAndroid: {
+  //   fontSize: 16,
+  //   paddingHorizontal: 10,
+  //   paddingVertical: 8,
+  //   // borderWidth: 1,
+  //   borderColor: 'gray',
+  //   borderRadius: 8,
+  //   paddingRight: 30,
+  //   backgroundColor: colors.secondaryContainer
+  // },
 });

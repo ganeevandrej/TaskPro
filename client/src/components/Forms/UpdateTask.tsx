@@ -1,6 +1,6 @@
 import { View } from "react-native";
 import { FormProvider, UseFormProps, useForm } from "react-hook-form";
-import { Button, List, Text } from "react-native-paper";
+import { Button, List, Text, useTheme } from "react-native-paper";
 import { CustomInput } from "../../components/custom/TextInput";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { InputsCreateTask } from "./models";
@@ -30,6 +30,7 @@ export const FormUpdateTask: React.FC<FormUpdateUserInfoProps> = ({
 }): React.JSX.Element => {
   const methods = useForm<InputsCreateTask>(configFormCreateTask);
   const dispatch = useAppDispatch();
+  const { colors } = useTheme();
   const { isLoading, user } = useAppSelector(
     (state) => state.authReducer
   );
@@ -130,7 +131,7 @@ export const FormUpdateTask: React.FC<FormUpdateUserInfoProps> = ({
             borderRadius: 10,
             borderBottomLeftRadius: 0,
             borderBottomRightRadius: 0,
-            backgroundColor: "white",
+            backgroundColor: colors.secondaryContainer,
           }}
         >
           <CustomDateInputTask
@@ -142,7 +143,7 @@ export const FormUpdateTask: React.FC<FormUpdateUserInfoProps> = ({
             borderRadius: 10,
             borderTopLeftRadius: 0,
             borderTopRightRadius: 0,
-            backgroundColor: "white",
+            backgroundColor: colors.secondaryContainer,
             marginTop: 5,
           }}
         >

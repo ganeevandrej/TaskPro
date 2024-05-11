@@ -1,13 +1,14 @@
 import { Portal, Dialog } from "react-native-paper";
-import { View } from "react-native";
-import { FormUpdateUserInfo } from "../Forms/UpdateUserInfo";
+import { View, StyleSheet } from "react-native";
+import { FormCreateCategory } from "../Forms/CreateCategory";
+
 
 export interface IVerificationProps {
   visible: boolean;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const DialogUpdateUserInfo: React.FC<IVerificationProps> = ({
+export const DialogCreateCategory: React.FC<IVerificationProps> = ({
   visible,
   setVisible,
 }): React.JSX.Element => {
@@ -19,12 +20,16 @@ export const DialogUpdateUserInfo: React.FC<IVerificationProps> = ({
     <View>
       <Portal>
         <Dialog visible={visible} onDismiss={hideDialog}>
-          <Dialog.Title>Редактирование данных</Dialog.Title>
+          <Dialog.Title style={{ paddingVertical: 0 }}>
+            Создайте Категорию
+          </Dialog.Title>
           <Dialog.Content>
-            <FormUpdateUserInfo hideDialog={hideDialog} />
+            <FormCreateCategory hideDialog={hideDialog} />
           </Dialog.Content>
         </Dialog>
       </Portal>
     </View>
   );
 };
+
+const styles = StyleSheet.create({});

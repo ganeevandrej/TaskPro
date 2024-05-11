@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { RegistrationScreen } from "../screens/Registration";
 import { LoginScreen } from "../screens/Login";
 import { DriwerNavigationConatiner } from "./DrawerContainer";
+import { TabNavigationConatiner } from "./TabContainer";
 
 export type RootStackParamList = {
   Home: undefined;

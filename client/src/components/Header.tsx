@@ -7,14 +7,8 @@ interface HeaderProps {
   navigation: DrawerNavigationProp<DrawerParamList>;
 }
 
-const data = {
-  Profile: "Профиль",
-  Notification: "Уведомления",
-
-}
-
 export const Header: React.FC<HeaderProps> = ({
-  navigation,
+  navigation
 }): React.JSX.Element => {
   const route = useRoute();
 

@@ -4,7 +4,6 @@ import {
 } from "@react-navigation/native";
 import { View, FlatList } from "react-native";
 import {
-  Button,
   Card,
   FAB,
   Icon,
@@ -18,7 +17,6 @@ import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
 import { DrawerParamList } from "../../NavigationContaners/DrawerContainer";
 import { useEffect, useState } from "react";
-import { Header } from "../../components/Header";
 import { RootStackParamList } from "../../NavigationContaners/RootContainer";
 import { TabStackParamList } from "../../NavigationContaners/TabContainer";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
@@ -29,14 +27,6 @@ import { fetchgetTaskManager } from "../../store/reducers/taskManager/ActionCrea
 import { ScrollView } from "react-native-virtualized-view";
 import { DialogDetalsTask } from "../../components/Dialogs/DetalsTask";
 import { DialogUpdateTask } from "../../components/Dialogs/UpdateTask";
-
-type SchedulerScreenProps = CompositeNavigationProp<
-  BottomTabNavigationProp<TabStackParamList, "Планировщик">,
-  CompositeNavigationProp<
-    DrawerNavigationProp<DrawerParamList>,
-    NativeStackNavigationProp<RootStackParamList>
-  >
->;
 
 const initialTask = {
   id: 0,
@@ -79,18 +69,11 @@ export const SchedulerScreen = (): React.JSX.Element => {
   //   );
   // }
 
-  const RightPart = () => {
-    return (
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <Icon source="playlist-edit" size={25} />
-        <Icon source="delete-empty" size={25} />
-      </View>
-    );
-  };
-
-  const handleAddCategories = () => {
-    console.log("Hello");
-  };
+  const renderIconStatus = (status: string): string => {
+    if(status === "Завершена") return "check";
+    if(status === "Активный") return "progress-question";
+    return "alert-remove";
+  }
 
   const openDialogDetalsTask = (task: ITask) => {
     setTask(task);
@@ -131,7 +114,7 @@ export const SchedulerScreen = (): React.JSX.Element => {
               }}
               titleStyle={{ fontSize: 14 }}
               title="Статус"
-              left={(props) => <List.Icon {...props} icon="theme-light-dark" />}
+              left={(props) => <List.Icon {...props} icon={renderIconStatus(item.status)} />}
               right={(props) => <Text {...props}>{item.status}</Text>}
             />
           </Card.Content>
@@ -142,7 +125,7 @@ export const SchedulerScreen = (): React.JSX.Element => {
 
   return (
     <View style={{ flex: 1 }}>
-      <Header navigation={nav} />
+      {/* <Header navigation={nav} /> */}
       <ScrollView>
         <Searchbar
           style={{ paddingRight: 20, marginTop: 20, marginHorizontal: 20 }}
@@ -166,12 +149,6 @@ export const SchedulerScreen = (): React.JSX.Element => {
               <ToggleButton icon="sort-calendar-ascending" value="left" />
               <ToggleButton icon="sort-calendar-descending" value="right" />
             </ToggleButton.Row>
-            <Button
-              style={{ marginRight: 20, padding: 0 }}
-              onPress={handleAddCategories}
-            >
-              Добавить категорию
-            </Button>
           </View>
         </List.Section>
         <List.Section>

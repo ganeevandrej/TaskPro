@@ -2,6 +2,7 @@ import axios, { AxiosPromise, AxiosResponse } from "axios";
 import { $api } from "../http";
 import { ICategory, IPriority, ITask } from "../store/reducers/taskManager/TaskManagerSlice";
 import { ICreateTask } from "../store/reducers/taskManager/ActionCreators";
+import { InputCreateCategory } from "../components/Forms/models";
 
 export default class TaskManagerService {
     static async createTask(body: ICreateTask): Promise<AxiosResponse<ITask>> {
@@ -12,8 +13,9 @@ export default class TaskManagerService {
         return $api.put<ITask>(`/user/tasks/${taskId}/update`, body);
     }
 
-    static async createCategory(body: ICreateTask): Promise<AxiosResponse<ICategory[]>> {
-        return $api.post<ICategory[]>("/user/category/new", body);
+    static async createCategory({category}: InputCreateCategory, userId: number): Promise<AxiosResponse<ICategory>> {
+        const body = { nameCategory: category, userId }
+        return $api.post<ICategory>("/user/categories/new", body);
     }
 
     static async deleteTask(taskId: number): Promise<void> {
@@ -26,7 +28,7 @@ export default class TaskManagerService {
 
     static async getTaskManeger(userId: number) {
         const [categoriesResult, prioritiesResult, tasksResult] = await axios.all([this.getCategories(userId), this.getPriorities(), this.getTasks(userId)]) as unknown as [AxiosResponse<ICategory[]>, AxiosResponse<IPriority[]>, AxiosResponse<ITask[]>];
-        
+
         return {
             tasks: tasksResult.data,
             categories: categoriesResult.data,

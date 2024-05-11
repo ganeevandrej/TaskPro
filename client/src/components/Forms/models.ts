@@ -10,6 +10,10 @@ export interface Inputs {
     passwordRepeat: string;
 }
 
+export interface InputCreateCategory {
+    category: string;
+}
+
 export interface InputsUpdateUserInfo {
     phone: string,
     userName:string,

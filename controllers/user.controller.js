@@ -68,6 +68,42 @@ class UserController {
     }
   }
 
+  async createCategory(req, res, next) {
+    try {
+      const body = req.body;
+      const category = await userService.createCategory(body);
+
+      console.log(category);
+
+      return res.json(category);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async updateCategory(req, res, next) {
+    try {
+      const categoryId = req.params.categoryId;
+      const newNameCategory = req.body;
+      const category = await userService.updateCategory(categoryId, newNameCategory);
+
+      return res.json(category);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async deleteCategory(req, res, next) {
+    try {
+      const categoryId = req.params.categoryId;
+      await userService.deleteCategory(categoryId);
+
+      return res.send("Вы усспешно удалили категорию!");
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async getPriorities(req, res, next) {
     try {
       const priorities = await userService.getPriorities();

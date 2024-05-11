@@ -48,10 +48,15 @@ export const taskManagerSlice = createSlice({
             state.error = '';
             state.tasks = action.payload;
         },
-        addTasksSuccess(state, action: PayloadAction<ITask>) {
+        addTaskSuccess(state, action: PayloadAction<ITask>) {
             state.isLoading = false;
             state.error = '';
-            state.tasks = [...state.tasks, action.payload];
+            state.tasks = [action.payload, ...state.tasks];
+        },
+        addCategorySuccess(state, action: PayloadAction<ICategory>) {
+            state.isLoading = false;
+            state.error = '';
+            state.categories = [action.payload, ...state.categories];
         },
         fetchingCategoriesSuccess(state, action: PayloadAction<ICategory[]>) {
             state.isLoading = false;

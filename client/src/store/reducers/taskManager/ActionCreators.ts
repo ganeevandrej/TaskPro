@@ -4,6 +4,7 @@ import { userSlice } from "../auth/AuthSlice";
 import { ICategory, IPriority, taskManagerSlice } from "./TaskManagerSlice";
 import { IResponsDataError } from "../auth/ActionCreators";
 import TaskManagerService from "../../../services/TaskManagerService";
+import { InputCreateCategory } from "../../../components/Forms/models";
 
 export interface ICreateTask {
     deadline: string | null,
@@ -19,7 +20,7 @@ export const fetchCreateTask = (requestBody: ICreateTask) => async (dispatch: Ap
     try {
         dispatch(taskManagerSlice.actions.fetching());
         const res = await TaskManagerService.createTask(requestBody);
-        dispatch(taskManagerSlice.actions.addTasksSuccess(res.data));
+        dispatch(taskManagerSlice.actions.addTaskSuccess(res.data));
     } catch (error) {
         if ((error as AxiosError).response) {
             const axiosError = error as AxiosError<IResponsDataError>;
@@ -47,11 +48,11 @@ export const fetchUpdateTask = (requestBody: ICreateTask, taskId: number) => asy
     }
 }
 
-export const fetchCreateCategory = (requestBody: ICreateTask) => async (dispatch: AppDispatch) => {
+export const fetchCreateCategory = (requestBody: InputCreateCategory, userId: number) => async (dispatch: AppDispatch) => {
     try {
         dispatch(taskManagerSlice.actions.fetching());
-        const res = await TaskManagerService.createCategory(requestBody);
-        dispatch(taskManagerSlice.actions.fetchingCategoriesSuccess(res.data));
+        const res = await TaskManagerService.createCategory(requestBody, userId);
+        dispatch(taskManagerSlice.actions.addCategorySuccess(res.data));
     } catch (error) {
         if ((error as AxiosError).response) {
             const axiosError = error as AxiosError<IResponsDataError>;

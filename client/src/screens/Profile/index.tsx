@@ -39,7 +39,7 @@ const data = [
   },
 ];
 
-type ProfileScreenProps = CompositeNavigationProp<
+export type ProfileScreenProps = CompositeNavigationProp<
   BottomTabNavigationProp<TabStackParamList>,
   CompositeNavigationProp<
     DrawerNavigationProp<DrawerParamList>,
@@ -53,8 +53,7 @@ export const ProfileScreen: React.FC = (): React.JSX.Element => {
   );
   const dispatch = useAppDispatch();
   const { toggleTheme, isThemeDark } = useTheme();
-  const [visibleDialogUpdateData, setVisibleDialogUpdateData] =
-    useState<boolean>(false);
+  
   const [visibleDialogActivate, setVisibleDialogActivate] =
     useState<boolean>(false);
   const navigation = useNavigation<ProfileScreenProps>();
@@ -73,7 +72,7 @@ export const ProfileScreen: React.FC = (): React.JSX.Element => {
           text: "Выйти",
           onPress: () => {
             dispatch(fetchLogout());
-            navigation.navigate("Home");
+            navigation.navigate("Login");
           },
         },
       ]
@@ -86,7 +85,7 @@ export const ProfileScreen: React.FC = (): React.JSX.Element => {
   };
 
   return (
-    <View style={{ paddingBottom: 64, flex: 1  }}>
+    <View style={{flex: 1}}>
       {/* <Header navigation={navigation} /> */}
       <ScrollView style={{flex: 1}}>
         <ImagePickerExample />
@@ -139,7 +138,7 @@ export const ProfileScreen: React.FC = (): React.JSX.Element => {
             }}
           >
             <Card.Content style={{ paddingHorizontal: 0, paddingVertical: 0 }}>
-              <TouchableRipple onPress={() => setVisibleDialogUpdateData(true)}>
+              <TouchableRipple>
                 <List.Item
                   titleStyle={{ fontSize: 14, marginBottom: 5 }}
                   title="Дата рожд."
@@ -155,10 +154,10 @@ export const ProfileScreen: React.FC = (): React.JSX.Element => {
                   )}
                 />
               </TouchableRipple>
-              <DialogUpdateUserInfo
+              {/* <DialogUpdateUserInfo
                 visible={visibleDialogUpdateData}
                 setVisible={setVisibleDialogUpdateData}
-              />
+              /> */}
             </Card.Content>
           </Card>
           <Card
@@ -249,9 +248,6 @@ export const ProfileScreen: React.FC = (): React.JSX.Element => {
                   titleStyle={{ fontSize: 14, marginBottom: 5 }}
                   title="Выйти из аккуанта"
                   left={(props) => <List.Icon {...props} icon="logout" />}
-                  // right={(props) => (
-                  //   <List.Icon {...props} icon="phone" />
-                  // )}
                 />
               </TouchableRipple>
             </Card.Content>
@@ -270,9 +266,6 @@ export const ProfileScreen: React.FC = (): React.JSX.Element => {
                 titleStyle={{ fontSize: 14, marginBottom: 5 }}
                 title="Удалить аккаунт"
                 left={(props) => <List.Icon {...props} icon="account-cancel" />}
-                // right={(props) => (
-                //   <List.Icon {...props} icon="phone" />
-                // )}
               />
             </Card.Content>
           </Card>
