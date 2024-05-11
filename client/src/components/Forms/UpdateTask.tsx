@@ -7,7 +7,7 @@ import { InputsCreateTask } from "./models";
 import { CustomTimeInput } from "../custom/TimeInput";
 import { CustomSelect } from "../custom/Select";
 import { CustomDateInputTask } from "../custom/DateInputTask";
-import { fetchCreateTask, fetchUpdateTask } from "../../store/reducers/taskManager/ActionCreators";
+import { fetchUpdateTask } from "../../store/reducers/taskManager/ActionCreators";
 
 const configFormCreateTask: UseFormProps<InputsCreateTask> = {
   mode: "onBlur",
@@ -22,10 +22,11 @@ const configFormCreateTask: UseFormProps<InputsCreateTask> = {
 
 export interface FormUpdateUserInfoProps {
   hideDialog: (flag: boolean) => void;
+  taskId: number
 }
 
-export const FormCreateTask: React.FC<FormUpdateUserInfoProps> = ({
-  hideDialog,
+export const FormUpdateTask: React.FC<FormUpdateUserInfoProps> = ({
+  hideDialog, taskId
 }): React.JSX.Element => {
   const methods = useForm<InputsCreateTask>(configFormCreateTask);
   const dispatch = useAppDispatch();
@@ -83,15 +84,12 @@ export const FormCreateTask: React.FC<FormUpdateUserInfoProps> = ({
 
     const body = {
       deadline: fields.time ? deadline : null,
-      userId: user.id,
       name: fields.name,
       category: fields.category ? fields.category : 1,
       priority: fields.priority ? fields.priority : 1,
-      createTask: new Date().toLocaleString(),
-      status: "Активный"
     }
 
-    dispatch(fetchCreateTask(body));
+    dispatch(fetchUpdateTask(body, taskId));
     reset();
     hideDialog(false);
   };
@@ -157,7 +155,7 @@ export const FormCreateTask: React.FC<FormUpdateUserInfoProps> = ({
           mode="contained"
           onPress={handleSubmit(onSubmit)}
         >
-          Создать
+          Сохранить
         </Button>
       </View>
     </FormProvider>

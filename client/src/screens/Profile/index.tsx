@@ -1,4 +1,4 @@
-import { View, ScrollView, Alert, SafeAreaView } from "react-native";
+import { View, ScrollView, Alert } from "react-native";
 import { Header } from "../../components/Header";
 import { Card, List, Switch, Text, TouchableRipple } from "react-native-paper";
 import {
@@ -86,9 +86,9 @@ export const ProfileScreen: React.FC = (): React.JSX.Element => {
   };
 
   return (
-    <View style={{ paddingBottom: 64 }}>
+    <View style={{ paddingBottom: 64, flex: 1  }}>
       {/* <Header navigation={navigation} /> */}
-      <ScrollView>
+      <ScrollView style={{flex: 1}}>
         <ImagePickerExample />
         <Text
           style={{ alignSelf: "center", marginTop: 10 }}
@@ -96,178 +96,187 @@ export const ProfileScreen: React.FC = (): React.JSX.Element => {
         >
           {name ? name : "Я Гость!"}
         </Text>
-        <List.Subheader>Информация о пользователе</List.Subheader>
-        <Card
-          style={{
-            borderBottomLeftRadius: 0,
-            alignSelf: "center",
-            borderBottomRightRadius: 0,
-            width: "90%",
-          }}
-        >
-          <Card.Content style={{ paddingHorizontal: 0, paddingVertical: 0 }}>
-            <TouchableRipple onPress={OpenDialogActivate}>
-              <List.Item
-                titleStyle={{ fontSize: 14, marginBottom: 5 }}
-                title="Email"
-                left={(props) => (
-                  <List.Icon
-                    {...props}
-                    icon={isActivated ? "check-circle" : "alert-circle-check"}
-                  />
-                )}
-                right={(props) => (
-                  <Text variant="bodyMedium" {...props}>
-                    {email}
-                  </Text>
-                )}
+        <List.Section>
+          <List.Subheader>Информация о пользователе</List.Subheader>
+          <Card
+            style={{
+              borderBottomLeftRadius: 0,
+              alignSelf: "center",
+              borderBottomRightRadius: 0,
+              width: "90%",
+            }}
+          >
+            <Card.Content style={{ paddingHorizontal: 0, paddingVertical: 0 }}>
+              <TouchableRipple onPress={OpenDialogActivate}>
+                <List.Item
+                  titleStyle={{ fontSize: 14, marginBottom: 5 }}
+                  title="Email"
+                  left={(props) => (
+                    <List.Icon
+                      {...props}
+                      icon={isActivated ? "check-circle" : "alert-circle-check"}
+                    />
+                  )}
+                  right={(props) => (
+                    <Text variant="bodyMedium" {...props}>
+                      {email}
+                    </Text>
+                  )}
+                />
+              </TouchableRipple>
+              <DialogActivateEmail
+                visible={visibleDialogActivate}
+                setVisible={setVisibleDialogActivate}
               />
-            </TouchableRipple>
-            <DialogActivateEmail
-              visible={visibleDialogActivate}
-              setVisible={setVisibleDialogActivate}
-            />
-          </Card.Content>
-        </Card>
-        <Card
-          style={{
-            borderRadius: 0,
-            marginVertical: 3,
-            alignSelf: "center",
-            width: "90%",
-          }}
-        >
-          <Card.Content style={{ paddingHorizontal: 0, paddingVertical: 0 }}>
-            <TouchableRipple onPress={() => setVisibleDialogUpdateData(true)}>
+            </Card.Content>
+          </Card>
+          <Card
+            style={{
+              borderRadius: 0,
+              marginVertical: 3,
+              alignSelf: "center",
+              width: "90%",
+            }}
+          >
+            <Card.Content style={{ paddingHorizontal: 0, paddingVertical: 0 }}>
+              <TouchableRipple onPress={() => setVisibleDialogUpdateData(true)}>
+                <List.Item
+                  titleStyle={{ fontSize: 14, marginBottom: 5 }}
+                  title="Дата рожд."
+                  left={(props) => <List.Icon {...props} icon="calendar" />}
+                  right={(props) => (
+                    <Text
+                      style={{ marginBottom: 5 }}
+                      variant="bodyMedium"
+                      {...props}
+                    >
+                      {dateBirth ? dateBirth : "Укажите дату рожд."}
+                    </Text>
+                  )}
+                />
+              </TouchableRipple>
+              <DialogUpdateUserInfo
+                visible={visibleDialogUpdateData}
+                setVisible={setVisibleDialogUpdateData}
+              />
+            </Card.Content>
+          </Card>
+          <Card
+            style={{
+              borderTopLeftRadius: 0,
+              borderTopRightRadius: 0,
+              alignSelf: "center",
+              width: "90%",
+            }}
+          >
+            <Card.Content style={{ paddingHorizontal: 0, paddingVertical: 0 }}>
               <List.Item
                 titleStyle={{ fontSize: 14, marginBottom: 5 }}
-                title="Дата рожд."
-                left={(props) => <List.Icon {...props} icon="calendar" />}
+                title="Phone"
+                left={(props) => <List.Icon {...props} icon="phone" />}
                 right={(props) => (
                   <Text
                     style={{ marginBottom: 5 }}
                     variant="bodyMedium"
                     {...props}
                   >
-                    {dateBirth ? dateBirth : "Укажите дату рожд."}
+                    {phone ? phone : "Укажите свой номер"}
                   </Text>
                 )}
               />
-            </TouchableRipple>
-            <DialogUpdateUserInfo
-              visible={visibleDialogUpdateData}
-              setVisible={setVisibleDialogUpdateData}
-            />
-          </Card.Content>
-        </Card>
-        <Card
-          style={{
-            borderTopLeftRadius: 0,
-            borderTopRightRadius: 0,
-            alignSelf: "center",
-            width: "90%",
-          }}
-        >
-          <Card.Content style={{ paddingHorizontal: 0, paddingVertical: 0 }}>
-            <List.Item
-              titleStyle={{ fontSize: 14, marginBottom: 5 }}
-              title="Phone"
-              left={(props) => <List.Icon {...props} icon="phone" />}
-              right={(props) => (
-                <Text
-                  style={{ marginBottom: 5 }}
-                  variant="bodyMedium"
-                  {...props}
-                >
-                  {phone ? phone : "Укажите свой номер"}
-                </Text>
-              )}
-            />
-          </Card.Content>
-        </Card>
-        <List.Subheader>Аналитика задач</List.Subheader>
-        <Card style={{ alignSelf: "center", width: "90%" }}>
-          <Card.Content style={{ paddingHorizontal: 5, paddingVertical: 0 }}>
-            <PieChart
-              data={data}
-              width={screenWidth - 50}
-              height={120}
-              chartConfig={{
-                color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-              }}
-              accessor={"population"}
-              backgroundColor={"transparent"}
-              paddingLeft={"-25"}
-              center={[0, 0]}
-            />
-          </Card.Content>
-        </Card>
-        <List.Subheader>Пользовательские настройки</List.Subheader>
-        <Card
-          style={{
-            borderBottomLeftRadius: 0,
-            borderBottomRightRadius: 0,
-            alignSelf: "center",
-            width: "90%",
-          }}
-        >
-          <Card.Content style={{ paddingHorizontal: 0, paddingVertical: 0 }}>
-            <List.Item
-              titleStyle={{ fontSize: 14, marginBottom: 5 }}
-              style={{ paddingVertical: 0 }}
-              title="Черная тема"
-              left={(props) => <List.Icon {...props} icon="theme-light-dark" />}
-              right={(props) => (
-                <Switch
-                  value={isThemeDark}
-                  {...props}
-                  onValueChange={toggleTheme}
-                />
-              )}
-            />
-          </Card.Content>
-        </Card>
-        <Card
-          style={{
-            borderRadius: 0,
-            marginVertical: 3,
-            alignSelf: "center",
-            width: "90%",
-          }}
-        >
-          <Card.Content style={{ paddingHorizontal: 0, paddingVertical: 0 }}>
-            <TouchableRipple onPress={logout}>
+            </Card.Content>
+          </Card>
+        </List.Section>
+        <List.Section>
+          <List.Subheader>Аналитика задач</List.Subheader>
+          <Card style={{ alignSelf: "center", width: "90%" }}>
+            <Card.Content style={{ paddingHorizontal: 5, paddingVertical: 0 }}>
+              <PieChart
+                data={data}
+                width={screenWidth - 50}
+                height={120}
+                chartConfig={{
+                  color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                }}
+                accessor={"population"}
+                backgroundColor={"transparent"}
+                paddingLeft={"-25"}
+                center={[0, 0]}
+              />
+            </Card.Content>
+          </Card>
+        </List.Section>
+
+        <List.Section>
+          <List.Subheader>Пользовательские настройки</List.Subheader>
+          <Card
+            style={{
+              borderBottomLeftRadius: 0,
+              borderBottomRightRadius: 0,
+              alignSelf: "center",
+              width: "90%",
+            }}
+          >
+            <Card.Content style={{ paddingHorizontal: 0, paddingVertical: 0 }}>
               <List.Item
                 titleStyle={{ fontSize: 14, marginBottom: 5 }}
-                title="Выйти из аккуанта"
-                left={(props) => <List.Icon {...props} icon="logout" />}
+                style={{ paddingVertical: 0 }}
+                title="Черная тема"
+                left={(props) => (
+                  <List.Icon {...props} icon="theme-light-dark" />
+                )}
+                right={(props) => (
+                  <Switch
+                    value={isThemeDark}
+                    {...props}
+                    onValueChange={toggleTheme}
+                  />
+                )}
+              />
+            </Card.Content>
+          </Card>
+          <Card
+            style={{
+              borderRadius: 0,
+              marginVertical: 3,
+              alignSelf: "center",
+              width: "90%",
+            }}
+          >
+            <Card.Content style={{ paddingHorizontal: 0, paddingVertical: 0 }}>
+              <TouchableRipple onPress={logout}>
+                <List.Item
+                  titleStyle={{ fontSize: 14, marginBottom: 5 }}
+                  title="Выйти из аккуанта"
+                  left={(props) => <List.Icon {...props} icon="logout" />}
+                  // right={(props) => (
+                  //   <List.Icon {...props} icon="phone" />
+                  // )}
+                />
+              </TouchableRipple>
+            </Card.Content>
+          </Card>
+          <Card
+            style={{
+              borderTopLeftRadius: 0,
+              borderTopRightRadius: 0,
+              alignSelf: "center",
+              width: "90%",
+              marginBottom: 20,
+            }}
+          >
+            <Card.Content style={{ paddingHorizontal: 0, paddingVertical: 0 }}>
+              <List.Item
+                titleStyle={{ fontSize: 14, marginBottom: 5 }}
+                title="Удалить аккаунт"
+                left={(props) => <List.Icon {...props} icon="account-cancel" />}
                 // right={(props) => (
                 //   <List.Icon {...props} icon="phone" />
                 // )}
               />
-            </TouchableRipple>
-          </Card.Content>
-        </Card>
-        <Card
-          style={{
-            borderTopLeftRadius: 0,
-            borderTopRightRadius: 0,
-            alignSelf: "center",
-            width: "90%",
-            marginBottom: 20,
-          }}
-        >
-          <Card.Content style={{ paddingHorizontal: 0, paddingVertical: 0 }}>
-            <List.Item
-              titleStyle={{ fontSize: 14, marginBottom: 5 }}
-              title="Удалить аккаунт"
-              left={(props) => <List.Icon {...props} icon="account-cancel" />}
-              // right={(props) => (
-              //   <List.Icon {...props} icon="phone" />
-              // )}
-            />
-          </Card.Content>
-        </Card>
+            </Card.Content>
+          </Card>
+        </List.Section>
       </ScrollView>
     </View>
   );

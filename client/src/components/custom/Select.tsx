@@ -4,16 +4,16 @@ import RNPickerSelect from "react-native-picker-select";
 import { View, StyleSheet  } from "react-native";
 import { Icon } from "react-native-paper";
 
-type ItemSelect = {
+export type ItemSelect = {
   label: string;
-  value: string;
-  key: string;
+  value: number;
+  key: number;
 };
 
 export interface CustomInputProps {
   name: string;
   label?: string;
-  rules: {
+  rules?: {
     required: string;
   };
   data: ItemSelect[];
@@ -25,11 +25,11 @@ export const CustomSelect: React.FC<CustomInputProps> = ({
   rules,
   name,
 }) => {
-  const [value, setValue] = useState<string>("");
+  const [value, setValue] = useState<number>(1);
   const { control } = useFormContext();
   const { field, fieldState } = useController({ control, rules, name });
 
-  const changeValueSelect = (value: string) => {
+  const changeValueSelect = (value: number) => {
     field.onChange(value);
     setValue(value);
   };
@@ -70,9 +70,10 @@ const pickerSelectStyles = StyleSheet.create({
     fontSize: 16,
     paddingHorizontal: 10,
     paddingVertical: 8,
-    borderWidth: 1,
+    // borderWidth: 1,
     borderColor: 'gray',
     borderRadius: 8,
     paddingRight: 30,
+    backgroundColor: "white"
   },
 });

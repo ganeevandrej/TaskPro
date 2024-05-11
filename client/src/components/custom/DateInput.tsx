@@ -24,8 +24,8 @@ export const CustomDateInput: React.FC<CustomInputProps> = ({
 
   const onChangeDate = (event: DateTimePickerEvent, selectedDate?: Date) => {
     const currentDate = (selectedDate || date);
-    setDate(currentDate);
     field.onChange(currentDate.toLocaleDateString());
+    setDate(currentDate);
     setShowDatePicker(false);
   };
 
@@ -39,7 +39,7 @@ export const CustomDateInput: React.FC<CustomInputProps> = ({
         style={styles.input}
         mode="outlined"
         onBlur={field.onBlur}
-        label="дата выполнения"
+        label="Дата рождения"
         onFocus={openDatePicker}
         value={field.value}
         error={fieldState.invalid ? true : false}
@@ -62,7 +62,7 @@ export const CustomDateInput: React.FC<CustomInputProps> = ({
 
 const styles = StyleSheet.create({
   input: {
-    // width: "100%",
+    width: "100%",
     marginLeft: "auto",
     marginRight: "auto",
   },

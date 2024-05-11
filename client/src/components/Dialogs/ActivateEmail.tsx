@@ -2,8 +2,6 @@ import { Text, Button, Portal, Dialog } from "react-native-paper";
 import { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { Verification } from "../custom/verification";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { RootStackParamList } from "../../NavigationContaners/RootContainer";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { fetchActivate, fetchSendLetter } from "../../store/reducers/auth/ActionCreators";
 
@@ -19,13 +17,16 @@ export const DialogActivateEmail: React.FC<IVerificationProps> = ({
   const [code, setCode] = useState("");
   const {id} = useAppSelector(state => state.authReducer.user)
   const dispatch = useAppDispatch();
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const hideDialog = async () => {
-    dispatch(fetchActivate(code));
     setVisible(false);
-    setCode("");
   };
+
+  const activateCode = async () => {
+    dispatch(fetchActivate(code));
+    setCode("");
+    hideDialog()
+  }
 
   const sendLetterByEmail = async () => {
     dispatch(fetchSendLetter(id));
@@ -34,7 +35,7 @@ export const DialogActivateEmail: React.FC<IVerificationProps> = ({
   return (
     <View>
       <Portal>
-        <Dialog visible={visible}>
+        <Dialog visible={visible} onDismiss={hideDialog}>
           <Dialog.Title>Подтвердите почту</Dialog.Title>
           <Dialog.Content>
             <Text variant="bodyMedium">
@@ -47,7 +48,7 @@ export const DialogActivateEmail: React.FC<IVerificationProps> = ({
             <Button mode="contained" onPress={sendLetterByEmail}>
               Отправить письмо
             </Button>
-            <Button mode="contained" onPress={hideDialog}>
+            <Button mode="contained" onPress={activateCode}>
               Подтвердить
             </Button>
           </Dialog.Actions>

@@ -1,0 +1,128 @@
+import { Portal, Dialog, List, Button, Text } from "react-native-paper";
+import { View, StyleSheet } from "react-native";
+import { ITask } from "../../store/reducers/taskManager/TaskManagerSlice";
+import { useAppDispatch } from "../../hooks/redux";
+import { fetchCompleteTask, fetchDeleteTask } from "../../store/reducers/taskManager/ActionCreators";
+
+export interface IVerificationProps {
+  visible: boolean;
+  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  task: ITask;
+}
+
+export const DialogDetalsTask: React.FC<IVerificationProps> = ({
+  visible,
+  setVisible,
+  task,
+}): React.JSX.Element => {
+  const dispatch = useAppDispatch();
+
+  const hideDialog = async () => {
+    setVisible(false);
+  };
+
+  const deleteTask = () => {
+    dispatch(fetchDeleteTask(task.id));
+    setVisible(false);
+  };
+
+  const completeTask = () => {
+    dispatch(fetchCompleteTask(task.id));
+    setVisible(false);
+  }
+
+  return (
+    <View>
+      <Portal>
+        <Dialog visible={visible} onDismiss={hideDialog}>
+          <Dialog.Title style={{ paddingVertical: 0 }}>
+            {task.name}
+          </Dialog.Title>
+          <Dialog.Content style={{ marginVertical: 0 }}>
+            <List.Section>
+              <List.Subheader style={{ paddingHorizontal: 0, paddingTop: 0 }}>
+                Детали задачи
+              </List.Subheader>
+              <View
+                style={{
+                  backgroundColor: "white",
+                  marginBottom: 5,
+                  borderTopLeftRadius: 10,
+                  borderTopRightRadius: 10,
+                }}
+              >
+                <List.Item
+                  titleStyle={{ fontSize: 14 }}
+                  title="Категория"
+                  left={(props) => (
+                    <List.Icon {...props} icon="folder-google-drive" />
+                  )}
+                  right={(props) => (
+                    <Text variant="bodyMedium" {...props}>
+                      {task.category}
+                    </Text>
+                  )}
+                />
+              </View>
+              <View style={{ backgroundColor: "white", marginBottom: 5 }}>
+                <List.Item
+                  titleStyle={{ fontSize: 14 }}
+                  title="Дедлайн"
+                  left={(props) => <List.Icon {...props} icon="alarm-snooze" />}
+                  right={(props) => (
+                    <Text variant="bodyMedium" {...props}>
+                      {String(task.deadline)}
+                    </Text>
+                  )}
+                />
+              </View>
+              <View style={{ backgroundColor: "white", marginBottom: 5 }}>
+                <List.Item
+                  titleStyle={{ fontSize: 14, marginBottom: 5 }}
+                  title="Приоритет"
+                  left={(props) => (
+                    <List.Icon {...props} icon="rhombus-medium" />
+                  )}
+                  right={(props) => (
+                    <Text
+                      style={{ marginBottom: 5 }}
+                      variant="bodyMedium"
+                      {...props}
+                    >
+                      {task.priority}
+                    </Text>
+                  )}
+                />
+              </View>
+              <View
+                style={{
+                  backgroundColor: "white",
+                  borderBottomLeftRadius: 10,
+                  borderBottomRightRadius: 10,
+                }}
+              >
+                <List.Item
+                  titleStyle={{ fontSize: 14 }}
+                  title="Статус"
+                  left={(props) => <List.Icon {...props} icon="scent" />}
+                  right={(props) => (
+                    <Text variant="bodyMedium" {...props}>
+                      {task.status}
+                    </Text>
+                  )}
+                />
+              </View>
+            </List.Section>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={hideDialog}>Назад</Button>
+            <Button onPress={() => deleteTask()}>Удалить</Button>
+            <Button onPress={() => completeTask()}>Завершить</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({});

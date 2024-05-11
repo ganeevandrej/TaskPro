@@ -26,8 +26,8 @@ export const CustomTimeInput: React.FC<CustomInputProps> = ({
     if (selectedTime) {
       const currentDate = selectedTime || time;
       setTime(currentDate);
-      const hours = selectedTime.getHours();
-      const minutes = selectedTime.getMinutes();
+      const hours = String(currentDate.getHours()).padStart(2, '0');
+      const minutes = String(currentDate.getMinutes()).padStart(2, '0');
       field.onChange(`${hours}:${minutes}`);
       setShowTimePicker(false);
     }
@@ -58,7 +58,7 @@ export const CustomTimeInput: React.FC<CustomInputProps> = ({
           testID="dateTimePicker"
           value={time}
           mode="time"
-          // is24Hour={true}
+          is24Hour={true}
           display="spinner"
           onChange={onChangeTime}
         />

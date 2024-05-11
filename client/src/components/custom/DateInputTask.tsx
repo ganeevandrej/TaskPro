@@ -8,7 +8,7 @@ import { View, StyleSheet } from "react-native";
 
 export interface CustomInputProps {
   name: string;
-  rules: {
+  rules?: {
     required: string;
   };
 }

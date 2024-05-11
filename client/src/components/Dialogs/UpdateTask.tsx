@@ -1,15 +1,17 @@
 import { Portal, Dialog } from "react-native-paper";
-import { View } from "react-native";
-import { FormUpdateUserInfo } from "../Forms/UpdateUserInfo";
+import { View, ScrollView, StyleSheet } from "react-native";
+import { FormUpdateTask } from "../Forms/UpdateTask";
 
 export interface IVerificationProps {
   visible: boolean;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  taskId: number
 }
 
-export const DialogUpdateUserInfo: React.FC<IVerificationProps> = ({
+export const DialogUpdateTask: React.FC<IVerificationProps> = ({
   visible,
   setVisible,
+  taskId
 }): React.JSX.Element => {
   const hideDialog = async () => {
     setVisible(false);
@@ -19,12 +21,16 @@ export const DialogUpdateUserInfo: React.FC<IVerificationProps> = ({
     <View>
       <Portal>
         <Dialog visible={visible} onDismiss={hideDialog}>
-          <Dialog.Title>Персональные данные</Dialog.Title>
+          <Dialog.Title>Редактирование задачи</Dialog.Title>
           <Dialog.Content>
-            <FormUpdateUserInfo hideDialog={hideDialog} />
+            <ScrollView>
+            <FormUpdateTask hideDialog={hideDialog} taskId={taskId} />
+            </ScrollView>
           </Dialog.Content>
         </Dialog>
       </Portal>
     </View>
   );
 };
+
+const styles = StyleSheet.create({});
