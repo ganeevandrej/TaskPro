@@ -2,32 +2,21 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { RegistrationScreen } from "../screens/Registration";
 import { LoginScreen } from "../screens/Login";
 import { DriwerNavigationConatiner } from "./DrawerContainer";
-import { TabNavigationConatiner } from "./TabContainer";
-
-export type RootStackParamList = {
-  Home: undefined;
-  Registration: undefined;
-  Login: undefined;
-};
+import { RootNavigationConatinerProps, RootStackParamList } from "./models";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
-
-interface RootNavigationConatinerProps {
-  isLoggedIn: boolean;
-}
 
 export const RootNavigationConatiner: React.FC<
   RootNavigationConatinerProps
 > = ({ isLoggedIn }) => {
+  const initialRoute = isLoggedIn ? "Home" : "Login";
 
   return (
-      <Stack.Navigator initialRouteName={isLoggedIn ? "Home" : "Login"}>
+      <Stack.Navigator initialRouteName={initialRoute}>
         <Stack.Screen
           name="Home"
           component={DriwerNavigationConatiner}
-          options={{ 
-            headerShown: false,
-           }}
+          options={{ headerShown: false}}
         />
         <Stack.Screen
           name="Registration"

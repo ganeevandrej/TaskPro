@@ -102,7 +102,6 @@ export const checkAuth = () => async (dispatch: AppDispatch) => {
         await AsyncStorage.setItem('accessToken', res.data.accessToken);
         dispatch(userSlice.actions.authFetchingSuccess(res.data.user));
     } catch (error) {
-        console.log(error)
         if ((error as AxiosError).response) {
             const axiosError = error as AxiosError<IResponsDataError>;
             const message = axiosError.response?.data.message;
@@ -124,7 +123,6 @@ export const sendAvatarToBackend = (data: ISendAvatarToBackendProprs) => async (
         const res = await UserService.uploadAvatar(data);
         dispatch(userSlice.actions.setUserAvatar(res.body));
     } catch (error) {
-        console.log(error);
         if ((error as AxiosError).response) {
             const axiosError = error as AxiosError<IResponsDataError>;
             const message = axiosError.response?.data.message;
@@ -141,7 +139,6 @@ export const deleteAvatarFromDb = (userId: number) => async (dispatch: AppDispat
         await UserService.deleteAvatar(userId);
         dispatch(userSlice.actions.setUserAvatar(''));
     } catch (error) {
-        console.log(error);
         if ((error as AxiosError).response) {
             const axiosError = error as AxiosError<IResponsDataError>;
             const message = axiosError.response?.data.message;
@@ -158,7 +155,6 @@ export const getAvatar = (userId: number) => async (dispatch: AppDispatch) => {
         const res = await UserService.getAvatar(userId);
         dispatch(userSlice.actions.setUserAvatar(res.data));
     } catch (error) {
-        console.log(error);
         if ((error as AxiosError).response) {
             const axiosError = error as AxiosError<IResponsDataError>;
             const message = axiosError.response?.data.message;
@@ -175,7 +171,6 @@ export const updateInfo = (body: InputsUpdateUserInfo, userId: number) => async 
         const res = await UserService.updateInfoUser(body, userId);
         dispatch(userSlice.actions.authFetchingSuccess(res.data));
     } catch (error) {
-        console.log(error);
         if ((error as AxiosError).response) {
             const axiosError = error as AxiosError<IResponsDataError>;
             const message = axiosError.response?.data.message;

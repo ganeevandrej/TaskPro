@@ -1,25 +1,14 @@
-import { View, ScrollView, Alert } from "react-native";
-import { Header } from "../../components/Header";
+import { View, ScrollView, Alert, StyleSheet } from "react-native";
 import { Card, List, Switch, Text, TouchableRipple } from "react-native-paper";
-import {
-  CompositeNavigationProp,
-  useNavigation,
-} from "@react-navigation/native";
-import { DrawerNavigationProp } from "@react-navigation/drawer";
 import { useTheme } from "../../contexts/theme-context";
 import { ImagePickerExample } from "../../components/FileUpload";
 import { PieChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { useState } from "react";
-import { DialogUpdateUserInfo } from "../../components/Dialogs/UpdateUserInfo";
 import { fetchLogout } from "../../store/reducers/auth/ActionCreators";
 import { DialogActivateEmail } from "../../components/Dialogs/ActivateEmail";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../../NavigationContaners/RootContainer";
-import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
-import { TabStackParamList } from "../../NavigationContaners/TabContainer";
-import { DrawerParamList } from "../../NavigationContaners/DrawerContainer";
+
 const screenWidth = Dimensions.get("window").width;
 
 const data = [
@@ -39,14 +28,6 @@ const data = [
   },
 ];
 
-export type ProfileScreenProps = CompositeNavigationProp<
-  BottomTabNavigationProp<TabStackParamList>,
-  CompositeNavigationProp<
-    DrawerNavigationProp<DrawerParamList>,
-    NativeStackNavigationProp<RootStackParamList>
-  >
->;
-
 export const ProfileScreen: React.FC = (): React.JSX.Element => {
   const { name, email, phone, dateBirth, isActivated } = useAppSelector(
     (state) => state.authReducer.user
@@ -56,11 +37,10 @@ export const ProfileScreen: React.FC = (): React.JSX.Element => {
   
   const [visibleDialogActivate, setVisibleDialogActivate] =
     useState<boolean>(false);
-  const navigation = useNavigation<ProfileScreenProps>();
 
   const logout = () => {
     Alert.alert(
-      "Подтверждение выхода",
+      "Выход",
       "Вы действительно хотите выйти из аккаунта?",
       [
         {
@@ -72,7 +52,7 @@ export const ProfileScreen: React.FC = (): React.JSX.Element => {
           text: "Выйти",
           onPress: () => {
             dispatch(fetchLogout());
-            navigation.navigate("Login");
+            // navigation.navigate("Login");
           },
         },
       ]
@@ -86,7 +66,6 @@ export const ProfileScreen: React.FC = (): React.JSX.Element => {
 
   return (
     <View style={{flex: 1}}>
-      {/* <Header navigation={navigation} /> */}
       <ScrollView style={{flex: 1}}>
         <ImagePickerExample />
         <Text
@@ -154,10 +133,6 @@ export const ProfileScreen: React.FC = (): React.JSX.Element => {
                   )}
                 />
               </TouchableRipple>
-              {/* <DialogUpdateUserInfo
-                visible={visibleDialogUpdateData}
-                setVisible={setVisibleDialogUpdateData}
-              /> */}
             </Card.Content>
           </Card>
           <Card
@@ -274,3 +249,12 @@ export const ProfileScreen: React.FC = (): React.JSX.Element => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  card: {
+    borderBottomLeftRadius: 0,
+    alignSelf: "center",
+    borderBottomRightRadius: 0,
+    width: "90%",
+  }
+});

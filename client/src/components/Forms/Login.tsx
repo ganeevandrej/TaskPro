@@ -5,9 +5,8 @@ import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { CustomInput } from "../../components/custom/TextInput";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { fetchLogin } from "../../store/reducers/auth/ActionCreators";
-import { useEffect } from "react";
-import { RootStackParamList } from "../../NavigationContaners/RootContainer";
 import { InputsLogin } from "./models";
+import { RootStackParamList } from "../../NavigationContaners/models";
 
 const configFormLogin: UseFormProps<InputsLogin> = {
   mode: "onBlur",
@@ -19,7 +18,7 @@ const configFormLogin: UseFormProps<InputsLogin> = {
 
 export const FormLogin: React.FC = (): React.JSX.Element => {
   const methods = useForm<InputsLogin>(configFormLogin);
-  const { isLoading, isAuth, error } = useAppSelector((state) => state.authReducer);
+  const { isLoading, error } = useAppSelector((state) => state.authReducer);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const dispatch = useAppDispatch();
 
@@ -28,12 +27,6 @@ export const FormLogin: React.FC = (): React.JSX.Element => {
   const onSubmit = (fields: InputsLogin) => {
     dispatch(fetchLogin(fields));
   };
-
-  useEffect(() => {
-    if(isAuth) {
-      navigation.navigate("Home");
-    }
-  }, [isAuth]);
 
   if (isLoading) {
     return <Text>Loading</Text>;
@@ -71,7 +64,6 @@ const styles = StyleSheet.create({
   container: {
     width: width_2,
     marginHorizontal: 40,
-    // marginTop: "50%",
   },
   link: {
     textDecorationLine: "underline",

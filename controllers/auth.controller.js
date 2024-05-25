@@ -93,15 +93,6 @@ class AuthController {
       next(error);
     }
   }
-
-  async getUsers(req, res, next) {
-    try {
-      const users = await authService.getAllUsers();
-      res.json(users);
-    } catch (error) {
-      next(error);
-    }
-  }
 }
 
 export default new AuthController();

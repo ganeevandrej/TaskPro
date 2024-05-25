@@ -18,33 +18,30 @@ class AuthService {
     ]);
 
     if (user.rows.length > 0) {
-      throw ApiError.BadRequest(`Пользователь с email ${email} уже зарегестрирован!`);
+      throw ApiError.BadRequest(
+        `Пользователь с email ${email} уже зарегестрирован!`
+      );
     }
 
     const hashPassword = bcrypt.hashSync(password, 7);
     const code = generateConfirmationCode();
 
-    await db.query(
-      "INSERT INTO users(email, password, activation_code) VALUES($1, $2, $3);",
+    const userData = await db.query(
+      "INSERT INTO users(email, password, activation_code) VALUES($1, $2, $3) RETURNING *",
       [email, hashPassword, code]
     );
 
     mailService.sendActivationMailRegistration(email, code);
-
-    const userData = await db.query("SELECT * FROM users WHERE email = $1", [
-      email,
-    ]);
-
     const userDto = createUserDto(userData.rows[0]);
     const tokens = tokenService.generateTokens(userDto);
     await tokenService.saveToken(userDto.id, tokens.refreshToken);
 
-    return {...tokens, user: userDto};
+    return { ...tokens, user: userDto };
   }
 
   async login(email, password) {
     const user = await db.query("SELECT * FROM users WHERE email = $1", [
-      email
+      email,
     ]);
 
     if (user.rows.length === 0) {
@@ -53,7 +50,7 @@ class AuthService {
 
     const isPassEquals = await bcrypt.compare(password, user.rows[0].password);
 
-    if(!isPassEquals) {
+    if (!isPassEquals) {
       throw ApiError.BadRequest("Неверный пароль");
     }
 
@@ -61,13 +58,14 @@ class AuthService {
     const tokens = tokenService.generateTokens(userDto);
     await tokenService.saveToken(userDto.id, tokens.refreshToken);
 
-    return {...tokens, user: userDto};
+    return { ...tokens, user: userDto };
   }
 
   async activate(code) {
-    const user = await db.query("SELECT * FROM users WHERE activation_code = $1", [
-      code
-    ]);
+    const user = await db.query(
+      "SELECT * FROM users WHERE activation_code = $1",
+      [code]
+    );
 
     if (user.rows.length === 0) {
       throw ApiError.BadRequest(`Код активации не верный!`);
@@ -84,7 +82,7 @@ class AuthService {
   }
 
   async refresh(refreshToken) {
-    if(!refreshToken) {
+    if (!refreshToken) {
       throw ApiError.UnathorizedError();
     }
 
@@ -95,36 +93,34 @@ class AuthService {
       [refreshToken]
     );
 
-    if(!userData || tokenFromDb.rows.length === 0) {
+    if (!userData || tokenFromDb.rows.length === 0) {
       throw ApiError.UnathorizedError();
     }
 
     const user = await db.query("SELECT * FROM users WHERE id = $1", [
-      userData.id
+      userData.id,
     ]);
 
     const userDto = createUserDto(user.rows[0]);
     const tokens = tokenService.generateTokens(userDto);
     await tokenService.saveToken(userDto.id, tokens.refreshToken);
 
-    return {...tokens, user: userDto};
+    return { ...tokens, user: userDto };
   }
 
   async sendLatter(userId) {
     const code = generateConfirmationCode();
 
-    const user = await db.query("SELECT * FROM users WHERE id = $1", [
-      userId,
-    ]);
+    const user = await db.query("SELECT * FROM users WHERE id = $1", [userId]);
 
-    if(user.rows.length === 0) {
+    if (user.rows.length === 0) {
       throw ApiError.BadRequest("Произошла ошибка при отправке письма!");
     }
 
-    await db.query(
-      "UPDATE users SET activation_code=$1 WHERE id=$2",
-      [code, userId]
-    );
+    await db.query("UPDATE users SET activation_code=$1 WHERE id=$2", [
+      code,
+      userId,
+    ]);
 
     mailService.sendActivationMail(user.rows[0].email, code);
   }

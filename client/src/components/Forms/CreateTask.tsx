@@ -103,7 +103,6 @@ export const FormCreateTask: React.FC<FormUpdateUserInfoProps> = ({
 
   return (
     <FormProvider {...methods}>
-      {/* <Text>hgjgdj</Text> */}
       <View>
         <CustomInput
           rules={{ required: "Обязательное поле!" }}

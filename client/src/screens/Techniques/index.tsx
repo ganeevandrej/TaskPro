@@ -1,18 +1,18 @@
-import { View, ScrollView } from "react-native";
+import { View, ScrollView, StyleSheet } from "react-native";
 import { Card, Text } from "react-native-paper";
 
 export const TechnipuesScreen: React.FC = (): React.JSX.Element => {
   return (
     <View>
-      <ScrollView contentContainerStyle={{ alignItems: "center" }}>
-        <Card style={{ width: "90%", marginTop: 20 }}>
+      <ScrollView contentContainerStyle={styles.container}>
+        <Card style={styles.card}>
           <Card.Cover
-            style={{ resizeMode: "contain", borderBottomRightRadius: 0, borderBottomLeftRadius: 0  }}
+            style={styles.cardCover}
             source={require("../../../assets/eatThatFrog.png")}
           />
           <Card.Title title={"Eat That Frog!"} />
-          <Card.Content style={{ paddingTop: 0 }}>
-            <Text style={{ width: "95%", textAlign: "justify" }}>
+          <Card.Content style={styles.cardContent}>
+            <Text style={styles.cardText}>
               Это методика, предложенная Брайаном Трейси, которая призывает
               начинать день с выполнения самой сложной и важной задачи (или
               "съесть самую большую лягушку"), чтобы улучшить продуктивность и
@@ -20,28 +20,28 @@ export const TechnipuesScreen: React.FC = (): React.JSX.Element => {
             </Text>
           </Card.Content>
         </Card>
-        <Card style={{ width: "90%", marginTop: 20 }}>
+        <Card style={styles.card}>
           <Card.Cover
-            style={{ resizeMode: "contain", borderBottomRightRadius: 0, borderBottomLeftRadius: 0  }}
+            style={styles.cardCover}
             source={require("../../../assets/pomodoro.jpg")}
           />
           <Card.Title title={"Pomodoro Technique"} />
-          <Card.Content style={{ paddingTop: 0 }}>
-            <Text style={{ width: "95%", textAlign: "justify" }}>
+          <Card.Content style={styles.cardContent}>
+            <Text style={styles.cardText}>
               Это методика управления временем, разработанная Франческо Чирилло,
               которая предлагает разделить рабочее время на периоды (обычно 25
               минут), называемые "помидорами", с последующим коротким перерывом.
             </Text>
           </Card.Content>
         </Card>
-        <Card style={{ width: "90%", marginTop: 20, marginBottom: 20 }}>
+        <Card style={{ ...styles.card, marginBottom: 20 }}>
           <Card.Cover
-            style={{ resizeMode: "contain", borderBottomRightRadius: 0, borderBottomLeftRadius: 0 }}
+            style={styles.cardCover}
             source={require("../../../assets/1-2-3-4.jpg")}
           />
           <Card.Title title={"1-2-3-4 Method"} />
-          <Card.Content style={{ paddingTop: 0 }}>
-            <Text style={{ width: "95%", textAlign: "justify" }}>
+          <Card.Content style={styles.cardContent}>
+            <Text style={styles.cardText}>
               В этой методике вы выбираете одну главную цель (1), две
               второстепенные цели (2) и три дополнительные задачи (3), которые
               нужно выполнить в течение дня. Это помогает установить ясные
@@ -53,3 +53,25 @@ export const TechnipuesScreen: React.FC = (): React.JSX.Element => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: { 
+    alignItems: "center" 
+  },
+  card: { 
+    width: "90%", 
+    marginTop: 20 
+  },
+  cardCover: { 
+    resizeMode: "contain", 
+    borderBottomRightRadius: 0, 
+    borderBottomLeftRadius: 0  
+  },
+  cardContent: { 
+    paddingTop: 0 
+  },
+  cardText: { 
+    width: "95%", 
+    textAlign: "justify" 
+  }
+});

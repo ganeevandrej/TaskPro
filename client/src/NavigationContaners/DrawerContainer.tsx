@@ -1,14 +1,7 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { CustomDrawerContent } from "../components/custom/DriwerContent";
 import { TabNavigationConatiner } from "./TabContainer";
-import { SchedulerScreen } from "../screens/Scheduler";
-
-export type DrawerParamList = {
-  Scheduler: undefined;
-  Notification: undefined;
-  Categories: undefined;
-  Profile: undefined;
-};
+import { DrawerParamList } from "./models";
 
 const Drawer = createDrawerNavigator<DrawerParamList>();
 
@@ -19,14 +12,10 @@ export const DriwerNavigationConatiner = () => {
       screenOptions={{ headerShown: false }}
       drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
-      <Drawer.Screen name="Scheduler" component={TabNavigationConatiner}>
-      </Drawer.Screen>
-      <Drawer.Screen name="Categories" component={TabNavigationConatiner}>
-      </Drawer.Screen>
-      <Drawer.Screen name="Notification" component={TabNavigationConatiner}>
-      </Drawer.Screen>
-      <Drawer.Screen name="Profile" component={TabNavigationConatiner}>
-      </Drawer.Screen>
+      <Drawer.Screen name="Scheduler" component={TabNavigationConatiner} />
+      <Drawer.Screen name="Categories" component={TabNavigationConatiner} />
+      <Drawer.Screen name="Notification" component={TabNavigationConatiner} />
+      <Drawer.Screen name="Profile" component={TabNavigationConatiner} />
     </Drawer.Navigator>
   );
 };

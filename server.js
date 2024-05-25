@@ -4,12 +4,13 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import authRouter from "./routes/auth.routes.js";
 import userRouter from "./routes/user.routes.js";
+import taskRouter from "./routes/task.routes.js";
+import categoryRouter from "./routes/category.routes.js";
 import fileRouter from "./routes/file.routes.js";
 import { errorMiddleware } from "./middlewares/error-middleware.js";
 
 const app = express();
 const port = process.env.PORT || 3000;
-
 
 app.use(express.json());
 app.use(cookieParser());
@@ -24,6 +25,8 @@ app.use(
 app.use("/api/auth", authRouter);
 app.use("/api/upload", fileRouter);
 app.use("/api/user", userRouter);
+app.use("/api/tasks", taskRouter);
+app.use("/api/categories", categoryRouter);
 app.use(errorMiddleware);
 
 app.listen(port, () => {

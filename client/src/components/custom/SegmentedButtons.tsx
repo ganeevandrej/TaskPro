@@ -2,7 +2,7 @@ import { useState } from "react";
 import { SegmentedButtons } from "react-native-paper";
 
 export const CustomSegmentedButtons = () => {
-    const [value, setValue] = useState("Низкий");
+    const [value, setValue] = useState<string>("Низкий");
     
     return (
         <SegmentedButtons
