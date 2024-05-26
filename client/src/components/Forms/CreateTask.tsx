@@ -7,7 +7,7 @@ import { InputsCreateTask } from "./models";
 import { CustomTimeInput } from "../custom/TimeInput";
 import { CustomSelect } from "../custom/Select";
 import { CustomDateInputTask } from "../custom/DateInputTask";
-import { fetchCreateTask, fetchUpdateTask } from "../../store/reducers/taskManager/ActionCreators";
+import { fetchCreateTask } from "../../store/reducers/taskManager/ActionCreators";
 
 const configFormCreateTask: UseFormProps<InputsCreateTask> = {
   mode: "onBlur",

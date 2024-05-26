@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { checkAuth } from "./src/store/reducers/auth/ActionCreators";
 import { useAppDispatch } from "./src/hooks/redux";
-import { RootNavigationConatiner } from "./src/NavigationContaners/RootContainer";
+import { RootNavigationConatiner } from "./src/Navigation/RootContainer";
 import ThemeProvider from "./src/contexts/theme-context";
 
 export const App: React.FC = (): React.JSX.Element => {

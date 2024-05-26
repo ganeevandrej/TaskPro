@@ -6,7 +6,7 @@ import { CustomInput } from "../../components/custom/TextInput";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { fetchLogin } from "../../store/reducers/auth/ActionCreators";
 import { InputsLogin } from "./models";
-import { RootStackParamList } from "../../NavigationContaners/models";
+import { RootStackParamList } from "../../Navigation/models";
 
 const configFormLogin: UseFormProps<InputsLogin> = {
   mode: "onBlur",

@@ -2,7 +2,6 @@ import { Portal, Dialog } from "react-native-paper";
 import { View, StyleSheet } from "react-native";
 import { FormCreateCategory } from "../Forms/CreateCategory";
 
-
 export interface IVerificationProps {
   visible: boolean;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;

@@ -1,4 +1,3 @@
-import { DrawerContentComponentProps } from "@react-navigation/drawer";
 import { useState } from "react";
 import {
   Avatar,

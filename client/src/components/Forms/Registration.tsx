@@ -6,8 +6,8 @@ import { CustomInput } from "../../components/custom/TextInput";
 import { fetchRegistration } from "../../store/reducers/auth/ActionCreators";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { useEffect } from "react";
-import { RootStackParamList } from "../../NavigationContaners/RootContainer";
 import { Inputs } from "./models";
+import { RootStackParamList } from "../../Navigation/models";
 
 const configFormRegistration: UseFormProps<Inputs> = {
   mode: "onBlur",
@@ -19,7 +19,9 @@ const configFormRegistration: UseFormProps<Inputs> = {
 };
 
 export const FormRegistration: React.FC = (): React.JSX.Element => {
-  const { isLoading, error, user } = useAppSelector((state) => state.authReducer);
+  const { isLoading, error, user } = useAppSelector(
+    (state) => state.authReducer
+  );
   const methods = useForm<Inputs>(configFormRegistration);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const dispatch = useAppDispatch();
@@ -31,10 +33,9 @@ export const FormRegistration: React.FC = (): React.JSX.Element => {
   };
 
   useEffect(() => {
-    if(user.id) {
+    if (user.id) {
       navigation.navigate("Home");
     }
-    
   }, [user]);
 
   if (isLoading) {
@@ -71,14 +72,14 @@ const { width } = Dimensions.get("window");
 const width_2 = width - 80;
 
 export const styles = StyleSheet.create({
-    container: {
-      width: width_2,
-      marginHorizontal: 40,
-      // marginTop: "50%",
-    },
-    link: {
-      textDecorationLine: "underline",
-      textAlign: "center",
-      marginTop: 20,
-    },
-  });
+  container: {
+    width: width_2,
+    marginHorizontal: 40,
+    // marginTop: "50%",
+  },
+  link: {
+    textDecorationLine: "underline",
+    textAlign: "center",
+    marginTop: 20,
+  },
+});

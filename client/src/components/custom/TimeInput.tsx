@@ -1,5 +1,5 @@
-import { FieldValues, useController, useFormContext } from "react-hook-form";
-import { TextInput, Text, TouchableRipple, List } from "react-native-paper";
+import { useController, useFormContext } from "react-hook-form";
+import { Text, TouchableRipple, List } from "react-native-paper";
 import { useState } from "react";
 import RNDateTimePicker, {
   DateTimePickerEvent,

@@ -3,7 +3,7 @@ import { Header } from "../../components/Header";
 import { Button } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
-import { DrawerParamList } from "../../NavigationContaners/DrawerContainer";
+import { DrawerParamList } from "../../Navigation/DrawerContainer";
 
 export const NotificationsScreen: React.FC = (): React.JSX.Element => {
   const navigation = useNavigation<DrawerNavigationProp<DrawerParamList>>();

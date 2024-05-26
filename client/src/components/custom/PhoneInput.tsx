@@ -1,7 +1,6 @@
 import { useController, useFormContext } from "react-hook-form";
 import { TextInput, Text } from "react-native-paper";
 import { View, StyleSheet } from "react-native";
-import { useState } from "react";
 
 export interface CustomInputProps {
   name: string;

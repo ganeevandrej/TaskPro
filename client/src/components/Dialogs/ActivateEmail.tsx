@@ -1,6 +1,6 @@
 import { Text, Button, Portal, Dialog } from "react-native-paper";
 import { useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { Verification } from "../custom/verification";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import {
