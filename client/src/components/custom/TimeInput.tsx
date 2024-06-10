@@ -5,32 +5,28 @@ import RNDateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import { View, StyleSheet } from "react-native";
+import { InputsUpdateTask } from "../Forms/models";
 
 export interface CustomInputProps {
-  name: string;
   rules?: {
     required: string;
   };
 }
 
 export const CustomTimeInput: React.FC<CustomInputProps> = ({
-  name,
   rules,
 }): React.JSX.Element => {
-  const [time, setTime] = useState<Date>(new Date());
   const [showTimePicker, setShowTimePicker] = useState<boolean>(false);
-  const { control } = useFormContext();
-  const { field, fieldState } = useController({ control, rules, name });
+  const { control } = useFormContext<InputsUpdateTask>();
+  const { field } = useController<InputsUpdateTask, "time">({
+    control,
+    rules,
+    name: "time",
+  });
 
   const onChangeTime = (event: DateTimePickerEvent, selectedTime?: Date) => {
-    if (selectedTime) {
-      const currentDate = selectedTime || time;
-      setTime(currentDate);
-      const hours = String(currentDate.getHours()).padStart(2, '0');
-      const minutes = String(currentDate.getMinutes()).padStart(2, '0');
-      field.onChange(`${hours}:${minutes}`);
-      setShowTimePicker(false);
-    }
+    field.onChange(selectedTime);
+    setShowTimePicker(false);
   };
 
   const openTimePicker = () => {
@@ -48,7 +44,10 @@ export const CustomTimeInput: React.FC<CustomInputProps> = ({
           )}
           right={(props) => (
             <Text variant="bodyMedium" {...props}>
-              {field.value}
+              {field.value ? field.value.toLocaleTimeString("ru-RU", {
+                hour: "numeric",
+                minute: "numeric",
+              }): ""}
             </Text>
           )}
         />
@@ -56,7 +55,7 @@ export const CustomTimeInput: React.FC<CustomInputProps> = ({
       {showTimePicker && (
         <RNDateTimePicker
           testID="dateTimePicker"
-          value={time}
+          value={field.value ? field.value : new Date()}
           mode="time"
           is24Hour={true}
           display="spinner"

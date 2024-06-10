@@ -82,23 +82,6 @@ export const DialogDetalsTask: React.FC<IVerificationProps> = ({
                 }}
               >
                 <List.Item
-                  titleStyle={{ fontSize: 14 }}
-                  title="Дедлайн"
-                  left={(props) => <List.Icon {...props} icon="alarm-snooze" />}
-                  right={(props) => (
-                    <Text variant="bodyMedium" {...props}>
-                      {String(task.deadline)}
-                    </Text>
-                  )}
-                />
-              </View>
-              <View
-                style={{
-                  backgroundColor: colors.secondaryContainer,
-                  marginBottom: 5,
-                }}
-              >
-                <List.Item
                   titleStyle={{ fontSize: 14, marginBottom: 5 }}
                   title="Приоритет"
                   left={(props) => (
@@ -134,16 +117,86 @@ export const DialogDetalsTask: React.FC<IVerificationProps> = ({
                 />
               </View>
             </List.Section>
+            <List.Section>
+              <List.Subheader style={{ paddingHorizontal: 0, paddingTop: 0 }}>
+                Дедлайн
+              </List.Subheader>
+              <View
+                style={{
+                  backgroundColor: colors.secondaryContainer,
+                  marginBottom: 5,
+                  borderTopLeftRadius: 10,
+                  borderTopRightRadius: 10,
+                }}
+              >
+                <List.Item
+                  titleStyle={{ fontSize: 14 }}
+                  title="Дата"
+                  left={(props) => (
+                    <List.Icon {...props} icon="calendar-today" />
+                  )}
+                  right={(props) => (
+                    <Text variant="bodyMedium" {...props}>
+                      {task.deadline ? dateToString(task.deadline) : ""}
+                    </Text>
+                  )}
+                />
+              </View>
+              <View
+                style={{
+                  backgroundColor: colors.secondaryContainer,
+                  borderBottomLeftRadius: 10,
+                  borderBottomRightRadius: 10,
+                }}
+              >
+                <List.Item
+                  titleStyle={{ fontSize: 14 }}
+                  title="Время"
+                  left={(props) => (
+                    <List.Icon {...props} icon="clock-time-four-outline" />
+                  )}
+                  right={(props) => (
+                    <Text variant="bodyMedium" {...props}>
+                      {task.deadline ? timeToString(task.deadline) : ""}
+                    </Text>
+                  )}
+                />
+              </View>
+            </List.Section>
           </Dialog.Content>
           <Dialog.Actions>
             <Button onPress={hideDialog}>Назад</Button>
             <Button onPress={() => deleteTask()}>Удалить</Button>
-            <Button onPress={() => completeTask()}>Завершить</Button>
+            <Button
+              disabled={task.status === "Завершена"}
+              onPress={() => completeTask()}
+            >
+              Завершить
+            </Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>
     </View>
   );
+};
+
+const dateToString = (date: Date) => {
+  const dateToDate = new Date(date);
+
+  return dateToDate.toLocaleDateString("ru-RU", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};
+
+const timeToString = (date: Date) => {
+  const dateToDate = new Date(date);
+
+  return dateToDate.toLocaleTimeString("ru-RU", {
+    hour: "numeric",
+    minute: "numeric",
+  });
 };
 
 const styles = StyleSheet.create({});

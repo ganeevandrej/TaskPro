@@ -19,7 +19,6 @@ export const initialTask: ITask = {
 export const ListTasks = () => {
   const { tasks } = useAppSelector((state) => state.taskManagerReducer);
   const [task, setTask] = useState(initialTask);
-  const [taskUpdate, setTaskUpdate] = useState<number>(0);
   const [visibleDialogDetalsTask, setVisibleDialogDetalsTask] =
     useState<boolean>(false);
   const [visibleDialogUpdateTask, setVisibleDialogUpdateTask] =
@@ -31,7 +30,7 @@ export const ListTasks = () => {
   };
 
   const openDialogUpdateTask = (task: ITask) => {
-    setTaskUpdate(task.id);
+    setTask(task);
     setVisibleDialogUpdateTask(true);
   };
 
@@ -61,7 +60,7 @@ export const ListTasks = () => {
       <DialogUpdateTask
         visible={visibleDialogUpdateTask}
         setVisible={setVisibleDialogUpdateTask}
-        taskId={taskUpdate}
+        task={task}
       />
     </>
   );

@@ -21,7 +21,7 @@ class UserService {
 
   async getAvatar(userId) {
     const imageData = await db.query(
-      "SELECT * FROM user_images WHERE user_id = $1",
+      "SELECT * FROM image_user WHERE user_id = $1",
       [userId]
     );
 
@@ -29,7 +29,7 @@ class UserService {
       throw new Error("Аватар пользователя не найден!");
     }
 
-    return `data:image/jpeg;base64,${imageData.rows[0].image_data.toString(
+    return `data:image/jpeg;base64,${imageData.rows[0].avatar.toString(
       "base64"
     )}`;
   }

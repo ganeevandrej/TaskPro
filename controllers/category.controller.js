@@ -3,7 +3,7 @@ import categoryService from "../service/category-service.js";
 class CategoryController {
   async getCategories(req, res, next) {
     try {
-      const userId = req.body.userId;
+      const userId = req.query.userId;
       const categories = await categoryService.getCategories(userId);
 
       return res.json(categories);
@@ -16,8 +16,6 @@ class CategoryController {
     try {
       const body = req.body;
       const category = await categoryService.createCategory(body);
-
-      console.log(category);
 
       return res.json(category);
     } catch (error) {

@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "client_2",
+    "name": "TaskPro",
     "slug": "client_2",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -9,11 +9,9 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#F2F2F2"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },

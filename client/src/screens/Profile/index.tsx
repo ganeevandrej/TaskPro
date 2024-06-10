@@ -52,7 +52,6 @@ export const ProfileScreen: React.FC = (): React.JSX.Element => {
           text: "Выйти",
           onPress: () => {
             dispatch(fetchLogout());
-            // navigation.navigate("Login");
           },
         },
       ]

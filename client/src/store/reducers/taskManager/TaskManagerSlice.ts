@@ -12,7 +12,7 @@ export interface ITask {
     priority: string,
     category: string,
     status: string,
-    deadline: Date,
+    deadline: Date | null,
 }
 
 export interface IPriority {

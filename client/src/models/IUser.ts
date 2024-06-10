@@ -5,5 +5,4 @@ export interface IUser {
     phone: string | null,
     name: string | null,
     dateBirth: string | null,
-
 }

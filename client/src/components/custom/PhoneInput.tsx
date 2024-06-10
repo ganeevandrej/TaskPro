@@ -1,35 +1,45 @@
 import { useController, useFormContext } from "react-hook-form";
-import { TextInput, Text } from "react-native-paper";
+import { TextInput, Text, List, useTheme } from "react-native-paper";
 import { View, StyleSheet } from "react-native";
+import { createStyles } from "./TextInput";
 
 export interface CustomInputProps {
   name: string;
-  rules: {
+  label: string;
+  rules?: {
     required: string;
   };
 }
 
 export const MyPhoneInput: React.FC<CustomInputProps> = ({
   name,
+  label,
   rules,
 }): React.JSX.Element => {
   const { control } = useFormContext();
-  const { field, fieldState } = useController({ control, rules, name });
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
+  const { field } = useController({ control, rules, name });
 
   return (
     <View>
+      <List.Subheader style={styles.label}>
+        {label}
+        <Text style={styles.after} variant="bodyMedium">
+          {" "}
+          *
+        </Text>
+      </List.Subheader>
       <TextInput
         style={styles.input}
         mode="outlined"
+        outlineStyle={{ borderWidth: 0, borderRadius: 10 }}
         onBlur={field.onBlur}
-        label="Номер телефона"
         maxLength={11}
         onChangeText={field.onChange}
         value={field.value}
         keyboardType="phone-pad"
-        error={fieldState.invalid ? true : false}
       />
-      <Text>{fieldState.error?.message}</Text>
     </View>
   );
 };

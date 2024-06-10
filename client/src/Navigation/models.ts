@@ -4,10 +4,15 @@ export type RootStackParamList = {
     Login: undefined;
 };
 
+export type StackShedulerParamList = {
+    Scheduler: undefined;
+    Categories: undefined;
+};
+
 export type DrawerParamList = {
     Scheduler: undefined;
     Notification: undefined;
-    Categories: undefined;
+    Category: undefined;
     Profile: undefined;
 };
 
@@ -18,7 +23,3 @@ export type TabStackParamList = {
     Профиль: undefined;
     Техники: undefined;
 };
-
-export interface RootNavigationConatinerProps {
-    isLoggedIn: boolean;
-}

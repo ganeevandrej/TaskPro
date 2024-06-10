@@ -1,24 +1,35 @@
 import { useState } from "react";
-import { SegmentedButtons } from "react-native-paper";
+import { useController, useFormContext } from "react-hook-form";
+import { List, SegmentedButtons } from "react-native-paper";
 
-export const CustomSegmentedButtons = () => {
-    const [value, setValue] = useState<string>("Низкий");
-    
-    return (
-        <SegmentedButtons
-        value={value}
-        onValueChange={setValue}
+interface CustomSegmentedButtonsProps {
+  name: string;
+}
+
+export const CustomSegmentedButtons: React.FC<
+  CustomSegmentedButtonsProps
+> = ({name}): React.JSX.Element => {
+  const { control } = useFormContext();
+  const { field } = useController({ control, name });
+
+  return (
+    <>
+      <List.Subheader style={{ paddingHorizontal: 0 }}>Статус</List.Subheader>
+      <SegmentedButtons
+        value={field.value}
+        onValueChange={field.onChange}
         buttons={[
           {
-            value: "Низкий",
-            label: "Низкий",
+            value: "Просрочена",
+            icon: "alert-remove",
           },
+          { value: "Завершена", icon: "check" },
           {
-            value: "Средний",
-            label: "Средний",
+            value: "Активная",
+            icon: "progress-question",
           },
-          { value: "Высокий", label: "Высокий" },
         ]}
       />
-    );
-}
+    </>
+  );
+};

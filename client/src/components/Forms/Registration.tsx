@@ -1,13 +1,20 @@
-import { View, StyleSheet, Dimensions } from "react-native";
+import { View } from "react-native";
 import { FormProvider, UseFormProps, useForm } from "react-hook-form";
-import { Button, TouchableRipple, Text } from "react-native-paper";
+import {
+  Button,
+  TouchableRipple,
+  Text,
+  useTheme,
+  ActivityIndicator,
+} from "react-native-paper";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { CustomInput } from "../../components/custom/TextInput";
 import { fetchRegistration } from "../../store/reducers/auth/ActionCreators";
-import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { useEffect } from "react";
+import { useAppDispatch } from "../../hooks/redux";
+import { useState } from "react";
 import { Inputs } from "./models";
 import { RootStackParamList } from "../../Navigation/models";
+import { createStyles } from "./Login";
 
 const configFormRegistration: UseFormProps<Inputs> = {
   mode: "onBlur",
@@ -19,47 +26,46 @@ const configFormRegistration: UseFormProps<Inputs> = {
 };
 
 export const FormRegistration: React.FC = (): React.JSX.Element => {
-  const { isLoading, error, user } = useAppSelector(
-    (state) => state.authReducer
-  );
   const methods = useForm<Inputs>(configFormRegistration);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
 
-  const { handleSubmit, reset } = methods;
+  const { handleSubmit } = methods;
 
-  const onSubmit = (fields: Inputs) => {
+  const onSubmit = async (fields: Inputs) => {
     dispatch(fetchRegistration(fields));
+    if (fields.email && fields.password && fields.passwordRepeat) {
+      setLoading(true);
+      await dispatch(fetchRegistration(fields));
+      setLoading(false);
+    }
+    setError("Заполните все поля!");
   };
 
-  useEffect(() => {
-    if (user.id) {
-      navigation.navigate("Home");
-    }
-  }, [user]);
-
-  if (isLoading) {
-    return <Text>Loading</Text>;
+  if (loading) {
+    return <ActivityIndicator animating={true} size="large" />;
   }
 
   return (
     <FormProvider {...methods}>
-      <View style={styles.container}>
-        <Text>{error}</Text>
-        <CustomInput rules={{ required: "Обязательное поле!" }} name="email" />
-        <CustomInput
-          rules={{ required: "Обязательное поле!" }}
-          name="password"
-        />
-        <CustomInput
-          rules={{ required: "Обязательное поле!" }}
-          name="passwordRepeat"
-        />
-        <Button mode="contained" onPress={handleSubmit(onSubmit)}>
-          Send
+      <View>
+      {error && <Text variant="bodyMedium" style={styles.error}>{error}</Text>}
+        <CustomInput name="email" label="Email" />
+        <CustomInput name="password" label="Password" />
+        <CustomInput name="passwordRepeat" label="Confirm password" />
+        <Button
+          style={styles.button}
+          mode="outlined"
+          onPress={handleSubmit(onSubmit)}
+        >
+          Зарегистрироваться
         </Button>
         <TouchableRipple onPress={() => navigation.navigate("Login")}>
-          <Text style={styles.link}>
+          <Text variant="bodySmall" style={styles.link}>
             Уже сеть аккаунт? Войдите в приложение
           </Text>
         </TouchableRipple>
@@ -67,19 +73,3 @@ export const FormRegistration: React.FC = (): React.JSX.Element => {
     </FormProvider>
   );
 };
-
-const { width } = Dimensions.get("window");
-const width_2 = width - 80;
-
-export const styles = StyleSheet.create({
-  container: {
-    width: width_2,
-    marginHorizontal: 40,
-    // marginTop: "50%",
-  },
-  link: {
-    textDecorationLine: "underline",
-    textAlign: "center",
-    marginTop: 20,
-  },
-});

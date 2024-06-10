@@ -18,6 +18,9 @@ import {
 } from "react-native-paper";
 import merge from "deepmerge";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { checkAuth } from "../store/reducers/auth/ActionCreators";
+import { useAppDispatch } from "../hooks/redux";
+import * as SplashScreen from "expo-splash-screen";
 
 interface ThemeContextType {
   isThemeDark: boolean;
@@ -27,6 +30,8 @@ interface ThemeContextType {
 interface ThemeProviderProps {
   children: React.ReactNode;
 }
+
+SplashScreen.preventAutoHideAsync();
 
 const CombinedDefaultTheme = merge(PaperDefaultTheme, NavigationDefaultTheme);
 const CombinedDarkTheme = merge(PaperDarkTheme, NavigationDarkTheme);
@@ -41,18 +46,24 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
 }): React.JSX.Element => {
   const [isThemeDark, setIsThemeDark] = useState(false);
   let theme = isThemeDark ? CombinedDarkTheme : CombinedDefaultTheme;
+  const dispatch = useAppDispatch();
+
 
   useEffect(() => {
     const getTheme = async () => {
-      const isDarkTheme = await AsyncStorage.getItem('isDarkTheme');
+      const isDarkTheme = await AsyncStorage.getItem("isDarkTheme");
+      const accessToken = await AsyncStorage.getItem("accessToken");
+
+      accessToken && (await dispatch(checkAuth()));
       setIsThemeDark(isDarkTheme ? true : false);
-    }
+      await SplashScreen.hideAsync();
+    };
 
     getTheme();
   });
 
   const toggleTheme = useCallback(async () => {
-    await AsyncStorage.setItem('isDarkTheme', isThemeDark ? "" : "true");
+    await AsyncStorage.setItem("isDarkTheme", isThemeDark ? "" : "true");
     setIsThemeDark(!isThemeDark);
   }, [isThemeDark]);
 

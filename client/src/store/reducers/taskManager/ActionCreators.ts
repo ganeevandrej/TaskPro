@@ -5,15 +5,16 @@ import { ICategory, IPriority, taskManagerSlice } from "./TaskManagerSlice";
 import { IResponsDataError } from "../auth/ActionCreators";
 import TaskManagerService from "../../../services/TaskManagerService";
 import { InputCreateCategory } from "../../../components/Forms/models";
+import { BodyGetTasks } from "../../../screens/Scheduler";
 
 export interface ICreateTask {
-    deadline: string | null,
+    deadline: Date | null,
     userId?: number,
     name: string,
     category: number,
     priority: number,
-    createTask?: string,
-    status?: string
+    createTask: Date,
+    status: string
 }
 
 export const fetchCreateTask = (requestBody: ICreateTask) => async (dispatch: AppDispatch) => {
@@ -64,10 +65,10 @@ export const fetchCreateCategory = (requestBody: InputCreateCategory, userId: nu
     }
 }
 
-export const fetchgetTaskManager = (userId: number) => async (dispatch: AppDispatch) => {
+export const fetchgetTaskManager = (body: BodyGetTasks) => async (dispatch: AppDispatch) => {
     try {
         dispatch(taskManagerSlice.actions.fetching());
-        const res = await TaskManagerService.getTaskManeger(userId);
+        const res = await TaskManagerService.getTaskManeger(body);
         dispatch(taskManagerSlice.actions.fetchingCategoriesSuccess(res.categories));
         dispatch(taskManagerSlice.actions.fetchingPrioritiesSuccess(res.priorities));
         dispatch(taskManagerSlice.actions.fetchingTasksSuccess(res.tasks));

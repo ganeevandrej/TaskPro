@@ -15,7 +15,7 @@ export const Task: React.FC<renderItemProps> = ({
 }): React.JSX.Element => {
   const renderIconStatus = (status: string): string => {
     if (status === "Завершена") return "check";
-    if (status === "Активный") return "progress-question";
+    if (status === "Активная") return "progress-question";
     return "alert-remove";
   };
 
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   cardTitle: {
-    paddingRight: 20,
+    paddingRight: 20
   },
   cardContent: {
     paddingHorizontal: 0,

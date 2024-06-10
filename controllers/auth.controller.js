@@ -58,8 +58,6 @@ class AuthController {
 
       await authService.activate(code);
 
-      console.log("Ваш email успешно подтвержден!");
-
       return res.send("Ваш email успешно подтвержден!");
     } catch (error) {
       next(error);

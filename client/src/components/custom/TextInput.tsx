@@ -1,24 +1,27 @@
 import { useController, useFormContext } from "react-hook-form";
-import { TextInput, Text } from "react-native-paper";
+import { TextInput, Text, useTheme, List } from "react-native-paper";
 import { useState } from "react";
 import { View, StyleSheet } from "react-native";
+import { MD3Colors } from "react-native-paper/lib/typescript/types";
 
 export interface CustomInputProps {
   name: string;
   label?: string;
-  rules: {
-    required: string;
+  rules?: {
+    required?: string;
   };
 }
 
 export const CustomInput: React.FC<CustomInputProps> = ({
   name,
   rules,
-  label
+  label,
 }): React.JSX.Element => {
   const [isIconShowPassword, setIconShowPassword] = useState(true);
   const { control } = useFormContext();
-  const { field, fieldState } = useController({ control, rules, name });
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
+  const { field } = useController({ control, rules, name });
   const isSecureText = field.name.indexOf("password") !== -1;
 
   const changeIcon = () => {
@@ -27,33 +30,46 @@ export const CustomInput: React.FC<CustomInputProps> = ({
 
   return (
     <View>
+      <List.Subheader style={styles.label}>
+        {label}
+        <Text style={styles.after} variant="bodyMedium">
+          {" "}
+          *
+        </Text>
+      </List.Subheader>
       <TextInput
         style={styles.input}
+        outlineStyle={{ borderWidth: 0, borderRadius: 10 }}
         mode="outlined"
         onBlur={field.onBlur}
-        label={label ? label : field.name}
         onChangeText={field.onChange}
         value={field.value}
-        error={fieldState.invalid ? true : false}
         secureTextEntry={isSecureText && isIconShowPassword}
         right={
           isSecureText && (
             <TextInput.Icon
-              icon={isIconShowPassword ? "eye-outline" : "eye-off-outline"}
+              icon={isIconShowPassword ? "eye-off-outline" : "eye-outline"}
               onPress={changeIcon}
             />
           )
         }
       />
-      <Text>{fieldState.error?.message}</Text>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  input: {
-    width: "100%",
-    marginLeft: "auto",
-    marginRight: "auto",
-  },
-});
+export const createStyles = (colors: MD3Colors) =>
+  StyleSheet.create({
+    input: {
+      width: "100%",
+      backgroundColor: colors.secondaryContainer,
+      paddingVertical: 0
+    },
+    label: {
+      marginLeft: -15,
+    },
+    after: {
+      color: colors.error,
+    },
+  }
+);

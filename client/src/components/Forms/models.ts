@@ -20,12 +20,24 @@ export interface InputsUpdateUserInfo {
     dataBirth: string,
 }
 
-type PriorityValueType = 1 | 2 | 3;
-
 export interface InputsCreateTask {
     name: string,
-    priority: PriorityValueType,
+    priority: number,
     category: number,
-    time: string,
-    date: string;
+    time: Date | null,
+    date: Date | null;
+}
+
+export interface InputsUpdateTask {
+    name: string,
+    priority: number,
+    category: number,
+    time: Date | null,
+    date: Date | null;
+}
+
+export interface InputsForms {
+    status: string,
+    priority: number,
+    category: number,
 }

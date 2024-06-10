@@ -2,6 +2,7 @@ import fileService from "../service/file-service.js";
 
 class FileController {
   async uploadAvatar(req, res, next) {
+    
     try {
       const userId = req.params.userId;
       const imageData = req.file.buffer;
@@ -10,7 +11,6 @@ class FileController {
 
       return res.send(imageUrl);
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }

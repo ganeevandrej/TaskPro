@@ -1,6 +1,6 @@
 import { Portal, Dialog } from "react-native-paper";
 import { View, ScrollView, StyleSheet } from "react-native";
-import { FormCreateTask } from "../Forms/CreateTask";
+import { FormCreateTask } from "../Forms/CreateTask/CreateTask";
 
 export interface IVerificationProps {
   visible: boolean;
@@ -11,7 +11,7 @@ export const DialogCreateTask: React.FC<IVerificationProps> = ({
   visible,
   setVisible,
 }): React.JSX.Element => {
-  const hideDialog = async () => {
+  const hideDialog = () => {
     setVisible(false);
   };
 
@@ -22,7 +22,7 @@ export const DialogCreateTask: React.FC<IVerificationProps> = ({
           <Dialog.Title>Создание задачи</Dialog.Title>
           <Dialog.Content>
             <ScrollView>
-            <FormCreateTask hideDialog={hideDialog} />
+              <FormCreateTask hideDialog={hideDialog} />
             </ScrollView>
           </Dialog.Content>
         </Dialog>
@@ -30,5 +30,3 @@ export const DialogCreateTask: React.FC<IVerificationProps> = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({});

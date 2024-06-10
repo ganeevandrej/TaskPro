@@ -14,7 +14,6 @@ export interface IResponsDataError {
 
 export const fetchRegistration = (requestBody: Inputs) => async (dispatch: AppDispatch) => {
     try {
-        dispatch(userSlice.actions.authFetching());
         const res = await AuthService.registration(requestBody);
         await AsyncStorage.setItem('accessToken', res.data.accessToken);
         dispatch(userSlice.actions.authFetchingSuccess(res.data.user));
@@ -31,7 +30,7 @@ export const fetchRegistration = (requestBody: Inputs) => async (dispatch: AppDi
 
 export const fetchLogin = (requestBody: InputsLogin) => async (dispatch: AppDispatch) => {
     try {
-        dispatch(userSlice.actions.authFetching());
+
         const res = await AuthService.login(requestBody);
         await AsyncStorage.setItem('accessToken', res.data.accessToken);
         dispatch(userSlice.actions.authFetchingSuccess(res.data.user));
@@ -48,7 +47,6 @@ export const fetchLogin = (requestBody: InputsLogin) => async (dispatch: AppDisp
 
 export const fetchLogout = () => async (dispatch: AppDispatch) => {
     try {
-        dispatch(userSlice.actions.authFetching());
         await AuthService.logout();
         await AsyncStorage.removeItem('accessToken');
         dispatch(userSlice.actions.logout());
@@ -65,7 +63,6 @@ export const fetchLogout = () => async (dispatch: AppDispatch) => {
 
 export const fetchActivate = (code: string) => async (dispatch: AppDispatch) => {
     try {
-        dispatch(userSlice.actions.authFetching());
         await AuthService.activate(code);
         dispatch(userSlice.actions.activate());
     } catch (error) {
@@ -81,7 +78,6 @@ export const fetchActivate = (code: string) => async (dispatch: AppDispatch) => 
 
 export const fetchSendLetter = (userId: number) => async (dispatch: AppDispatch) => {
     try {
-        dispatch(userSlice.actions.authFetching());
         await AuthService.sendLetter(userId);
         dispatch(userSlice.actions.activateSuccess());
     } catch (error) {
@@ -97,7 +93,6 @@ export const fetchSendLetter = (userId: number) => async (dispatch: AppDispatch)
 
 export const checkAuth = () => async (dispatch: AppDispatch) => {
     try {
-        dispatch(userSlice.actions.authFetching());
         const res = await axios.get<AuthResponse>(`${API_URL}/auth/refresh`, { withCredentials: true });
         await AsyncStorage.setItem('accessToken', res.data.accessToken);
         dispatch(userSlice.actions.authFetchingSuccess(res.data.user));
@@ -118,8 +113,8 @@ export interface ISendAvatarToBackendProprs {
 }
 
 export const sendAvatarToBackend = (data: ISendAvatarToBackendProprs) => async (dispatch: AppDispatch) => {
+    console.log(data);
     try {
-        dispatch(userSlice.actions.authFetching());
         const res = await UserService.uploadAvatar(data);
         dispatch(userSlice.actions.setUserAvatar(res.body));
     } catch (error) {
@@ -135,7 +130,6 @@ export const sendAvatarToBackend = (data: ISendAvatarToBackendProprs) => async (
 
 export const deleteAvatarFromDb = (userId: number) => async (dispatch: AppDispatch) => {
     try {
-        dispatch(userSlice.actions.authFetching());
         await UserService.deleteAvatar(userId);
         dispatch(userSlice.actions.setUserAvatar(''));
     } catch (error) {
@@ -151,7 +145,6 @@ export const deleteAvatarFromDb = (userId: number) => async (dispatch: AppDispat
 
 export const getAvatar = (userId: number) => async (dispatch: AppDispatch) => {
     try {
-        dispatch(userSlice.actions.authFetching());
         const res = await UserService.getAvatar(userId);
         dispatch(userSlice.actions.setUserAvatar(res.data));
     } catch (error) {
@@ -167,7 +160,6 @@ export const getAvatar = (userId: number) => async (dispatch: AppDispatch) => {
 
 export const updateInfo = (body: InputsUpdateUserInfo, userId: number) => async (dispatch: AppDispatch) => {
     try {
-        dispatch(userSlice.actions.authFetching());
         const res = await UserService.updateInfoUser(body, userId);
         dispatch(userSlice.actions.authFetchingSuccess(res.data));
     } catch (error) {

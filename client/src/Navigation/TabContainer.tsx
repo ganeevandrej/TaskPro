@@ -1,39 +1,19 @@
 import { NotificationsScreen } from "../screens/Notifications";
-import { SchedulerScreen } from "../screens/Scheduler";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { ProfileScreen } from "../screens/Profile";
-import { Icon, IconButton } from "react-native-paper";
+import { Icon } from "react-native-paper";
 import { StyleSheet } from "react-native";
 import { useState } from "react";
 import { DialogUpdateUserInfo } from "../components/Dialogs/UpdateUserInfo";
-import { DialogCreateCategory } from "../components/Dialogs/CreateCategory";
 import { TechnipuesScreen } from "../screens/Techniques";
 import { TabStackParamList } from "./models";
+import { StackShedulerConatiner } from "./StackSheduler";
+import { RenderIcon } from "../components/custom/RenderIcon";
 
 const Tab = createBottomTabNavigator<TabStackParamList>();
 
-export interface RenderIconProps {
-  nameIcon: string;
-  callback: any;
-}
-
-const RenderIcon: React.FC<RenderIconProps> = ({
-  nameIcon,
-  callback,
-}): React.JSX.Element => {
-  return (
-    <IconButton
-      style={styles.headerLeft}
-      icon={nameIcon}
-      onPress={callback()}
-    />
-  );
-};
-
 export const TabNavigationConatiner = () => {
   const [visibleDialogUpdateData, setVisibleDialogUpdateData] =
-    useState<boolean>(false);
-  const [visibleDialogCreateCategory, setVisibleDialogCreateCategory] =
     useState<boolean>(false);
 
   return (
@@ -64,26 +44,12 @@ export const TabNavigationConatiner = () => {
         />
         <Tab.Screen
           name="Планировщик"
-          component={SchedulerScreen}
-          options={({ navigation }) => ({
-            headerShown: true,
-            headerTitle: "Планировщик",
-            headerLeft: () => (
-              <RenderIcon
-                nameIcon="menu"
-                callback={() => navigation.openDrawer()}
-              />
-            ),
-            headerRight: () => (
-              <RenderIcon
-                nameIcon="folder-plus-outline"
-                callback={() => setVisibleDialogCreateCategory(true)}
-              />
-            ),
+          component={StackShedulerConatiner}
+          options={{
             tabBarIcon: ({ color, size }) => (
               <Icon source="clock-outline" size={size} color={color} />
             ),
-          })}
+          }}
         />
         <Tab.Screen
           name="Уведомления"
@@ -131,19 +97,6 @@ export const TabNavigationConatiner = () => {
         visible={visibleDialogUpdateData}
         setVisible={setVisibleDialogUpdateData}
       />
-      <DialogCreateCategory
-        visible={visibleDialogCreateCategory}
-        setVisible={setVisibleDialogCreateCategory}
-      />
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  headerLeft: {
-    marginLeft: 10,
-  },
-  headerRight: {
-    marginRight: 10,
-  },
-});
