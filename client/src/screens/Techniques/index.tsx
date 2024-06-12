@@ -1,11 +1,18 @@
 import { View, ScrollView, StyleSheet } from "react-native";
 import { Card, Text } from "react-native-paper";
+import { StackTechniquesParamList } from "../../Navigation/models";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 
 export const TechnipuesScreen: React.FC = (): React.JSX.Element => {
+  const navigation = useNavigation<NavigationProp<StackTechniquesParamList>>();
+
   return (
     <View>
       <ScrollView contentContainerStyle={styles.container}>
-        <Card style={styles.card}>
+        <Card
+          style={styles.card}
+          onPress={() => navigation.navigate("EatThatFrog")}
+        >
           <Card.Cover
             style={styles.cardCover}
             source={require("../../../assets/eatThatFrog.png")}
@@ -20,7 +27,10 @@ export const TechnipuesScreen: React.FC = (): React.JSX.Element => {
             </Text>
           </Card.Content>
         </Card>
-        <Card style={styles.card}>
+        <Card
+          style={styles.card}
+          onPress={() => navigation.navigate("Pomodoro")}
+        >
           <Card.Cover
             style={styles.cardCover}
             source={require("../../../assets/pomodoro.jpg")}
@@ -34,12 +44,15 @@ export const TechnipuesScreen: React.FC = (): React.JSX.Element => {
             </Text>
           </Card.Content>
         </Card>
-        <Card style={{ ...styles.card, marginBottom: 20 }}>
+        <Card
+          style={{ ...styles.card, marginBottom: 20 }}
+          onPress={() => navigation.navigate("Method")}
+        >
           <Card.Cover
             style={styles.cardCover}
             source={require("../../../assets/1-2-3-4.jpg")}
           />
-          <Card.Title title={"1-2-3-4 Method"} />
+          <Card.Title title={"1-3-5 Method"} />
           <Card.Content style={styles.cardContent}>
             <Text style={styles.cardText}>
               В этой методике вы выбираете одну главную цель (1), две
@@ -55,23 +68,23 @@ export const TechnipuesScreen: React.FC = (): React.JSX.Element => {
 };
 
 const styles = StyleSheet.create({
-  container: { 
-    alignItems: "center" 
+  container: {
+    alignItems: "center",
   },
-  card: { 
-    width: "90%", 
-    marginTop: 20 
+  card: {
+    width: "90%",
+    marginTop: 20,
   },
-  cardCover: { 
-    resizeMode: "contain", 
-    borderBottomRightRadius: 0, 
-    borderBottomLeftRadius: 0  
+  cardCover: {
+    resizeMode: "contain",
+    borderBottomRightRadius: 0,
+    borderBottomLeftRadius: 0,
   },
-  cardContent: { 
-    paddingTop: 0 
+  cardContent: {
+    paddingTop: 0,
   },
-  cardText: { 
-    width: "95%", 
-    textAlign: "justify" 
-  }
+  cardText: {
+    width: "95%",
+    textAlign: "justify",
+  },
 });

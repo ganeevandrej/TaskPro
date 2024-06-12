@@ -5,6 +5,7 @@ import { DrawerParamList } from "./models";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { getAvatar } from "../store/reducers/auth/ActionCreators";
+import { TimerProvider } from "../contexts/timer-context";
 
 const Drawer = createDrawerNavigator<DrawerParamList>();
 
@@ -17,7 +18,8 @@ export const DriwerNavigationConatiner = () => {
   }, []);
 
   return (
-    <Drawer.Navigator
+    <TimerProvider >
+      <Drawer.Navigator
       initialRouteName="Scheduler"
       screenOptions={{ headerShown: false }}
       drawerContent={(props) => <CustomDrawerContent {...props} />}
@@ -27,5 +29,7 @@ export const DriwerNavigationConatiner = () => {
       <Drawer.Screen name="Notification" component={TabNavigationConatiner} />
       <Drawer.Screen name="Profile" component={TabNavigationConatiner} />
     </Drawer.Navigator>
+    </TimerProvider>
+    
   );
 };

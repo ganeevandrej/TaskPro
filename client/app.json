@@ -12,6 +12,14 @@
       "backgroundColor": "#F2F2F2"
     },
     "assetBundlePatterns": ["**/*"],
+    "plugins": [
+      [
+        "expo-font",
+        {
+          "fonts": ["path/to/file.ttf"]
+        }
+      ]
+    ],
     "ios": {
       "supportsTablet": true
     },

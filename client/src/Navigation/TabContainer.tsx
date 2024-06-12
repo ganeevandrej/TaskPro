@@ -9,6 +9,7 @@ import { TechnipuesScreen } from "../screens/Techniques";
 import { TabStackParamList } from "./models";
 import { StackShedulerConatiner } from "./StackSheduler";
 import { RenderIcon } from "../components/custom/RenderIcon";
+import { StackTechniquesConatiner } from "./StackTechniques";
 
 const Tab = createBottomTabNavigator<TabStackParamList>();
 
@@ -27,20 +28,13 @@ export const TabNavigationConatiner = () => {
       >
         <Tab.Screen
           name="Техники"
-          component={TechnipuesScreen}
-          options={({ navigation }) => ({
-            headerShown: true,
-            headerTitle: "Техники",
-            headerLeft: () => (
-              <RenderIcon
-                nameIcon="menu"
-                callback={() => navigation.openDrawer()}
-              />
-            ),
+          component={StackTechniquesConatiner}
+          options={{
+            unmountOnBlur: true,
             tabBarIcon: ({ color, size }) => (
               <Icon source="head-lightbulb-outline" size={size} color={color} />
             ),
-          })}
+          }}
         />
         <Tab.Screen
           name="Планировщик"

@@ -192,7 +192,6 @@ export const SchedulerScreen = (): React.JSX.Element => {
       />
       <ScrollView>
         <Sort value={sort} setValue={setSort} />
-        <CustomButton title="уведомление" callback={() => console.log("ghj")} />
         {isLoading ? (
           <ActivityIndicator animating={true} size="large" />
         ) : (

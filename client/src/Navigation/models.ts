@@ -7,6 +7,16 @@ export type RootStackParamList = {
 export type StackShedulerParamList = {
     Scheduler: undefined;
     Categories: undefined;
+    Category: {
+        title: string
+    };
+};
+
+export type StackTechniquesParamList = {
+    Techniques: undefined;
+    EatThatFrog: undefined;
+    Pomodoro: undefined;
+    Method: undefined;
 };
 
 export type DrawerParamList = {

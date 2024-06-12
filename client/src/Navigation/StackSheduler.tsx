@@ -5,6 +5,7 @@ import { SchedulerScreen } from "../screens/Scheduler";
 import { useState } from "react";
 import { DialogCreateCategory } from "../components/Dialogs/CreateCategory";
 import { RenderIcon } from "../components/custom/RenderIcon";
+import { CategoryScreen } from "../screens/Category";
 
 const Stack = createNativeStackNavigator<StackShedulerParamList>();
 
@@ -21,6 +22,15 @@ export const StackShedulerConatiner = () => {
           options={{
             headerShown: true,
             headerTitle: "Категории",
+            headerTitleAlign: "center",
+          }}
+        />
+        <Stack.Screen
+          name="Category"
+          component={CategoryScreen}
+          options={{
+            headerShown: true,
+            headerTitle: "Категория",
             headerTitleAlign: "center",
           }}
         />
