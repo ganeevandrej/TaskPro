@@ -48,8 +48,8 @@ class TaskService {
     return createTaskDto(task.rows[0], categoriesFromDb, prioritiesFromDb);
   }
 
-  async getTasks(params, filters = {category: '0', status: '', priority: '0'}) {
-    const { userId, sort, search } = params;
+  async getTasks(userId, params, filters = {category: '0', status: '', priority: '0'}) {
+    const { sort, search } = params;
 
     let query = `SELECT * FROM tasks WHERE user_id = ${userId}`;
 

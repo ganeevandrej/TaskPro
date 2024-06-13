@@ -4,6 +4,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import authRouter from "./routes/auth.routes.js";
 import userRouter from "./routes/user.routes.js";
+import notificationRouter from "./routes/notification.routes.js";
 import taskRouter from "./routes/task.routes.js";
 import categoryRouter from "./routes/category.routes.js";
 import fileRouter from "./routes/file.routes.js";
@@ -27,6 +28,7 @@ app.use("/api/upload", fileRouter);
 app.use("/api/user", userRouter);
 app.use("/api/tasks", taskRouter);
 app.use("/api/categories", categoryRouter);
+app.use("/api/notifications", notificationRouter);
 app.use(errorMiddleware);
 
 app.listen(port, () => {

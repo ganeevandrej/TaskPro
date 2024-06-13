@@ -1,19 +1,17 @@
-import { View, Text } from "react-native";
-import { Header } from "../../components/Header";
+import { View } from "react-native";
 import { Button } from "react-native-paper";
-import { useNavigation } from "@react-navigation/native";
-import { DrawerNavigationProp } from "@react-navigation/drawer";
-import { DrawerParamList } from "../../Navigation/DrawerContainer";
+import { useAppSelector } from "../../hooks/redux";
 
 export const NotificationsScreen: React.FC = (): React.JSX.Element => {
-  const navigation = useNavigation<DrawerNavigationProp<DrawerParamList>>();
+  const { notifications } = useAppSelector(state => state.notificationReducer);
 
   return (
     <View>
-      {/* <Header navigation={navigation} /> */}
-      <Button mode="outlined">
-        Уведомления
-      </Button>
+      {
+        notifications && notifications.map((el) => {
+          return <Button key={el.id}>{el.message}</Button>;
+        })
+      }
     </View>
   );
 };

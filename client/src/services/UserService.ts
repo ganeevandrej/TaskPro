@@ -4,7 +4,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ISendAvatarToBackendProprs } from "../store/reducers/auth/ActionCreators";
 import * as FileSystem from 'expo-file-system';
 import { FileSystemUploadResult, FileSystemUploadType } from "expo-file-system";
-import { AuthResponse } from "../models/response/AuthResponse";
 import { InputsUpdateUserInfo } from "../components/Forms/models";
 import { IUser } from "../models/IUser";
 

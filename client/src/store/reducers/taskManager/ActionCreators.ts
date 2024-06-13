@@ -1,8 +1,5 @@
-import { AxiosError } from "axios";
 import { AppDispatch } from "../../store";
-import { userSlice } from "../auth/AuthSlice";
-import { ICategory, IPriority, taskManagerSlice } from "./TaskManagerSlice";
-import { IResponsDataError } from "../auth/ActionCreators";
+import { taskManagerSlice } from "./TaskManagerSlice";
 import TaskManagerService from "../../../services/TaskManagerService";
 import { InputCreateCategory } from "../../../components/Forms/models";
 import { BodyGetTasks } from "../../../screens/Scheduler";
@@ -23,13 +20,7 @@ export const fetchCreateTask = (requestBody: ICreateTask) => async (dispatch: Ap
         const res = await TaskManagerService.createTask(requestBody);
         dispatch(taskManagerSlice.actions.addTaskSuccess(res.data));
     } catch (error) {
-        if ((error as AxiosError).response) {
-            const axiosError = error as AxiosError<IResponsDataError>;
-            const message = axiosError.response?.data.message;
-            if (message) {
-                dispatch(userSlice.actions.authFetchingError(message));
-            }
-        }
+        console.log(error);
     }
 }
 
@@ -39,13 +30,7 @@ export const fetchUpdateTask = (requestBody: ICreateTask, taskId: number) => asy
         const res = await TaskManagerService.updateTask(requestBody, taskId);
         dispatch(taskManagerSlice.actions.updateTasksSuccess(res.data));
     } catch (error) {
-        if ((error as AxiosError).response) {
-            const axiosError = error as AxiosError<IResponsDataError>;
-            const message = axiosError.response?.data.message;
-            if (message) {
-                dispatch(userSlice.actions.authFetchingError(message));
-            }
-        }
+        console.log(error);
     }
 }
 
@@ -55,13 +40,7 @@ export const fetchCreateCategory = (requestBody: InputCreateCategory, userId: nu
         const res = await TaskManagerService.createCategory(requestBody, userId);
         dispatch(taskManagerSlice.actions.addCategorySuccess(res.data));
     } catch (error) {
-        if ((error as AxiosError).response) {
-            const axiosError = error as AxiosError<IResponsDataError>;
-            const message = axiosError.response?.data.message;
-            if (message) {
-                dispatch(userSlice.actions.authFetchingError(message));
-            }
-        }
+        console.log(error);
     }
 }
 
@@ -73,13 +52,7 @@ export const fetchgetTaskManager = (body: BodyGetTasks) => async (dispatch: AppD
         dispatch(taskManagerSlice.actions.fetchingPrioritiesSuccess(res.priorities));
         dispatch(taskManagerSlice.actions.fetchingTasksSuccess(res.tasks));
     } catch (error) {
-        if ((error as AxiosError).response) {
-            const axiosError = error as AxiosError<IResponsDataError>;
-            const message = axiosError.response?.data.message;
-            if (message) {
-                dispatch(userSlice.actions.authFetchingError(message));
-            }
-        }
+        console.log(error);
     }
 }
 
@@ -89,13 +62,7 @@ export const fetchDeleteTask = (taskId: number) => async (dispatch: AppDispatch)
         await TaskManagerService.deleteTask(taskId);
         dispatch(taskManagerSlice.actions.fetchingDeleteTask(taskId));
     } catch (error) {
-        if ((error as AxiosError).response) {
-            const axiosError = error as AxiosError<IResponsDataError>;
-            const message = axiosError.response?.data.message;
-            if (message) {
-                dispatch(userSlice.actions.authFetchingError(message));
-            }
-        }
+        console.log(error);
     }
 }
 
@@ -105,12 +72,6 @@ export const fetchCompleteTask = (taskId: number) => async (dispatch: AppDispatc
         await TaskManagerService.completeTask(taskId);
         dispatch(taskManagerSlice.actions.fetchingCompleteTask(taskId));
     } catch (error) {
-        if ((error as AxiosError).response) {
-            const axiosError = error as AxiosError<IResponsDataError>;
-            const message = axiosError.response?.data.message;
-            if (message) {
-                dispatch(userSlice.actions.authFetchingError(message));
-            }
-        }
+        console.log(error);
     }
 }

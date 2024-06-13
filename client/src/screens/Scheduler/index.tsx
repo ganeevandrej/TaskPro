@@ -1,18 +1,14 @@
-import { Platform, View } from "react-native";
+import { View } from "react-native";
 import { ActivityIndicator, IconButton, Searchbar } from "react-native-paper";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { ScrollView } from "react-native-virtualized-view";
 import { ListTasks } from "./ListTasks";
 import { Sort } from "./Sort";
-import * as Notifications from 'expo-notifications';
 import { ShedulerFAB } from "./FAB";
 import { DialogFilters } from "../../components/Dialogs/Filters";
 import { useDebounce } from "../../hooks/debounce";
 import { fetchgetTaskManager } from "../../store/reducers/taskManager/ActionCreators";
-import { CustomButton } from "../../components/custom/Button";
-import Constants from "expo-constants";
-import * as Device from 'expo-device';
 
 export interface Filters {
   category: number;
@@ -41,16 +37,7 @@ export const SchedulerScreen = (): React.JSX.Element => {
   const [sort, setSort] = useState<string>("ASC");
   const [filters, setFilters] = useState<Filters>(filtersInit);
   const [visible, setVisible] = useState<boolean>(false);
-  const [channels, setChannels] = useState<Notifications.NotificationChannel[]>(
-    []
-  );
-  const [expoPushToken, setExpoPushToken] = useState<string>("");
-  const [error, setError] = useState<string>("");
-  const [notification, setNotification] = useState<
-    Notifications.Notification | undefined
-  >(undefined);
-  const notificationListener = useRef<Notifications.Subscription>();
-  const responseListener = useRef<Notifications.Subscription>();
+  
 
   const dispatch = useAppDispatch();
 
@@ -62,7 +49,7 @@ export const SchedulerScreen = (): React.JSX.Element => {
           sort,
           search: search ? search.toLocaleLowerCase() : "",
         };
-        await dispatch(fetchgetTaskManager(body));
+        dispatch(fetchgetTaskManager(body));
       }
     };
 
@@ -76,98 +63,7 @@ export const SchedulerScreen = (): React.JSX.Element => {
     };
 
     getData();
-
-    registerForPushNotificationsAsync().then((token) =>
-      setExpoPushToken(token)
-    );
-
-    if (Platform.OS === "android") {
-      Notifications.getNotificationChannelsAsync().then((value) =>
-        setChannels(value ?? [])
-      );
-    }
-
-    notificationListener.current =
-      Notifications.addNotificationReceivedListener((notification) => {
-        setNotification(notification);
-      });
-
-    responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response);
-      });
-
-    return () => {
-      notificationListener.current &&
-        Notifications.removeNotificationSubscription(
-          notificationListener.current
-        );
-      responseListener.current &&
-        Notifications.removeNotificationSubscription(responseListener.current);
-    };
   }, [sort, filters]);
-
-  async function sendPushNotification(expoPushToken: string) {
-    const message = {
-      to: expoPushToken,
-      sound: 'default',
-      title: 'Original Title',
-      body: 'And here is the body!',
-      data: { created_at: new Date(), status: "Непрочитано", userId: user.id },
-    };
-  
-    
-  }
-
-  async function registerForPushNotificationsAsync(): Promise<string> {
-    let token;
-
-    if (Platform.OS === "android") {
-      await Notifications.setNotificationChannelAsync("default", {
-        name: "default",
-        importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [0, 250, 250, 250],
-        lightColor: "#FF231F7C",
-      });
-    }
-
-    if (Device.isDevice) {
-      const { status: existingStatus } =
-        await Notifications.getPermissionsAsync();
-      let finalStatus = existingStatus;
-      if (existingStatus !== "granted") {
-        const { status } = await Notifications.requestPermissionsAsync();
-        finalStatus = status;
-      }
-      if (finalStatus !== "granted") {
-        alert("Failed to get push token for push notification!");
-        return "";
-      }
-      // Learn more about projectId:
-      // https://docs.expo.dev/push-notifications/push-notifications-setup/#configure-projectid
-      // EAS projectId is used here.
-      try {
-        const projectId =
-          Constants?.expoConfig?.extra?.eas?.projectId ??
-          Constants?.easConfig?.projectId;
-        if (!projectId) {
-          throw new Error("Project ID not found");
-        }
-        token = (
-          await Notifications.getExpoPushTokenAsync({
-            projectId,
-          })
-        ).data;
-        console.log(token);
-      } catch (e) {
-        token = `${e}`;
-      }
-    } else {
-      alert("Must use physical device for Push Notifications");
-    }
-
-    return token ? token : "";
-  }
 
   return (
     <View style={{ flex: 1 }}>

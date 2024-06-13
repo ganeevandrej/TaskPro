@@ -4,7 +4,7 @@ import { authMiddleware } from "../middlewares/auth-middleware.js";
 
 const router = new Router();
 
-router.get("/all", authMiddleware, taskController.getTasks);
+router.get("/all/:userId", taskController.getTasks);
 router.post("/new", authMiddleware, taskController.createTask);
 router.put("/complete/:taskId", authMiddleware, taskController.completeTask);
 router.put("/update/:taskId", authMiddleware, taskController.updateTask);

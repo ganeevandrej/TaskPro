@@ -28,7 +28,16 @@ export default class TaskManagerService {
     }
 
     static async getTaskManeger(body: BodyGetTasks) {
-        const [categoriesResult, prioritiesResult, tasksResult] = await axios.all([this.getCategories(body.userId), this.getPriorities(), this.getTasks(body)]) as unknown as [AxiosResponse<ICategory[]>, AxiosResponse<IPriority[]>, AxiosResponse<ITask[]>];
+        const [categoriesResult, prioritiesResult, tasksResult] = 
+            await axios.all([
+                this.getCategories(body.userId), 
+                this.getPriorities(), 
+                this.getTasks(body)
+            ]) as unknown as [
+                AxiosResponse<ICategory[]>, 
+                AxiosResponse<IPriority[]>, 
+                AxiosResponse<ITask[]>
+            ];
 
         return {
             tasks: tasksResult.data,
@@ -38,17 +47,15 @@ export default class TaskManagerService {
     }
 
     static async getTasks({ userId, sort, filters, search }: BodyGetTasks): Promise<AxiosResponse<ITask[]>> {
-        let query = `/tasks/all?userId=${userId}&sort=${sort}`;
+        let query = `/tasks/all/${userId}`;
 
-        if (search) {
-            query += `&search=${search}`;
+        const params = {
+            filters,
+            search,
+            sort,
         }
 
-        return $api.get<ITask[]>(query, filters && {
-            params: {
-                filters
-            }
-        });
+        return $api.get<ITask[]>(query, { params });
     }
 
     static async getCategories(userId: number): Promise<AxiosResponse<ICategory[]>> {

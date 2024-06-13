@@ -3,8 +3,10 @@ import taskService from "../service/task-service.js";
 class TaskController {
   async getTasks(req, res, next) {
     try {
+      const userId = req.params.userId;
       const params = req.query;
-      const tasks = await taskService.getTasks(params, params.filters);
+      console.log(userId, params);
+      const tasks = await taskService.getTasks(userId, params, params.filters);
       
       return res.json(tasks);
     } catch (error) {

@@ -3,19 +3,35 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { ProfileScreen } from "../screens/Profile";
 import { Icon } from "react-native-paper";
 import { StyleSheet } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DialogUpdateUserInfo } from "../components/Dialogs/UpdateUserInfo";
 import { TechnipuesScreen } from "../screens/Techniques";
 import { TabStackParamList } from "./models";
 import { StackShedulerConatiner } from "./StackSheduler";
 import { RenderIcon } from "../components/custom/RenderIcon";
 import { StackTechniquesConatiner } from "./StackTechniques";
+import { useAppSelector } from "../hooks/redux";
+import { INotification } from "../store/reducers/notifications/NotificationSlice";
 
 const Tab = createBottomTabNavigator<TabStackParamList>();
 
 export const TabNavigationConatiner = () => {
   const [visibleDialogUpdateData, setVisibleDialogUpdateData] =
     useState<boolean>(false);
+  const { notifications } = useAppSelector(state => state.notificationReducer);
+
+  const getUnreadNotifications = (notifications: INotification[]) => {
+    const count = notifications.reduce((count, item) => {
+      return !item.status ? count + 1 : count;
+    }, 0);
+    return count;
+  }
+
+  useEffect(() => {
+    console.log("hi")
+  }, [notifications]);
+
+  const unreadNotifications = getUnreadNotifications(notifications);
 
   return (
     <>
@@ -60,7 +76,7 @@ export const TabNavigationConatiner = () => {
             tabBarIcon: ({ color, size }) => (
               <Icon source="bell-outline" size={size} color={color} />
             ),
-            tabBarBadge: 1,
+            tabBarBadge: unreadNotifications ? unreadNotifications : undefined,
           })}
         />
         <Tab.Screen

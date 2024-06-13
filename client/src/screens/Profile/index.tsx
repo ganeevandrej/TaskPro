@@ -5,9 +5,12 @@ import { ImagePickerExample } from "../../components/FileUpload";
 import { PieChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { fetchLogout } from "../../store/reducers/auth/ActionCreators";
 import { DialogActivateEmail } from "../../components/Dialogs/ActivateEmail";
+import { useFocusEffect } from "@react-navigation/native";
+import { fetchgetTaskManager } from "../../store/reducers/taskManager/ActionCreators";
+import { ITask } from "../../store/reducers/taskManager/TaskManagerSlice";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -29,14 +32,25 @@ const data = [
 ];
 
 export const ProfileScreen: React.FC = (): React.JSX.Element => {
-  const { name, email, phone, dateBirth, isActivated } = useAppSelector(
+  const [visibleDialogActivate, setVisibleDialogActivate] =
+    useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [task, setTasks] = useState<ITask[]>([]);
+  const { id, name, email, phone, dateBirth, isActivated } = useAppSelector(
     (state) => state.authReducer.user
   );
   const dispatch = useAppDispatch();
   const { toggleTheme, isThemeDark } = useTheme();
+
+  useFocusEffect(useCallback(() => {
+    const getTasks = async () => {
+      setLoading(true);
+      await dispatch(fetchgetTaskManager({userId: id}));
+      setLoading(true);
+    }
   
-  const [visibleDialogActivate, setVisibleDialogActivate] =
-    useState<boolean>(false);
+    getTasks();
+  }, []))
 
   const logout = () => {
     Alert.alert(
