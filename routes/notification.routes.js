@@ -4,6 +4,6 @@ import { authMiddleware } from "../middlewares/auth-middleware.js";
 
 const router = new Router();
 
-router.post("/register", notificationController.registerToken);
+router.post("/register", authMiddleware, notificationController.registerToken);
 
 export default router;

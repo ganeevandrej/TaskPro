@@ -5,7 +5,6 @@ class TaskController {
     try {
       const userId = req.params.userId;
       const params = req.query;
-      console.log(userId, params);
       const tasks = await taskService.getTasks(userId, params, params.filters);
       
       return res.json(tasks);

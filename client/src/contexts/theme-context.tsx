@@ -64,12 +64,16 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
 
   useEffect(() => {
     const getTheme = async () => {
-      const isDarkTheme = await AsyncStorage.getItem("isDarkTheme");
-      const accessToken = await AsyncStorage.getItem("accessToken");
-
-      accessToken && (await dispatch(checkAuth()));
-      setIsThemeDark(isDarkTheme ? true : false);
-      await SplashScreen.hideAsync();
+      try{
+        const isDarkTheme = await AsyncStorage.getItem("isDarkTheme");
+        setIsThemeDark(isDarkTheme ? true : false);
+        const accessToken = await AsyncStorage.getItem("accessToken");
+        accessToken && await dispatch(checkAuth());
+      } catch(e) {
+        console.log(e);
+      } finally {
+        await SplashScreen.hideAsync();
+      }
     };
 
     getTheme();

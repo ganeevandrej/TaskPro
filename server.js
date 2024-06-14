@@ -9,9 +9,11 @@ import taskRouter from "./routes/task.routes.js";
 import categoryRouter from "./routes/category.routes.js";
 import fileRouter from "./routes/file.routes.js";
 import { errorMiddleware } from "./middlewares/error-middleware.js";
+import { Expo } from 'expo-server-sdk';
 
 const app = express();
 const port = process.env.PORT || 3000;
+export let expo = new Expo();
 
 app.use(express.json());
 app.use(cookieParser());

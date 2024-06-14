@@ -18,6 +18,17 @@
         {
           "fonts": ["path/to/file.ttf"]
         }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/icon.png",
+          "color": "#ffffff",
+          "defaultChannel": "default",
+          "sounds": [
+            "../assets/notifications/new_message_tone.wav"
+          ]
+        }
       ]
     ],
     "ios": {

@@ -1,5 +1,4 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
-import { IUser } from "../../../models/IUser";
 
 export interface ICategory {
     id: number,
@@ -70,6 +69,18 @@ export const taskManagerSlice = createSlice({
                 if(task.id === action.payload.id) {
                     return {
                         ...action.payload
+                    }
+                }
+                return task;
+            });
+        },
+        updateTaskStatus(state, action: PayloadAction<ITask>) {
+            state.isLoading = false;
+            state.error = '';
+            state.tasks = state.tasks.map(task => {
+                if(task.id === action.payload.id) {
+                    return {
+                        ...task, status: action.payload.status
                     }
                 }
                 return task;

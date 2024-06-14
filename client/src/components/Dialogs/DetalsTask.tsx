@@ -168,7 +168,7 @@ export const DialogDetalsTask: React.FC<IVerificationProps> = ({
             <Button onPress={hideDialog}>Назад</Button>
             <Button onPress={() => deleteTask()}>Удалить</Button>
             <Button
-              disabled={task.status === "Завершена"}
+              disabled={task.status === "Завершена" || task.status === "Просрочена"}
               onPress={() => completeTask()}
             >
               Завершить

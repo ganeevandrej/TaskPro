@@ -83,7 +83,7 @@ export const MethodScreen: FC = (): JSX.Element => {
                     Выберите одну основную задачу на день, которая требует
                     значительных усилий и времени.
                   </Text>
-                  <Text style={{ marginTop: 10 }} variant="bodyMedium">
+                  <Text style={{ marginTop: 10, color: "#666666", fontStyle: "italic"  }} variant="bodyMedium">
                     P.S. Это самая важная задача, которую нужно обязательно
                     выполнить
                   </Text>
@@ -102,7 +102,7 @@ export const MethodScreen: FC = (): JSX.Element => {
                     Определите 3 задачи среднего размера. Они тоже важны, но не
                     столь масштабны, как основная задача.
                   </Text>
-                  <Text style={{ marginTop: 10 }} variant="bodyMedium">
+                  <Text style={{ marginTop: 10, color: "#666666", fontStyle: "italic"  }} variant="bodyMedium">
                     P.S. Они должны дополнять ваш день и продвигать вас к вашим
                     целям.
                   </Text>
@@ -117,11 +117,11 @@ export const MethodScreen: FC = (): JSX.Element => {
                   title="3 Шаг. Определите 5 мелких задач"
                 />
                 <Card.Content>
-                  <Text variant="bodyMedium">
+                  <Text variant="titleSmall">
                     Определите 5 небольших задач, которые являются менее важными
                     делами, например рутинные.
                   </Text>
-                  <Text style={{ marginTop: 10 }} variant="bodyMedium">
+                  <Text style={{ marginTop: 10, color: "#666666", fontStyle: "italic" }} variant="titleSmall">
                     P.S. Эти задачи должны быть короткими и не требовать много
                     времени
                   </Text>
@@ -140,7 +140,7 @@ export const MethodScreen: FC = (): JSX.Element => {
                     Начните с выполнения крупной задачи, затем переходите к
                     средним и завершайте мелкими.
                   </Text>
-                  <Text style={{ marginTop: 10 }} variant="bodyMedium">
+                  <Text style={{ marginTop: 10, color: "#7DAFDF", fontStyle: "italic"  }} variant="bodyMedium">
                     P.S. Советуем зайти в раздел техники "Eat That Frog!".
                   </Text>
                 </Card.Content>
@@ -157,7 +157,7 @@ export const MethodScreen: FC = (): JSX.Element => {
                   <Text variant="bodyMedium">
                     По мере выполнения задач отмечайте их как завершённые.
                   </Text>
-                  <Text style={{ marginTop: 10 }} variant="bodyMedium">
+                  <Text style={{ marginTop: 10, color: "#9C27B0", fontStyle: "italic"  }} variant="bodyMedium">
                     P.S. Это позволит вам видеть свой прогресс и поддерживать
                     мотивацию.
                   </Text>

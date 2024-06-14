@@ -3,9 +3,7 @@ import { RegistrationScreen } from "../screens/Registration";
 import { LoginScreen } from "../screens/Login";
 import { DriwerNavigationConatiner } from "./DrawerContainer";
 import { RootStackParamList } from "./models";
-import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { useEffect } from "react";
-import { getAvatar } from "../store/reducers/auth/ActionCreators";
+import { useAppSelector } from "../hooks/redux";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 

@@ -28,7 +28,6 @@ export const TabNavigationConatiner = () => {
   }
 
   useEffect(() => {
-    console.log("hi")
   }, [notifications]);
 
   const unreadNotifications = getUnreadNotifications(notifications);

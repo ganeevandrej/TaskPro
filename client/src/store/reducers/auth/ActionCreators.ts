@@ -35,13 +35,7 @@ export const fetchLogin = (requestBody: InputsLogin) => async (dispatch: AppDisp
         await AsyncStorage.setItem('accessToken', res.data.accessToken);
         dispatch(userSlice.actions.authFetchingSuccess(res.data.user));
     } catch (error) {
-        if ((error as AxiosError).response) {
-            const axiosError = error as AxiosError<IResponsDataError>;
-            const message = axiosError.response?.data.message;
-            if (message) {
-                dispatch(userSlice.actions.authFetchingError(message));
-            }
-        }
+        console.log(error);
     }
 }
 
@@ -51,13 +45,7 @@ export const fetchLogout = () => async (dispatch: AppDispatch) => {
         await AsyncStorage.removeItem('accessToken');
         dispatch(userSlice.actions.logout());
     } catch (error) {
-        if ((error as AxiosError).response) {
-            const axiosError = error as AxiosError<IResponsDataError>;
-            const message = axiosError.response?.data.message;
-            if (message) {
-                dispatch(userSlice.actions.authFetchingError(message));
-            }
-        }
+        console.log(error);
     }
 }
 
@@ -66,13 +54,7 @@ export const fetchActivate = (code: string) => async (dispatch: AppDispatch) => 
         await AuthService.activate(code);
         dispatch(userSlice.actions.activate());
     } catch (error) {
-        if ((error as AxiosError).response) {
-            const axiosError = error as AxiosError<IResponsDataError>;
-            const message = axiosError.response?.data.message;
-            if (message) {
-                dispatch(userSlice.actions.authFetchingError(message));
-            }
-        }
+        console.log(error);
     }
 }
 
@@ -81,13 +63,7 @@ export const fetchSendLetter = (userId: number) => async (dispatch: AppDispatch)
         await AuthService.sendLetter(userId);
         dispatch(userSlice.actions.activateSuccess());
     } catch (error) {
-        if ((error as AxiosError).response) {
-            const axiosError = error as AxiosError<IResponsDataError>;
-            const message = axiosError.response?.data.message;
-            if (message) {
-                dispatch(userSlice.actions.authFetchingError(message));
-            }
-        }
+        console.log(error);
     }
 }
 
@@ -97,13 +73,7 @@ export const checkAuth = () => async (dispatch: AppDispatch) => {
         await AsyncStorage.setItem('accessToken', res.data.accessToken);
         dispatch(userSlice.actions.authFetchingSuccess(res.data.user));
     } catch (error) {
-        if ((error as AxiosError).response) {
-            const axiosError = error as AxiosError<IResponsDataError>;
-            const message = axiosError.response?.data.message;
-            if (message) {
-                dispatch(userSlice.actions.authFetchingError(message));
-            }
-        }
+        console.log(error);
     }
 }
 
@@ -118,13 +88,7 @@ export const sendAvatarToBackend = (data: ISendAvatarToBackendProprs) => async (
         const res = await UserService.uploadAvatar(data);
         dispatch(userSlice.actions.setUserAvatar(res.body));
     } catch (error) {
-        if ((error as AxiosError).response) {
-            const axiosError = error as AxiosError<IResponsDataError>;
-            const message = axiosError.response?.data.message;
-            if (message) {
-                dispatch(userSlice.actions.authFetchingError(message));
-            }
-        }
+        console.log(error);
     }
 }
 
@@ -133,13 +97,7 @@ export const deleteAvatarFromDb = (userId: number) => async (dispatch: AppDispat
         await UserService.deleteAvatar(userId);
         dispatch(userSlice.actions.setUserAvatar(''));
     } catch (error) {
-        if ((error as AxiosError).response) {
-            const axiosError = error as AxiosError<IResponsDataError>;
-            const message = axiosError.response?.data.message;
-            if (message) {
-                dispatch(userSlice.actions.authFetchingError(message));
-            }
-        }
+        console.log(error);
     }
 }
 
@@ -148,13 +106,7 @@ export const getAvatar = (userId: number) => async (dispatch: AppDispatch) => {
         const res = await UserService.getAvatar(userId);
         dispatch(userSlice.actions.setUserAvatar(res.data));
     } catch (error) {
-        if ((error as AxiosError).response) {
-            const axiosError = error as AxiosError<IResponsDataError>;
-            const message = axiosError.response?.data.message;
-            if (message) {
-                dispatch(userSlice.actions.authFetchingError(message));
-            }
-        }
+        console.log(error);
     }
 }
 
@@ -163,12 +115,15 @@ export const updateInfo = (body: InputsUpdateUserInfo, userId: number) => async 
         const res = await UserService.updateInfoUser(body, userId);
         dispatch(userSlice.actions.authFetchingSuccess(res.data));
     } catch (error) {
-        if ((error as AxiosError).response) {
-            const axiosError = error as AxiosError<IResponsDataError>;
-            const message = axiosError.response?.data.message;
-            if (message) {
-                dispatch(userSlice.actions.authFetchingError(message));
-            }
-        }
+        console.log(error);
+    }
+}
+
+export const fetchAnalytics = (userId: number) => async (dispatch: AppDispatch) => {
+    try {
+        const res = await UserService.getDataAnalytics(userId);
+        dispatch(userSlice.actions.setAnalytics(res.data));
+    } catch (error) {
+        console.log(error);
     }
 }

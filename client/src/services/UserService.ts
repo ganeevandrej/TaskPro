@@ -6,6 +6,7 @@ import * as FileSystem from 'expo-file-system';
 import { FileSystemUploadResult, FileSystemUploadType } from "expo-file-system";
 import { InputsUpdateUserInfo } from "../components/Forms/models";
 import { IUser } from "../models/IUser";
+import { IAnalytics } from "../store/reducers/auth/AuthSlice";
 
 export default class UserService {
     static async uploadAvatar({ userId, uriImage }: ISendAvatarToBackendProprs): Promise<FileSystemUploadResult> {
@@ -31,5 +32,9 @@ export default class UserService {
 
     static async updateInfoUser(body: InputsUpdateUserInfo, userId: number): Promise<AxiosResponse<IUser>> {
         return $api.put<IUser>(`user/${userId}/update`, body);
+    }
+
+    static async getDataAnalytics(userId: number): Promise<AxiosResponse<IAnalytics[]>> {
+        return $api.get<IAnalytics[]>(`user/${userId}/analytics`);
     }
 }

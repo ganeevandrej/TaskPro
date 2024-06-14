@@ -1,12 +1,17 @@
 import { useState } from "react";
 import { View, StyleSheet } from "react-native";
-import { Avatar, IconButton } from "react-native-paper";
+import { Avatar, IconButton, useTheme as useThemePaper } from "react-native-paper";
 import { useAppSelector } from "../hooks/redux";
 import { DialogUploadAvatar } from "./Dialogs/UploadAvatar";
+import { useTheme } from "../contexts/theme-context";
+import { MD3Colors } from "react-native-paper/lib/typescript/types";
 
 export const ImagePickerExample = () => {
   const { avatar, user } = useAppSelector((state) => state.authReducer);
   const [visibleDialog, setVisibleDialog] = useState<boolean>(false);
+  const {isThemeDark} = useTheme();
+  const { colors } = useThemePaper();
+  const styles = createStyles(colors, isThemeDark);
 
   return (
     <View style={styles.container}>
@@ -35,7 +40,7 @@ export const ImagePickerExample = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (colors: MD3Colors, themeDark: boolean) => StyleSheet.create({
   container: {
     justifyContent: "center",
     alignItems: "center",
@@ -46,8 +51,8 @@ const styles = StyleSheet.create({
     marginTop: 20,
     width: 154,
     borderRadius: 80,
-    borderWidth: 2,
-    borderColor: "yellow",
+    borderWidth: 3,
+    borderColor: themeDark ? "#CCCCCC" :  "#333333",
     marginHorizontal: "auto",
   },
   icon: {
@@ -56,6 +61,6 @@ const styles = StyleSheet.create({
     right: 0,
     backgroundColor: "white",
     borderWidth: 2,
-    borderColor: "yellow",
+    borderColor: themeDark ? "#CCCCCC" :  "#333333",
   }
 });
