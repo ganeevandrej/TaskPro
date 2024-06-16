@@ -9,7 +9,9 @@ let messages = [];
 
 const scheduleTaskNotification = (task, userId) => {
   const date = new Date(task.deadline);
-  const job = new CronJob(date, async () => {
+  const job = new CronJob(
+    date,
+    async () => {
       sendPushNotification(task, userId);
     },
     null,
@@ -29,6 +31,13 @@ const sendPushNotification = async (task, userId) => {
   const taskOverdue = await db.query(
     "UPDATE tasks SET status=$1 WHERE id=$2 RETURNING *",
     ["Просрочена", task.id]
+  );
+
+  const creatAt = new Date().toISOString();
+
+  await db.query(
+    `INSERT INTO notifications (user_id, message, status, created_at) VALUES ($1, $2, $3, $4)`,
+    [userId, `Задача "${task.name}" просрочена!`, false, creatAt]
   );
 
   messages.push({

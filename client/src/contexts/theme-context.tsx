@@ -10,6 +10,7 @@ import {
   NavigationContainer,
   DarkTheme as NavigationDarkTheme,
   DefaultTheme as NavigationDefaultTheme,
+  Theme,
 } from "@react-navigation/native";
 import {
   MD3DarkTheme as PaperDarkTheme,
@@ -22,7 +23,25 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { checkAuth } from "../store/reducers/auth/ActionCreators";
 import { useAppDispatch } from "../hooks/redux";
 import * as SplashScreen from "expo-splash-screen";
-import { useFonts } from "expo-font";
+import {
+  useFonts,
+  Nunito_200ExtraLight,
+  Nunito_300Light,
+  Nunito_400Regular,
+  Nunito_500Medium,
+  Nunito_600SemiBold,
+  Nunito_700Bold,
+  Nunito_800ExtraBold,
+  Nunito_900Black,
+  Nunito_200ExtraLight_Italic,
+  Nunito_300Light_Italic,
+  Nunito_400Regular_Italic,
+  Nunito_500Medium_Italic,
+  Nunito_600SemiBold_Italic,
+  Nunito_700Bold_Italic,
+  Nunito_800ExtraBold_Italic,
+  Nunito_900Black_Italic,
+} from "@expo-google-fonts/nunito";
 
 interface ThemeContextType {
   isThemeDark: boolean;
@@ -47,9 +66,46 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
   children,
 }): React.JSX.Element => {
   const [isThemeDark, setIsThemeDark] = useState(false);
-  const [fontsLoaded] = useFonts({
-    NunitoSans: require("../../assets/fonts/NunitoSans-VariableFont_YTLC,opsz,wdth,wght.ttf"),
+  let [fontsLoaded] = useFonts({
+    NunitoSans: Nunito_200ExtraLight,
+    Nunito_300Light,
+    Nunito_400Regular,
+    Nunito_500Medium,
+    Nunito_600SemiBold,
+    Nunito_700Bold,
+    Nunito_800ExtraBold,
+    Nunito_900Black,
+    Nunito_200ExtraLight_Italic,
+    Nunito_300Light_Italic,
+    Nunito_400Regular_Italic,
+    Nunito_500Medium_Italic,
+    Nunito_600SemiBold_Italic,
+    Nunito_700Bold_Italic,
+    Nunito_800ExtraBold_Italic,
+    Nunito_900Black_Italic,
   });
+  const dispatch = useAppDispatch();
+
+  useEffect(
+    useCallback(() => {
+      const getTheme = async () => {
+        try {
+          const isDarkTheme = await AsyncStorage.getItem("isDarkTheme");
+          setIsThemeDark(isDarkTheme ? true : false);
+          const accessToken = await AsyncStorage.getItem("accessToken");
+          accessToken && (await dispatch(checkAuth()));
+        } catch (e) {
+          console.log(e);
+        } finally {
+          await SplashScreen.hideAsync();
+        }
+      };
+
+      getTheme();
+    }, []),
+    []
+  );
+
   const fontConfig = {
     fontFamily: "NunitoSans",
   };
@@ -59,25 +115,6 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
         ...CombinedDefaultTheme,
         fonts: configureFonts({ config: fontConfig }),
       };
-
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    const getTheme = async () => {
-      try{
-        const isDarkTheme = await AsyncStorage.getItem("isDarkTheme");
-        setIsThemeDark(isDarkTheme ? true : false);
-        const accessToken = await AsyncStorage.getItem("accessToken");
-        accessToken && await dispatch(checkAuth());
-      } catch(e) {
-        console.log(e);
-      } finally {
-        await SplashScreen.hideAsync();
-      }
-    };
-
-    getTheme();
-  });
 
   const toggleTheme = useCallback(async () => {
     await AsyncStorage.setItem("isDarkTheme", isThemeDark ? "" : "true");
@@ -94,8 +131,8 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
 
   return (
     <ThemeContext.Provider value={preferences}>
-      <PaperProvider theme={theme}>
-        <NavigationContainer theme={theme}>{children}</NavigationContainer>
+      <PaperProvider theme={fontsLoaded ? theme : undefined}>
+        <NavigationContainer theme={fontsLoaded ? theme : undefined}>{children}</NavigationContainer>
       </PaperProvider>
     </ThemeContext.Provider>
   );

@@ -9,9 +9,12 @@ import { TimerProvider } from "../contexts/timer-context";
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
 import * as Device from "expo-device";
-import { Alert, Platform } from "react-native";
-import { registerTokenToServer } from "../store/reducers/notifications/ActionCreators";
-import { ITask, taskManagerSlice } from "../store/reducers/taskManager/TaskManagerSlice";
+import { Platform } from "react-native";
+import { getNotifications, registerTokenToServer } from "../store/reducers/notifications/ActionCreators";
+import {
+  ITask,
+  taskManagerSlice,
+} from "../store/reducers/taskManager/TaskManagerSlice";
 
 const Drawer = createDrawerNavigator<DrawerParamList>();
 
@@ -29,10 +32,6 @@ export const DriwerNavigationConatiner = () => {
   const [channels, setChannels] = useState<Notifications.NotificationChannel[]>(
     []
   );
-  const [expoPushToken, setExpoPushToken] = useState<string>("");
-  const [notification, setNotification] = useState<
-    Notifications.Notification | undefined
-  >(undefined);
   const notificationListener = useRef<Notifications.Subscription>();
   const responseListener = useRef<Notifications.Subscription>();
 
@@ -40,7 +39,6 @@ export const DriwerNavigationConatiner = () => {
     dispatch(getAvatar(user.id));
 
     registerForPushNotificationsAsync().then((token) => {
-      setExpoPushToken(token);
       sendPushTokenToServer(user.id, token);
     });
 
@@ -52,10 +50,12 @@ export const DriwerNavigationConatiner = () => {
 
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
-        // const title = notification.request.content.title || 'No Title';
-        // const body = notification.request.content.body || 'No Body';
-        dispatch(taskManagerSlice.actions.updateTaskStatus(notification.request.content.data as ITask));
-        // return Alert.alert(title, body);
+        dispatch(
+          taskManagerSlice.actions.updateTaskStatus(
+            notification.request.content.data as ITask
+          )
+        );
+        dispatch(getNotifications(user.id));
       });
 
     responseListener.current =
@@ -142,7 +142,7 @@ export const DriwerNavigationConatiner = () => {
         drawerContent={(props) => <CustomDrawerContent {...props} />}
       >
         <Drawer.Screen name="Scheduler" component={TabNavigationConatiner} />
-        <Drawer.Screen name="Category" component={TabNavigationConatiner} />
+        <Drawer.Screen name="Techniques" component={TabNavigationConatiner} />
         <Drawer.Screen name="Notification" component={TabNavigationConatiner} />
         <Drawer.Screen name="Profile" component={TabNavigationConatiner} />
       </Drawer.Navigator>

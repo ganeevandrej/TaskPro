@@ -57,6 +57,23 @@ export const taskManagerSlice = createSlice({
             state.error = '';
             state.categories = [action.payload, ...state.categories];
         },
+        updateCategorySuccess(state, action: PayloadAction<ICategory>) {
+            state.error = '';
+            state.categories = state.categories.map(category => {
+                if(category.id === action.payload.id) {
+                    return {
+                        ...action.payload
+                    }
+                }
+                return category;
+            });
+            state.isLoading = false;
+        },
+        deleteCategory(state, action: PayloadAction<number>) {
+            state.isLoading = false;
+            state.error = '';
+            state.categories = state.categories.filter(category => category.id !== action.payload);
+        },
         fetchingCategoriesSuccess(state, action: PayloadAction<ICategory[]>) {
             state.isLoading = false;
             state.error = '';

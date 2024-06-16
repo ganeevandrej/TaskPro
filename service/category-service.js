@@ -36,7 +36,7 @@ class CategoryService {
 
   async getCategories(userId) {
     const categoriesFromDb = await db.query(
-      "SELECT * FROM categories WHERE user_id = $1",
+      "SELECT * FROM categories WHERE user_id = $1 ORDER BY id DESC",
       [userId]
     );
 

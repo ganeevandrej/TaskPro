@@ -44,6 +44,26 @@ export const fetchCreateCategory = (requestBody: InputCreateCategory, userId: nu
     }
 }
 
+export const fetchDeleteCategory = (categoryId: number) => async (dispatch: AppDispatch) => {
+    try {
+        dispatch(taskManagerSlice.actions.fetching());
+        const res = await TaskManagerService.deleteCategory(categoryId);
+        dispatch(taskManagerSlice.actions.deleteCategory(categoryId));
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const fetchUpdateCategory = (categoryId: number, name: string) => async (dispatch: AppDispatch) => {
+    try {
+        dispatch(taskManagerSlice.actions.fetching());
+        const res = await TaskManagerService.updateCategory(categoryId, name);
+        dispatch(taskManagerSlice.actions.updateCategorySuccess(res.data));
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 export const fetchgetTaskManager = (body: BodyGetTasks) => async (dispatch: AppDispatch) => {
     try {
         dispatch(taskManagerSlice.actions.fetching());

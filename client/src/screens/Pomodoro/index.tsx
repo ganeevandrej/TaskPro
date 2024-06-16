@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 import { View, StyleSheet, ScrollView, Image } from "react-native";
 import { Card, List, ProgressBar, Text } from "react-native-paper";
 import PagerView from "react-native-pager-view";
-import CustomTimer from "../../components/custom/Timer";
+import { CustomTimer } from "../../components/custom/Timer";
 
 export const PomodoroScreen: FC = (): JSX.Element => {
   const [progress, setProgress] = useState<number>(0.4);
@@ -25,17 +25,17 @@ export const PomodoroScreen: FC = (): JSX.Element => {
   };
 
   return (
-      <View
-        style={{
-          flexDirection: "column",
-          justifyContent: "center",
-        }}
-      >
-        <Image
-          style={{width: "100%", height: 200}}
-          source={require("../../../assets/pomodoro.jpg")}
-        />
-        <ScrollView style={{marginBottom: 120}}>
+    <View
+      style={{
+        flexDirection: "column",
+        justifyContent: "center",
+      }}
+    >
+      <Image
+        style={{ width: "100%", height: 200 }}
+        source={require("../../../assets/pomodoro.jpg")}
+      />
+      <ScrollView style={{ marginBottom: 100 }}>
         <Text
           style={{ textAlign: "center", marginHorizontal: 15, marginTop: 20 }}
           variant="titleMedium"
@@ -166,23 +166,25 @@ export const PomodoroScreen: FC = (): JSX.Element => {
             Таймер
           </List.Subheader>
           <View style={{ flexDirection: "row", justifyContent: "center" }}>
-            <View
-              style={{
-                borderRadius: 150,
-                borderWidth: 2,
-                borderColor: "#b71f15",
-                backgroundColor: "#fff",
-                overflow: "hidden",
-                width: 150,
-                height: 150,
-              }}
-            >
-              <CustomTimer />
-            </View>
+            <Card style={{ width: "90%", marginLeft: 0, marginBottom: 5 }}>
+              <Card.Content>
+                <CustomTimer />
+              </Card.Content>
+            </Card>
           </View>
         </List.Section>
-        </ScrollView>
-      </View>
+        <List.Section style={{ marginVertical: 0 }}>
+          <List.Subheader style={{ marginHorizontal: 5 }}>
+            Задача
+          </List.Subheader>
+          <View
+            style={{ flexDirection: "row", justifyContent: "center" }}
+          >
+            
+          </View>
+        </List.Section>
+      </ScrollView>
+    </View>
   );
 };
 

@@ -13,7 +13,7 @@ export type StackShedulerParamList = {
 };
 
 export type StackTechniquesParamList = {
-    Techniques: undefined;
+    Root: undefined;
     EatThatFrog: undefined;
     Pomodoro: undefined;
     Method: undefined;
@@ -22,7 +22,7 @@ export type StackTechniquesParamList = {
 export type DrawerParamList = {
     Scheduler: undefined;
     Notification: undefined;
-    Category: undefined;
+    Techniques: undefined;
     Profile: undefined;
 };
 

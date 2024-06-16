@@ -47,7 +47,7 @@ export const TabNavigationConatiner = () => {
           options={{
             unmountOnBlur: true,
             tabBarIcon: ({ color, size }) => (
-              <Icon source="head-lightbulb-outline" size={size} color={color} />
+              <Icon source="lightbulb-on-outline" size={size} color={color} />
             ),
           }}
         />
@@ -62,7 +62,6 @@ export const TabNavigationConatiner = () => {
         />
         <Tab.Screen
           name="Уведомления"
-          component={NotificationsScreen}
           options={({ navigation }) => ({
             headerShown: true,
             headerTitle: "Уведомления",
@@ -77,7 +76,9 @@ export const TabNavigationConatiner = () => {
             ),
             tabBarBadge: unreadNotifications ? unreadNotifications : undefined,
           })}
-        />
+        >
+          {props => <NotificationsScreen {...props} badgeCount={unreadNotifications} />}
+        </Tab.Screen>
         <Tab.Screen
           name="Профиль"
           component={ProfileScreen}

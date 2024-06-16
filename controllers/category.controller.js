@@ -26,8 +26,8 @@ class CategoryController {
   async updateCategory(req, res, next) {
     try {
       const categoryId = req.params.categoryId;
-      const newNameCategory = req.body;
-      const category = await categoryService.updateCategory(categoryId, newNameCategory);
+      const {nameCategory} = req.body;
+      const category = await categoryService.updateCategory(categoryId, nameCategory);
 
       return res.json(category);
     } catch (error) {

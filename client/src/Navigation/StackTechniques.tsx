@@ -11,9 +11,9 @@ const Stack = createNativeStackNavigator<StackTechniquesParamList>();
 export const StackTechniquesConatiner = () => {
   return (
     <>
-      <Stack.Navigator initialRouteName="Techniques">
+      <Stack.Navigator initialRouteName="Root">
       <Stack.Screen
-          name="Techniques"
+          name="Root"
           component={TechnipuesScreen}
           options={({ navigation }) => ({
             headerTitle: "Техники",

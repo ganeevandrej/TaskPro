@@ -9,6 +9,7 @@ import { ShedulerFAB } from "./FAB";
 import { DialogFilters } from "../../components/Dialogs/Filters";
 import { useDebounce } from "../../hooks/debounce";
 import { fetchgetTaskManager } from "../../store/reducers/taskManager/ActionCreators";
+import { Loading } from "../../components/custom/Loading";
 
 export interface Filters {
   category: number;
@@ -32,12 +33,12 @@ export interface BodyGetTasks {
 export const SchedulerScreen = (): React.JSX.Element => {
   const { user } = useAppSelector((state) => state.authReducer);
   const { isLoading } = useAppSelector((state) => state.taskManagerReducer);
+  const { tasks } = useAppSelector((state) => state.taskManagerReducer);
   const [search, setSearch] = useState<string>("");
   const debouncedSearchQuery = useDebounce(search, 1000);
   const [sort, setSort] = useState<string>("ASC");
   const [filters, setFilters] = useState<Filters>(filtersInit);
   const [visible, setVisible] = useState<boolean>(false);
-  
 
   const dispatch = useAppDispatch();
 
@@ -88,11 +89,7 @@ export const SchedulerScreen = (): React.JSX.Element => {
       />
       <ScrollView>
         <Sort value={sort} setValue={setSort} />
-        {isLoading ? (
-          <ActivityIndicator animating={true} size="large" />
-        ) : (
-          <ListTasks />
-        )}
+        {isLoading ? <Loading /> : <ListTasks tasks={tasks} />}
       </ScrollView>
       <ShedulerFAB />
     </View>

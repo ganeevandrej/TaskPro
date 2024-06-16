@@ -6,7 +6,7 @@ const router = new Router();
 
 router.get("/all", authMiddleware, categoryController.getCategories);
 router.post("/new", authMiddleware, categoryController.createCategory);
-router.put("/:categoryId/uplate", authMiddleware, categoryController.updateCategory);
-router.delete("/:categoryId/delete", authMiddleware, categoryController.deleteCategory);
+router.put("/update/:categoryId", authMiddleware, categoryController.updateCategory);
+router.delete("/delete/:categoryId", authMiddleware, categoryController.deleteCategory);
 
 export default router;

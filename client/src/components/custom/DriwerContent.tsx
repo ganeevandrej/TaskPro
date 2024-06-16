@@ -17,32 +17,38 @@ interface CustomDrawerContentProps {
   navigation: DrawerNavigationHelpers;
 }
 
-export function CustomDrawerContent({navigation}: CustomDrawerContentProps) {
-  const [active, setActive] = useState("");
+export function CustomDrawerContent({ navigation }: CustomDrawerContentProps) {
+  const [active, setActive] = useState("Планировщик");
   const { avatar, user } = useAppSelector((state) => state.authReducer);
-  const { categories } = useAppSelector(state => state.taskManagerReducer);
+  const { categories } = useAppSelector((state) => state.taskManagerReducer);
   const [expanded, setExpanded] = useState<boolean>(false);
   const { colors } = useTheme();
 
-  const categoriesFilter = categories.filter(category => category.name !== "Планировщик");
+  const categoriesFilter = categories.filter(
+    (category) => category.name !== "Планировщик"
+  );
 
   const toggleAccordion = () => {
     setExpanded(!expanded);
   };
 
   const renderItem = ({ item }: { item: ICategory }) => {
+
+    const onPressCategory = (name: string) => {
+      setActive(name);
+      navigation.navigate("Category", {title: name});
+    }
+
     return (
       <View
         style={{
           borderRadius: 50,
           paddingHorizontal: 35,
           backgroundColor:
-            active === item.name
-              ? colors.secondaryContainer
-              : "transparent",
+            active === item.name ? colors.secondaryContainer : "transparent",
         }}
       >
-        <TouchableRipple onPress={() => setActive(item.name)}>
+        <TouchableRipple onPress={() => onPressCategory(item.name)}>
           <Text style={{ paddingVertical: 15 }} variant="titleSmall">
             {item.name}
           </Text>
@@ -55,9 +61,7 @@ export function CustomDrawerContent({navigation}: CustomDrawerContentProps) {
     <View>
       <Drawer.Section style={{ paddingVertical: 20 }}>
         <TouchableRipple
-          onPress={() =>
-            navigation.navigate("Profile", { screen: "Профиль" })
-          }
+          onPress={() => navigation.navigate("Profile", { screen: "Профиль" })}
         >
           <View style={{ alignItems: "center", marginBottom: 20 }}>
             <Avatar.Image
@@ -76,6 +80,15 @@ export function CustomDrawerContent({navigation}: CustomDrawerContentProps) {
         </TouchableRipple>
       </Drawer.Section>
       <Drawer.Section showDivider={false} style={{ marginBottom: 0 }}>
+        <Drawer.Item
+          label="Техники"
+          active={active === "Техники"}
+          icon="lightbulb-on"
+          onPress={() => {
+            setActive("Техники");
+            navigation.navigate("Techniques", { screen: "Техники" });
+          }}
+        />
         <Drawer.Item
           label="Планировщик"
           active={active === "Планировщик"}

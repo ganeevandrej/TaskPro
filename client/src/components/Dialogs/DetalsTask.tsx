@@ -180,7 +180,7 @@ export const DialogDetalsTask: React.FC<IVerificationProps> = ({
   );
 };
 
-const dateToString = (date: Date) => {
+export const dateToString = (date: Date) => {
   const dateToDate = new Date(date);
 
   return dateToDate.toLocaleDateString("ru-RU", {
@@ -190,7 +190,7 @@ const dateToString = (date: Date) => {
   });
 };
 
-const timeToString = (date: Date) => {
+export const timeToString = (date: Date) => {
   const dateToDate = new Date(date);
 
   return dateToDate.toLocaleTimeString("ru-RU", {

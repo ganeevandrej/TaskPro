@@ -19,6 +19,14 @@ export default class TaskManagerService {
         return $api.post<ICategory>("/categories/new", body);
     }
 
+    static async deleteCategory(categoryId: number): Promise<AxiosResponse> {
+        return $api.delete(`/categories/delete/${categoryId}`);
+    }
+
+    static async updateCategory(categoryId: number, name: string): Promise<AxiosResponse<ICategory>> {
+        return $api.put<ICategory>(`/categories/update/${categoryId}`, {nameCategory: name});
+    }
+
     static async deleteTask(taskId: number): Promise<void> {
         return $api.delete(`/tasks/delete/${taskId}`);
     }

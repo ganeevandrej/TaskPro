@@ -16,8 +16,11 @@ export const initialTask: ITask = {
   priority: "",
 };
 
-export const ListTasks = () => {
-  const { tasks } = useAppSelector((state) => state.taskManagerReducer);
+interface IListTasks {
+  tasks: ITask[]
+}
+
+export const ListTasks: React.FC<IListTasks> = ({tasks}): React.JSX.Element => {
   const [task, setTask] = useState(initialTask);
   const [visibleDialogDetalsTask, setVisibleDialogDetalsTask] =
     useState<boolean>(false);

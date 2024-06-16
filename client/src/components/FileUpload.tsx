@@ -51,7 +51,7 @@ const createStyles = (colors: MD3Colors, themeDark: boolean) => StyleSheet.creat
     marginTop: 20,
     width: 154,
     borderRadius: 80,
-    borderWidth: 3,
+    borderWidth: 2,
     borderColor: themeDark ? "#CCCCCC" :  "#333333",
     marginHorizontal: "auto",
   },

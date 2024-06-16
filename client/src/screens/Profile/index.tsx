@@ -1,6 +1,6 @@
 import { View, ScrollView, Alert, StyleSheet } from "react-native";
-import { Card, List, Switch, Text, TouchableRipple } from "react-native-paper";
-import { useTheme } from "../../contexts/theme-context";
+import { Card, List, Switch, Text, TouchableRipple, useTheme } from "react-native-paper";
+import { useTheme as useThemeContext } from "../../contexts/theme-context";
 import { ImagePickerExample } from "../../components/FileUpload";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { useState } from "react";
@@ -15,8 +15,9 @@ export const ProfileScreen: React.FC = (): React.JSX.Element => {
     (state) => state.authReducer
   );
   const dispatch = useAppDispatch();
-  const { toggleTheme, isThemeDark } = useTheme();
+  const { toggleTheme, isThemeDark } = useThemeContext();
   const { id, name, email, phone, dateBirth, isActivated } = user;
+  const {colors} = useTheme();
 
   const logout = () => {
     Alert.alert("Выход", "Вы действительно хотите выйти из аккаунта?", [
@@ -157,8 +158,8 @@ export const ProfileScreen: React.FC = (): React.JSX.Element => {
                 )}
                 right={(props) => (
                   <Switch
+                    color={colors.primary}
                     value={isThemeDark}
-                    {...props}
                     onValueChange={toggleTheme}
                   />
                 )}

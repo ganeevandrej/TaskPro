@@ -2,9 +2,10 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 
 export interface INotification {
     id: number;
+    title: string;
     message: string;
     status: boolean;
-    createdAt : Date;
+    createdAt: Date;
 }
 
 export interface NotificationState {
@@ -26,6 +27,9 @@ export const NotificationSlice = createSlice({
         },
         setNotifications(state, action: PayloadAction<INotification[]>) {
             state.notifications = action.payload;
+        },
+        deleteNotification(state, action: PayloadAction<number>) {
+            state.notifications = state.notifications.filter(notification => notification.id !== action.payload);;
         }
     }
 })

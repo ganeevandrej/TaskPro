@@ -28,11 +28,11 @@ export const StackShedulerConatiner = () => {
         <Stack.Screen
           name="Category"
           component={CategoryScreen}
-          options={{
+          options={(props: any) => ({
             headerShown: true,
-            headerTitle: "Категория",
+            headerTitle: props.route.params.title,
             headerTitleAlign: "center",
-          }}
+          })}
         />
         <Stack.Screen
           name="Scheduler"

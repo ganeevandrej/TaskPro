@@ -29,7 +29,7 @@ const timerContextInit = {
 const TimerContext = createContext<TimerContextType>(timerContextInit);
 
 export const TimerProvider: React.FC<TimerProviderProps> = ({ children }) => {
-  const [seconds, setSeconds] = useState<number>(1500);
+  const [seconds, setSeconds] = useState<number>(30);
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -48,14 +48,16 @@ export const TimerProvider: React.FC<TimerProviderProps> = ({ children }) => {
       clearInterval(intervalRef.current as NodeJS.Timeout);
     }
 
-    return () => clearInterval(intervalRef.current as NodeJS.Timeout);
+    return () => {
+      clearInterval(intervalRef.current as NodeJS.Timeout);
+    }
   }, [isRunning]);
 
   const startTimer = () => setIsRunning(true);
   const stopTimer = () => setIsRunning(false);
   const resetTimer = () => {
     setIsRunning(false);
-    setSeconds(60);
+    setSeconds(30);
   };
 
   return (
