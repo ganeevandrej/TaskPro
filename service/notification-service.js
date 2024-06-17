@@ -1,5 +1,6 @@
 import db from "../db/index.js";
 import { Expo } from "expo-server-sdk";
+import { expo } from "../server.js";
 
 class NotificationService {
   async registerToken({ token, userId }) {
@@ -56,8 +57,34 @@ class NotificationService {
     }));
   }
 
+  async sendNotification(notification) {
+    const {data, body, title, sound} = notification;
+    const creatAt = new Date().toISOString();
+
+    await db.query(
+      `INSERT INTO notifications (user_id, message, status, created_at) VALUES ($1, $2, $3, $4)`,
+      [data.userId, body, false, creatAt]
+    );
+
+    const pushToken = await db.query(
+      "SELECT push_token FROM tokens WHERE user_id = $1",
+      [data.userId]
+    );
+
+    let messages = [];
+
+    messages.push({
+      to: pushToken.rows[0].push_token,
+      sound: "default",
+      title,
+      body,
+      icon: "../client/assets/icon.png",
+    });
+
+    await expo.sendPushNotificationsAsync(messages);
+  }
+
   async deleteNotification(taskId) {
-    console.log(taskId);
     await db.query(
       "DELETE FROM notifications WHERE id = $1",
       [taskId]

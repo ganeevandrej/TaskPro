@@ -5,7 +5,6 @@ import { CronJob } from "cron";
 import { expo } from "../server.js";
 
 let cronJobs = {};
-let messages = [];
 
 const scheduleTaskNotification = (task, userId) => {
   const date = new Date(task.deadline);
@@ -22,7 +21,9 @@ const scheduleTaskNotification = (task, userId) => {
   cronJobs[task.id] = job;
 };
 
-const sendPushNotification = async (task, userId) => {
+
+
+export const sendPushNotification = async (task, userId) => {
   const pushToken = await db.query(
     "SELECT push_token FROM tokens WHERE user_id = $1",
     [userId]
@@ -40,6 +41,8 @@ const sendPushNotification = async (task, userId) => {
     [userId, `Задача "${task.name}" просрочена!`, false, creatAt]
   );
 
+  const messages = [];
+
   messages.push({
     to: pushToken.rows[0].push_token,
     sound: "default",
@@ -50,7 +53,38 @@ const sendPushNotification = async (task, userId) => {
   });
 
   try {
-    const response = await expo.sendPushNotificationsAsync(messages);
+    await expo.sendPushNotificationsAsync(messages);
+  } catch (error) {
+    console.error("Error sending push notification:", error);
+  }
+};
+
+export const sendPushNotificationCompleted = async (task, userId) => {
+  const pushToken = await db.query(
+    "SELECT push_token FROM tokens WHERE user_id = $1",
+    [userId]
+  );
+
+  const creatAt = new Date().toISOString();
+
+  await db.query(
+    `INSERT INTO notifications (user_id, message, status, created_at) VALUES ($1, $2, $3, $4)`,
+    [userId, `Задача "${task.title || task.name}" Завершена!`, false, creatAt]
+  );
+
+  const messages = [];
+
+  messages.push({
+    to: pushToken.rows[0].push_token,
+    sound: "default",
+    title: "Задча Завершена",
+    body: `Задача "${task.title || task.name}" завершена!`,
+    data: task,
+    icon: "../client/assets/icon.png",
+  });
+
+  try {
+    await expo.sendPushNotificationsAsync(messages);
   } catch (error) {
     console.error("Error sending push notification:", error);
   }
@@ -139,16 +173,28 @@ class TaskService {
     }
 
     const tasksFromDb = await db.query(query);
+
+
+    if(tasksFromDb.rows[0] === 0) {
+      console.log(tasksFromDb.rows[0]);
+      return [];
+    }
+
     const categoriesFromDb = await categoryService.getCategories(userId);
     const prioritiesFromDb = await this.getPriorities();
 
-    return tasksFromDb.rows.map((task) => {
-      return createTaskDto(task, categoriesFromDb, prioritiesFromDb);
-    });
+    if(categoriesFromDb.length > 0 && prioritiesFromDb.length > 0) {
+      return tasksFromDb.rows.map((task) => {
+        return createTaskDto(task, categoriesFromDb, prioritiesFromDb);
+      });
+    }
+
+    return tasksFromDb.rows;
   }
 
   async deleteTask(taskId) {
     await db.query("DELETE FROM tasks WHERE id = $1", [taskId]);
+    
     if (cronJobs[taskId]) {
       cronJobs[taskId].stop();
       delete cronJobs[taskId];
@@ -156,7 +202,7 @@ class TaskService {
   }
 
   async completeTask(taskId) {
-    await db.query("UPDATE tasks SET status = $1 WHERE id = $2", [
+    const res = await db.query("UPDATE tasks SET status = $1 WHERE id = $2 RETURNING *", [
       "Завершена",
       taskId,
     ]);
@@ -165,6 +211,10 @@ class TaskService {
       cronJobs[taskId].stop();
       delete cronJobs[taskId];
     }
+
+    const task = res.rows[0];
+
+    sendPushNotificationCompleted(task, task.user_id);
   }
 
   async getPriorities() {

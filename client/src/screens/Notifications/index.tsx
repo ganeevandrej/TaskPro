@@ -1,8 +1,11 @@
-import { FlatList, View } from "react-native";
-import { Button, Card, Icon, IconButton, List, Text } from "react-native-paper";
+import { ScrollView, View } from "react-native";
+import { Card, List, Text } from "react-native-paper";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { INotification } from "../../store/reducers/notifications/NotificationSlice";
-import { dateToString, timeToString } from "../../components/Dialogs/DetalsTask";
+import {
+  dateToString,
+  timeToString,
+} from "../../components/Dialogs/DetalsTask";
 import { useCallback, useEffect } from "react";
 import { CustomButton } from "../../components/custom/Button";
 import {
@@ -10,6 +13,8 @@ import {
   removeNotification,
 } from "../../store/reducers/notifications/ActionCreators";
 import { useFocusEffect } from "@react-navigation/native";
+import { CustomStatusBar } from "../../components/custom/StatusBar";
+import { useDriwer } from "../../contexts/driwer-context";
 
 export interface IRenderItemProps {
   item: INotification;
@@ -31,12 +36,14 @@ const RenderItem: React.FC<IRenderItemProps> = ({
   return (
     <Card
       key="5"
-      style={{ width: "92%", marginLeft: 15, marginBottom: 10, marginTop: 2 }}
+      style={{ width: "92%", marginLeft: 15, marginBottom: 10, marginTop: 15 }}
     >
       <Card.Content style={{ paddingBottom: 5 }}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           {/* <Icon source="bell" size={20} /> */}
-          <Text style={{width: "90%"}} variant="titleMedium">{item.message}</Text>
+          <Text style={{ width: "90%" }} variant="titleMedium">
+            {item.message}
+          </Text>
         </View>
         <View
           style={{
@@ -46,7 +53,12 @@ const RenderItem: React.FC<IRenderItemProps> = ({
             marginTop: 5,
           }}
         >
-          <Text variant="bodyMedium">{item.createdAt && `${dateToString(item.createdAt)} в ${timeToString(item.createdAt)}`}</Text>
+          <Text variant="bodyMedium">
+            {item.createdAt &&
+              `${dateToString(item.createdAt)} в ${timeToString(
+                item.createdAt
+              )}`}
+          </Text>
           <CustomButton
             title="Удалить"
             callback={() => deleteNotification(item.id)}
@@ -65,9 +77,11 @@ export const NotificationsScreen: React.FC<IInotifications> = ({
   );
   const { id } = useAppSelector((state) => state.authReducer.user);
   const dispatch = useAppDispatch();
+  const { handlerSetActive } = useDriwer();
 
   useFocusEffect(
     useCallback(() => {
+      handlerSetActive("Уведомления");
       if (badgeCount) {
         dispatch(readNotifications(id));
       }
@@ -79,15 +93,16 @@ export const NotificationsScreen: React.FC<IInotifications> = ({
   );
 
   return (
-    <View>
+    <ScrollView>
+      <CustomStatusBar />
       <List.Section>
-        <List.Subheader>Уведомления</List.Subheader>
-        <FlatList
-          data={notifications}
-          renderItem={renderItem}
-          keyExtractor={(item) => String(item.id)}
-        />
+        {notifications && notifications.map((item) => (
+          <RenderItem
+            key={item.id}
+            item={item}
+          />
+        ))}
       </List.Section>
-    </View>
+    </ScrollView>
   );
 };

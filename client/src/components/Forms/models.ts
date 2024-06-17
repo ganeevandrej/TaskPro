@@ -28,10 +28,24 @@ export interface InputsCreateTask {
     date: Date | null;
 }
 
+export interface InputsCreateTaskTechnique {
+    name: string,
+    priority: number,
+    time: Date | null,
+    date: Date | null;
+}
+
 export interface InputsUpdateTask {
     name: string,
     priority: number,
     category: number,
+    time: Date | null,
+    date: Date | null;
+}
+
+export interface InputsUpdateTaskTechnique {
+    name: string,
+    priority: number,
     time: Date | null,
     date: Date | null;
 }

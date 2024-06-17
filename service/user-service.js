@@ -39,7 +39,11 @@ class UserService {
       userId,
     ]);
 
-    const tasks = result.rows;
+    const res = await db.query("SELECT * FROM tasks_techniques WHERE user_id = $1", [
+      userId,
+    ]);
+
+    const tasks = [...result.rows, ...res.rows];
 
     if (tasks.length === 0) {
       return tasks;

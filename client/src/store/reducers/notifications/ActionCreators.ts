@@ -1,6 +1,7 @@
 import { AppDispatch } from "../../store";
 import NotificationService from "../../../services/NotificationService";
 import { NotificationSlice } from "./NotificationSlice";
+import { NotificationContentInput } from "expo-notifications";
 
 export const registerTokenToServer = (userId: number, token: string) => async (dispatch: AppDispatch) => {
     try {
@@ -17,6 +18,15 @@ export const getNotifications = (userId: number) => async (dispatch: AppDispatch
     try {
         const res = await NotificationService.getNotifications(userId);
         dispatch(NotificationSlice.actions.setNotifications(res.data));
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const sendNotification = (message: NotificationContentInput) => async (dispatch: AppDispatch) => {
+    try {
+        const res = await NotificationService.sendNotification(message);
+        // dispatch(NotificationSlice.actions.setNotifications(res.data));
     } catch (error) {
         console.log(error);
     }

@@ -12,13 +12,14 @@ import { useAppSelector } from "../../hooks/redux";
 import { ScrollView } from "react-native-virtualized-view";
 import { ICategory } from "../../store/reducers/taskManager/TaskManagerSlice";
 import { DrawerNavigationHelpers } from "@react-navigation/drawer/lib/typescript/src/types";
+import { useDriwer } from "../../contexts/driwer-context";
 
 interface CustomDrawerContentProps {
   navigation: DrawerNavigationHelpers;
 }
 
 export function CustomDrawerContent({ navigation }: CustomDrawerContentProps) {
-  const [active, setActive] = useState("Планировщик");
+  const {active, handlerSetActive} = useDriwer();
   const { avatar, user } = useAppSelector((state) => state.authReducer);
   const { categories } = useAppSelector((state) => state.taskManagerReducer);
   const [expanded, setExpanded] = useState<boolean>(false);
@@ -35,7 +36,7 @@ export function CustomDrawerContent({ navigation }: CustomDrawerContentProps) {
   const renderItem = ({ item }: { item: ICategory }) => {
 
     const onPressCategory = (name: string) => {
-      setActive(name);
+      handlerSetActive(name);
       navigation.navigate("Category", {title: name});
     }
 
@@ -85,7 +86,7 @@ export function CustomDrawerContent({ navigation }: CustomDrawerContentProps) {
           active={active === "Техники"}
           icon="lightbulb-on"
           onPress={() => {
-            setActive("Техники");
+            handlerSetActive("Техники");
             navigation.navigate("Techniques", { screen: "Техники" });
           }}
         />
@@ -94,7 +95,7 @@ export function CustomDrawerContent({ navigation }: CustomDrawerContentProps) {
           active={active === "Планировщик"}
           icon="clock"
           onPress={() => {
-            setActive("Планировщик");
+            handlerSetActive("Планировщик");
             navigation.navigate("Scheduler", { screen: "Планировщик" });
           }}
         />
@@ -103,7 +104,7 @@ export function CustomDrawerContent({ navigation }: CustomDrawerContentProps) {
           active={active === "Уведомления"}
           icon="bell"
           onPress={() => {
-            setActive("Уведомления");
+            handlerSetActive("Уведомления");
             navigation.navigate("Notification", {
               screen: "Уведомления",
             });

@@ -1,19 +1,12 @@
 import { View } from "react-native";
 import { FormProvider, UseFormProps, useForm } from "react-hook-form";
-import {
-  Button,
-  TouchableRipple,
-  Text,
-  useTheme,
-  ActivityIndicator,
-} from "react-native-paper";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { Button, Text, useTheme, ActivityIndicator } from "react-native-paper";
+import { Link } from "@react-navigation/native";
 import { CustomInput } from "../../components/custom/TextInput";
 import { fetchRegistration } from "../../store/reducers/auth/ActionCreators";
-import { useAppDispatch } from "../../hooks/redux";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { useState } from "react";
 import { Inputs } from "./models";
-import { RootStackParamList } from "../../Navigation/models";
 import { createStyles } from "./Login";
 
 const configFormRegistration: UseFormProps<Inputs> = {
@@ -26,8 +19,8 @@ const configFormRegistration: UseFormProps<Inputs> = {
 };
 
 export const FormRegistration: React.FC = (): React.JSX.Element => {
+  const { token } = useAppSelector(state => state.notificationReducer);
   const methods = useForm<Inputs>(configFormRegistration);
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
@@ -37,11 +30,16 @@ export const FormRegistration: React.FC = (): React.JSX.Element => {
   const { handleSubmit } = methods;
 
   const onSubmit = async (fields: Inputs) => {
-    dispatch(fetchRegistration(fields));
     if (fields.email && fields.password && fields.passwordRepeat) {
-      setLoading(true);
-      await dispatch(fetchRegistration(fields));
-      setLoading(false);
+      try {
+        setLoading(true);
+        await dispatch(fetchRegistration(fields, token));
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setLoading(false);
+      }
+      
     }
     setError("Заполните все поля!");
   };
@@ -53,7 +51,11 @@ export const FormRegistration: React.FC = (): React.JSX.Element => {
   return (
     <FormProvider {...methods}>
       <View>
-      {error && <Text variant="bodyMedium" style={styles.error}>{error}</Text>}
+        {error && (
+          <Text variant="bodyMedium" style={styles.error}>
+            {error}
+          </Text>
+        )}
         <CustomInput name="email" label="Email" />
         <CustomInput name="password" label="Password" />
         <CustomInput name="passwordRepeat" label="Confirm password" />
@@ -64,11 +66,9 @@ export const FormRegistration: React.FC = (): React.JSX.Element => {
         >
           Зарегистрироваться
         </Button>
-        <TouchableRipple onPress={() => navigation.navigate("Login")}>
-          <Text variant="bodySmall" style={styles.link}>
-            Уже сеть аккаунт? Войдите в приложение
-          </Text>
-        </TouchableRipple>
+        <Link style={styles.link} to={{ screen: "Login" }}>
+          Уже сеть аккаунт? Войдите в приложение
+        </Link>
       </View>
     </FormProvider>
   );

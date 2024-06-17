@@ -1,9 +1,13 @@
 import { ActivityIndicator } from "react-native-paper";
 import { View } from "react-native";
 
-export const Loading = () => {
+interface ILoadingProps {
+  marginTop: number;
+}
+
+export const Loading: React.FC<ILoadingProps> = ({marginTop}) => {
   return (
-    <View style={{marginVertical: 25}}>
+    <View style={{marginVertical: marginTop}}>
       <ActivityIndicator animating={true} size="large" />
     </View>
   );

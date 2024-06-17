@@ -3,7 +3,11 @@ import { StyleSheet } from "react-native";
 import { DialogCreateTask } from "../../../components/Dialogs/CreateTask";
 import { useState } from "react";
 
-export const ShedulerFAB = () => {
+interface IShedulerFABProps {
+  categoryId?: number;
+}
+
+export const ShedulerFAB: React.FC<IShedulerFABProps> = ({categoryId}) => {
   const [visibleDialogCreateTask, setVisibleDialogCreateTask] =
     useState<boolean>(false);
 
@@ -17,6 +21,7 @@ export const ShedulerFAB = () => {
       <DialogCreateTask
         visible={visibleDialogCreateTask}
         setVisible={setVisibleDialogCreateTask}
+        categoryId={categoryId}
       />
     </>
   );

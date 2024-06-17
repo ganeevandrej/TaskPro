@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import { ActivityIndicator, IconButton, Searchbar } from "react-native-paper";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ScrollView } from "react-native-virtualized-view";
 import { ListTasks } from "./ListTasks";
 import { Sort } from "./Sort";
@@ -10,6 +10,9 @@ import { DialogFilters } from "../../components/Dialogs/Filters";
 import { useDebounce } from "../../hooks/debounce";
 import { fetchgetTaskManager } from "../../store/reducers/taskManager/ActionCreators";
 import { Loading } from "../../components/custom/Loading";
+import { CustomStatusBar } from "../../components/custom/StatusBar";
+import { useFocusEffect } from "@react-navigation/native";
+import { useDriwer } from "../../contexts/driwer-context";
 
 export interface Filters {
   category: number;
@@ -35,10 +38,17 @@ export const SchedulerScreen = (): React.JSX.Element => {
   const { isLoading } = useAppSelector((state) => state.taskManagerReducer);
   const { tasks } = useAppSelector((state) => state.taskManagerReducer);
   const [search, setSearch] = useState<string>("");
-  const debouncedSearchQuery = useDebounce(search, 1000);
+  const debouncedSearchQuery = useDebounce(search, 1200);
   const [sort, setSort] = useState<string>("ASC");
   const [filters, setFilters] = useState<Filters>(filtersInit);
   const [visible, setVisible] = useState<boolean>(false);
+  const { handlerSetActive } = useDriwer();
+
+  useFocusEffect(
+    useCallback(() => {
+      handlerSetActive("Планировщик");
+    }, [])
+  );
 
   const dispatch = useAppDispatch();
 
@@ -68,6 +78,7 @@ export const SchedulerScreen = (): React.JSX.Element => {
 
   return (
     <View style={{ flex: 1 }}>
+      <CustomStatusBar />
       <Searchbar
         style={{ marginVertical: 20, marginHorizontal: 20 }}
         placeholder="Поиск..."
@@ -89,7 +100,11 @@ export const SchedulerScreen = (): React.JSX.Element => {
       />
       <ScrollView>
         <Sort value={sort} setValue={setSort} />
-        {isLoading ? <Loading /> : <ListTasks tasks={tasks} />}
+        {isLoading ? (
+          <Loading marginTop={130} />
+        ) : (
+          <ListTasks marginTop={130} tasks={tasks} />
+        )}
       </ScrollView>
       <ShedulerFAB />
     </View>

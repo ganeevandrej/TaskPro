@@ -3,16 +3,18 @@ import { View, ScrollView, StyleSheet } from "react-native";
 import { FormUpdateTask } from "../Forms/UpdateTask";
 import { ITask } from "../../store/reducers/taskManager/TaskManagerSlice";
 
-export interface IVerificationProps {
+export interface IUpdateTaskProps {
   visible: boolean;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  task: ITask
+  task: ITask;
+  categoryId?: number;
 }
 
-export const DialogUpdateTask: React.FC<IVerificationProps> = ({
+export const DialogUpdateTask: React.FC<IUpdateTaskProps> = ({
   visible,
   setVisible,
-  task
+  task,
+  categoryId
 }): React.JSX.Element => {
   const hideDialog = async () => {
     setVisible(false);
@@ -25,7 +27,7 @@ export const DialogUpdateTask: React.FC<IVerificationProps> = ({
           <Dialog.Title>Редактирование задачи</Dialog.Title>
           <Dialog.Content>
             <ScrollView>
-            <FormUpdateTask hideDialog={hideDialog} task={task} />
+            <FormUpdateTask category={categoryId} hideDialog={hideDialog} task={task} />
             </ScrollView>
           </Dialog.Content>
         </Dialog>

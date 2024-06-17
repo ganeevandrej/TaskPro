@@ -7,6 +7,7 @@ class AuthController {
     try {
       const errors = validationResult(req);
       const { email, password, passwordRepeat } = req.body;
+      
       if (!errors.isEmpty() || password !== passwordRepeat) {
         return next(
           ApiError.BadRequest("Ошибка при валидации", errors.array())

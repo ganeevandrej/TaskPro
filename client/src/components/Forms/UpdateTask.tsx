@@ -26,7 +26,7 @@ const creatConfigFormUpdateTask = (
       priority: priority,
       category: category,
       time: task.deadline && new Date(task.deadline),
-      date: task.deadline  && new Date(task.deadline),
+      date: task.deadline && new Date(task.deadline),
     },
   };
 };
@@ -34,17 +34,19 @@ const creatConfigFormUpdateTask = (
 export interface FormUpdateUserInfoProps {
   hideDialog: () => void;
   task: ITask;
+  category?: number;
 }
 
 export const FormUpdateTask: React.FC<FormUpdateUserInfoProps> = ({
   hideDialog,
   task,
+  category,
 }): React.JSX.Element => {
   const { categories, priorities } = useAppSelector(
     (state) => state.taskManagerReducer
   );
   const priorityId = findItemIdByName(priorities, task.priority);
-  const categoryId = findItemIdByName(categories, task.category);
+  const categoryId = category || findItemIdByName(categories, task.category);
   const methods = useForm<InputsUpdateTask>(
     creatConfigFormUpdateTask(task, priorityId, categoryId)
   );
@@ -74,11 +76,15 @@ export const FormUpdateTask: React.FC<FormUpdateUserInfoProps> = ({
             label="Приоритет"
             name="priority"
           />
-          <CustomSelect
-            data={dataCategories}
-            label="Категории"
-            name="category"
-          />
+          {!category ? (
+            <CustomSelect
+              data={dataCategories}
+              label="Категории"
+              name="category"
+            />
+          ) : (
+            <></>
+          )}
         </View>
         <List.Subheader style={{ paddingHorizontal: 0 }}>
           Укажите сроки выполнения

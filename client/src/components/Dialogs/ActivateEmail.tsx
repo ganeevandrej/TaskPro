@@ -7,6 +7,7 @@ import {
   fetchActivate,
   fetchSendLetter,
 } from "../../store/reducers/auth/ActionCreators";
+import { CustomButton } from "../custom/Button";
 
 export interface IVerificationProps {
   visible: boolean;
@@ -47,12 +48,8 @@ export const DialogActivateEmail: React.FC<IVerificationProps> = ({
           <Verification value={code} setValue={setCode} />
         </Dialog.Content>
         <Dialog.Actions>
-          <Button mode="contained" onPress={sendLetterByEmail}>
-            Отправить письмо
-          </Button>
-          <Button mode="contained" onPress={activateCode}>
-            Подтвердить
-          </Button>
+          <CustomButton title="Отправить письмо" callback={sendLetterByEmail} />
+          <CustomButton title="Подтвердить" callback={activateCode} />
         </Dialog.Actions>
       </Dialog>
     </Portal>

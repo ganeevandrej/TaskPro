@@ -1,4 +1,4 @@
-import { InputsCreateTask } from "../models";
+import { InputsCreateTask, InputsUpdateTaskTechnique } from "../models";
 
 export const dateTransform = (date: Date, time: Date) => {
     const day = date.getDate();
@@ -19,6 +19,18 @@ export const createBody = ( fields: InputsCreateTask, userId?: number) => {
         category: category ? category : 1,
         priority: priority ? priority : 1,
         createTask: new Date(),
+        status: "Активная",
+      };
+}
+
+export const createBodyTechnique = ( fields: InputsUpdateTaskTechnique, technique: string, userId?: number) => {
+  const { date, time, name, priority } = fields;
+    return {
+        deadline: date && time ? dateTransform(date, time) : null,
+        userId: userId,
+        title: name,
+        technique,
+        priority: priority ? priority : 1,
         status: "Активная",
       };
 }

@@ -4,6 +4,7 @@ import { createUserDto } from "../dtos/user-dto.js";
 import mailService from "./mail-service.js";
 import tokenService from "./token-service.js";
 import { ApiError } from "../exceptions/api-error.js";
+import { expo } from "../server.js";
 
 export const generateConfirmationCode = () => {
   const min = 100000;
@@ -24,14 +25,12 @@ class AuthService {
     }
 
     const hashPassword = bcrypt.hashSync(password, 7);
-    const code = generateConfirmationCode();
 
     const userData = await db.query(
-      "INSERT INTO users(email, password, activation_code) VALUES($1, $2, $3) RETURNING *",
-      [email, hashPassword, code]
+      "INSERT INTO users(email, password) VALUES($1, $2) RETURNING *",
+      [email, hashPassword]
     );
 
-    mailService.sendActivationMailRegistration(email, code);
     const userDto = createUserDto(userData.rows[0]);
     const tokens = tokenService.generateTokens(userDto);
     await tokenService.saveToken(userDto.id, tokens.refreshToken);
@@ -75,6 +74,31 @@ class AuthService {
       "UPDATE users SET is_activated=$1 WHERE activation_code=$2",
       [true, code]
     );
+
+    const body = `Вы успешно подтвердили свою почту ${user.rows[0].email}!`;
+    const creatAt = new Date().toISOString();
+
+    await db.query(
+      `INSERT INTO notifications (user_id, message, status, created_at) VALUES ($1, $2, $3, $4)`,
+      [user.rows[0].id, body, false, creatAt]
+    );
+
+    const pushToken = await db.query(
+      "SELECT push_token FROM tokens WHERE user_id = $1",
+      [user.rows[0].id]
+    );
+
+    let messages = [];
+
+    messages.push({
+      to: pushToken.rows[0].push_token,
+      sound: "default",
+      title: "Email подтвержден",
+      body,
+      icon: "../client/assets/icon.png",
+    });
+
+    await expo.sendPushNotificationsAsync(messages);
   }
 
   async logout(refreshToken) {

@@ -15,6 +15,7 @@ import { InputsLogin } from "./models";
 import { RootStackParamList } from "../../Navigation/models";
 import { MD3Colors } from "react-native-paper/lib/typescript/types";
 import { useState } from "react";
+import { Link } from "@react-navigation/native";
 
 const configFormLogin: UseFormProps<InputsLogin> = {
   mode: "onBlur",
@@ -32,7 +33,6 @@ export const FormLogin: React.FC = (): React.JSX.Element => {
   const { colors } = useTheme();
   const styles = createStyles(colors);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  
 
   const { handleSubmit } = methods;
 
@@ -66,11 +66,9 @@ export const FormLogin: React.FC = (): React.JSX.Element => {
         >
           Войти
         </Button>
-        <TouchableRipple onPress={() => navigation.navigate("Registration")}>
-          <Text variant="bodySmall" style={styles.link}>
-            Новый пользователь? Зарегистрируйтесь здесь
-          </Text>
-        </TouchableRipple>
+        <Link style={styles.link} to={{ screen: "Registration" }}>
+          Новый пользователь? Зарегистрируйтесь здесь
+        </Link>
       </View>
     </FormProvider>
   );
@@ -90,8 +88,10 @@ export const createStyles = (colors: MD3Colors) =>
     link: {
       textDecorationLine: "underline",
       textAlign: "center",
-      marginVertical: 15,
+      marginTop: 15,
       color: colors.primary,
+      fontSize: 13,
+      fontWeight: "300",
     },
     button: {
       marginTop: 30,

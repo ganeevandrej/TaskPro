@@ -49,10 +49,10 @@ const createStyles = (colors: MD3Colors, themeDark: boolean) => StyleSheet.creat
     alignItems: "center",
     justifyContent: "center",
     marginTop: 20,
-    width: 154,
+    width: 152,
     borderRadius: 80,
-    borderWidth: 2,
-    borderColor: themeDark ? "#CCCCCC" :  "#333333",
+    borderWidth: 1,
+    borderColor: colors.primary,
     marginHorizontal: "auto",
   },
   icon: {
@@ -60,7 +60,7 @@ const createStyles = (colors: MD3Colors, themeDark: boolean) => StyleSheet.creat
     bottom: 0,
     right: 0,
     backgroundColor: "white",
-    borderWidth: 2,
-    borderColor: themeDark ? "#CCCCCC" :  "#333333",
+    borderWidth: 1,
+    borderColor: colors.primary,
   }
 });

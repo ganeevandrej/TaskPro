@@ -6,7 +6,7 @@ class TaskController {
       const userId = req.params.userId;
       const params = req.query;
       const tasks = await taskService.getTasks(userId, params, params.filters);
-      
+
       return res.json(tasks);
     } catch (error) {
       next(error);
@@ -61,7 +61,7 @@ class TaskController {
   async getPriorities(req, res, next) {
     try {
       const priorities = await taskService.getPriorities();
-
+      
       return res.json(priorities);
     } catch (error) {
       next(error);

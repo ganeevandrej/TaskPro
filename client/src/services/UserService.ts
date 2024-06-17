@@ -27,7 +27,8 @@ export default class UserService {
     }
 
     static async deleteAvatar(userId: number): Promise<void> {
-        return $api.delete(`/upload/avatar/${userId}`);
+        console.log(userId);
+        return $api.delete(`/upload/avatar/delete/${userId}`);
     }
 
     static async updateInfoUser(body: InputsUpdateUserInfo, userId: number): Promise<AxiosResponse<IUser>> {

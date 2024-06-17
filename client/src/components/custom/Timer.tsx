@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { View, StyleSheet, Animated, Dimensions } from "react-native";
 import { Button, IconButton, Text, useTheme } from "react-native-paper";
 import { useTimer } from "../../contexts/timer-context";
 import Svg, { Circle, G } from "react-native-svg";
 import { MD3Colors } from "react-native-paper/lib/typescript/types";
+import { sendNotification } from "../../store/reducers/notifications/ActionCreators";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 const screenWidth = Dimensions.get("window").width;
@@ -17,35 +19,14 @@ const formatTime = (totalSeconds: number) => {
 
 export const CustomTimer = () => {
   const { seconds, isRunning, startTimer, stopTimer, resetTimer } = useTimer();
-  const [progress, setProgress] = useState(1);
-  const progressRef = useRef(new Animated.Value(1)).current;
+  const { id } = useAppSelector((state) => state.authReducer.user);
   const { colors } = useTheme();
   const styles = createStyles(colors);
-
-  const timer = formatTime(seconds);
-
-  useEffect(useCallback(() => {
-    if (isRunning) {
-      Animated.timing(progressRef, {
-        toValue: progress,
-        duration: seconds * 1000,
-        useNativeDriver: true,
-      }).start(({ finished }) => {
-        if (finished) {
-          handleFinish();
-        }
-      });
-    } else {
-      progressRef.stopAnimation();
-    }
-  }, [progress, isRunning]), [isRunning]);
-
-  const circleRadius = 50;
-  const circleCircumference = 2 * Math.PI * circleRadius;
+  const dispatch = useAppDispatch();
+  const time = formatTime(seconds);
 
   const handleStart = () => {
     if (!isRunning) {
-      setProgress(0);
       startTimer();
     } else {
       stopTimer();
@@ -53,59 +34,32 @@ export const CustomTimer = () => {
   };
 
   const handleReset = () => {
-    stopTimer();
-    setProgress(1);
     resetTimer(); // Сброс до 2 минут
-    progressRef.setValue(1);
-  };
-
-  const handleFinish = () => {
-    handleReset();
   };
 
   return (
     <View style={styles.container}>
-      <View>
-        <Svg height="225" width="225" viewBox="0 0 126 126">
-          <G rotation="-90" origin="126, 126">
-            <Circle cx="195" cy="63" r={circleRadius} fill="transparent" />
-            <AnimatedCircle
-              stroke={colors.primary}
-              cx="195"
-              cy="63"
-              r={circleRadius}
-              strokeWidth="1"
-              fill="none"
-              strokeDasharray={circleCircumference}
-              strokeDashoffset={progressRef.interpolate({
-                inputRange: [0, 1],
-                outputRange: [circleCircumference, 0],
-              })}
-            />
-          </G>
-          <Text style={styles.timerText}>
-            {timer.minutes}m : {timer.seconds}s
-          </Text>
-        </Svg>
+      <View
+        style={{
+          width: 150,
+          height: 150,
+          borderRadius: 150,
+          borderWidth: 2,
+          borderColor: colors.primary,
+          marginRight: 15,
+          marginBottom: 10,
+        }}
+      >
+        <Text style={styles.timerText} variant="headlineMedium">
+          {time.minutes} : {time.seconds}
+        </Text>
       </View>
       <View style={styles.buttonContainer}>
-        <Button
-          // textColor={colors.error}
-          labelStyle={{ fontSize: 16 }}
-          onPress={handleStart}
-        >
-          {!isRunning ? "Старт" : "Стоп"}
+        <Button labelStyle={{ fontSize: 16 }} onPress={handleStart}>
+          {!isRunning ? "Cтарт" : "Cтоп"}
         </Button>
-        {/* <Button onPress={handleStop} disabled={!isRunning}>
-          Stop
-        </Button> */}
-        <Button
-          // style={{ marginLeft: 15 }}
-          // textColor={colors.error}
-          labelStyle={{ fontSize: 16 }}
-          onPress={handleReset}
-        >
-          Сбросить
+        <Button labelStyle={{ fontSize: 16 }} onPress={handleReset}>
+          Cбросить
         </Button>
       </View>
     </View>
@@ -119,9 +73,9 @@ const createStyles = (colors: MD3Colors) =>
       justifyContent: "center",
     },
     timerText: {
-      fontSize: 28,
-      top: 80,
-      left: 40,
+      top: 55,
+      left: 25,
+      fontWeight: "600",
       color: colors.primary,
     },
     buttonContainer: {

@@ -33,8 +33,8 @@ class FileService {
 
   async deleteAvatar(userId) {
     await db.query(
-      "DELETE FROM image_user WHERE user_id=$1",
-      [null, userId]
+      "DELETE FROM image_user WHERE user_id = $1",
+      [userId]
     );
   }
 }

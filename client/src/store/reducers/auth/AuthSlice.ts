@@ -15,6 +15,7 @@ interface UserState {
     error: string,
     avatar: string,
     analytics: IAnalytics[]
+    loading: boolean,
 }
 
 const initialState: UserState = {
@@ -22,6 +23,7 @@ const initialState: UserState = {
     isAuth: false,
     error: "",
     avatar: "",
+    loading: false,
     analytics: []
 }
 
@@ -33,11 +35,10 @@ export const userSlice = createSlice({
             state.error = '';
             state.user = action.payload;
             state.isAuth = true;
+            state.loading = false;
         },
         authFetchingError(state, action: PayloadAction<string>) {
             state.error = action.payload;
-        },
-        activateSuccess(state) {
         },
         logout(state) {
             state.user = {} as IUser;
@@ -47,13 +48,18 @@ export const userSlice = createSlice({
         activate(state) {
             state.user.isActivated = true;
             state.error = '';
+            state.loading = false;
         },
         setUserAvatar(state, action: PayloadAction<string>) {
             state.avatar = action.payload;
             state.error = '';
+            state.loading = false;
         },
         setAnalytics(state, action: PayloadAction<IAnalytics[]>) {
             state.analytics = action.payload;
+        },
+        loading(state, action: PayloadAction) {
+            state.loading = true;
         }
     }
 })

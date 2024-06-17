@@ -34,6 +34,17 @@ class NotificationController {
     }
   }
 
+  async sendNotification(req, res, next) {
+    try {
+      const data = req.body;
+      await NotificationService.sendNotification(data);
+
+      return res.send("Уведомление удалено!");
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async deleteNotification(req, res, next) {
     try {
       const taskId = req.params.taskId;

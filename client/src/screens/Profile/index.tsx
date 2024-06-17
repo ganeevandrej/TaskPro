@@ -1,39 +1,40 @@
-import { View, ScrollView, Alert, StyleSheet } from "react-native";
-import { Card, List, Switch, Text, TouchableRipple, useTheme } from "react-native-paper";
+import { View, ScrollView, StyleSheet } from "react-native";
+import {
+  Card,
+  List,
+  Switch,
+  Text,
+  TouchableRipple,
+  useTheme,
+} from "react-native-paper";
 import { useTheme as useThemeContext } from "../../contexts/theme-context";
 import { ImagePickerExample } from "../../components/FileUpload";
-import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { useState } from "react";
-import { fetchLogout } from "../../store/reducers/auth/ActionCreators";
+import { useAppSelector } from "../../hooks/redux";
+import { useCallback, useState } from "react";
 import { DialogActivateEmail } from "../../components/Dialogs/ActivateEmail";
 import { Analytics } from "./Analytics/Analytics";
+import { CustomStatusBar } from "../../components/custom/StatusBar";
+import { useDriwer } from "../../contexts/driwer-context";
+import { useFocusEffect } from "@react-navigation/native";
+import { DialogLogout } from "../../components/Dialogs/Logout";
 
 export const ProfileScreen: React.FC = (): React.JSX.Element => {
   const [visibleDialogActivate, setVisibleDialogActivate] =
     useState<boolean>(false);
-  const { user, analytics } = useAppSelector(
-    (state) => state.authReducer
-  );
-  const dispatch = useAppDispatch();
+  const { user, analytics } = useAppSelector((state) => state.authReducer);
   const { toggleTheme, isThemeDark } = useThemeContext();
   const { id, name, email, phone, dateBirth, isActivated } = user;
-  const {colors} = useTheme();
+  const { colors } = useTheme();
+  const { handlerSetActive } = useDriwer();
+  const [visible, setVisible] = useState<boolean>(false);
 
-  const logout = () => {
-    Alert.alert("Выход", "Вы действительно хотите выйти из аккаунта?", [
-      {
-        text: "Отмена",
-        onPress: () => {},
-        style: "cancel",
-      },
-      {
-        text: "Выйти",
-        onPress: () => {
-          dispatch(fetchLogout());
-        },
-      },
-    ]);
-  };
+  const openDialog = () => setVisible(true);
+
+  useFocusEffect(
+    useCallback(() => {
+      handlerSetActive("Профиль");
+    }, [])
+  );
 
   const OpenDialogActivate = () => {
     if (isActivated) return;
@@ -42,6 +43,7 @@ export const ProfileScreen: React.FC = (): React.JSX.Element => {
 
   return (
     <View style={{ flex: 1 }}>
+      <CustomStatusBar />
       <ScrollView style={{ flex: 1 }}>
         <ImagePickerExample />
         <Text
@@ -175,7 +177,7 @@ export const ProfileScreen: React.FC = (): React.JSX.Element => {
             }}
           >
             <Card.Content style={{ paddingHorizontal: 0, paddingVertical: 0 }}>
-              <TouchableRipple onPress={logout}>
+              <TouchableRipple onPress={openDialog}>
                 <List.Item
                   titleStyle={{ fontSize: 14, marginBottom: 5 }}
                   title="Выйти из аккуанта"
@@ -201,6 +203,10 @@ export const ProfileScreen: React.FC = (): React.JSX.Element => {
               />
             </Card.Content>
           </Card>
+          <DialogLogout
+            visible={visible}
+            setVisible={setVisible}
+          />
         </List.Section>
       </ScrollView>
     </View>

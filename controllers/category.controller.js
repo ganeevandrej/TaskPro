@@ -5,7 +5,6 @@ class CategoryController {
     try {
       const userId = req.query.userId;
       const categories = await categoryService.getCategories(userId);
-
       return res.json(categories);
     } catch (error) {
       next(error);

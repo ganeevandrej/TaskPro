@@ -1,13 +1,26 @@
 import { View, ScrollView, StyleSheet } from "react-native";
 import { Card, Text } from "react-native-paper";
 import { StackTechniquesParamList } from "../../Navigation/models";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
+import {
+  NavigationProp,
+  useFocusEffect,
+  useNavigation,
+} from "@react-navigation/native";
+import { CustomStatusBar } from "../../components/custom/StatusBar";
+import { useDriwer } from "../../contexts/driwer-context";
+import { useCallback } from "react";
 
 export const TechnipuesScreen: React.FC = (): React.JSX.Element => {
   const navigation = useNavigation<NavigationProp<StackTechniquesParamList>>();
+  const { handlerSetActive } = useDriwer();
+
+  useFocusEffect(useCallback(() => {
+    handlerSetActive("Техники");
+  }, []));
 
   return (
     <View>
+      <CustomStatusBar />
       <ScrollView contentContainerStyle={styles.container}>
         <Card
           style={styles.card}
@@ -17,7 +30,7 @@ export const TechnipuesScreen: React.FC = (): React.JSX.Element => {
             style={styles.cardCover}
             source={require("../../../assets/eatThatFrog.png")}
           />
-          <Card.Title title={"Eat That Frog!"} />
+          <Card.Title titleStyle={{fontWeight: "700"}} title={"Eat That Frog!"} />
           <Card.Content style={styles.cardContent}>
             <Text style={styles.cardText}>
               Это методика, предложенная Брайаном Трейси, которая призывает
@@ -35,7 +48,7 @@ export const TechnipuesScreen: React.FC = (): React.JSX.Element => {
             style={styles.cardCover}
             source={require("../../../assets/pomodoro.jpg")}
           />
-          <Card.Title title={"Pomodoro Technique"} />
+          <Card.Title titleStyle={{fontWeight: "700"}} title={"Pomodoro Technique"} />
           <Card.Content style={styles.cardContent}>
             <Text style={styles.cardText}>
               Это методика управления временем, разработанная Франческо Чирилло,
@@ -52,7 +65,7 @@ export const TechnipuesScreen: React.FC = (): React.JSX.Element => {
             style={styles.cardCover}
             source={require("../../../assets/1-2-3-4.jpg")}
           />
-          <Card.Title title={"1-3-5 Method"} />
+          <Card.Title titleStyle={{fontWeight: "700"}} title={"1-3-5 Method"} />
           <Card.Content style={styles.cardContent}>
             <Text style={styles.cardText}>
               В этой методике вы выбираете одну главную цель (1), две
@@ -86,5 +99,6 @@ const styles = StyleSheet.create({
   cardText: {
     width: "95%",
     textAlign: "justify",
+    marginTop: -10
   },
 });

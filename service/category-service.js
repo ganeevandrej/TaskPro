@@ -41,7 +41,7 @@ class CategoryService {
     );
 
     if (categoriesFromDb.rows.length === 0) {
-      throw ApiError.BadRequest("Не удалось получить категории!");
+      return [];
     }
 
     return categoriesFromDb.rows;

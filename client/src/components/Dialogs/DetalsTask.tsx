@@ -93,7 +93,7 @@ export const DialogDetalsTask: React.FC<IVerificationProps> = ({
                       variant="bodyMedium"
                       {...props}
                     >
-                      {task.priority}
+                      {task.priority ? task.priority : "-"}
                     </Text>
                   )}
                 />

@@ -3,21 +3,61 @@ import { RegistrationScreen } from "../screens/Registration";
 import { LoginScreen } from "../screens/Login";
 import { DriwerNavigationConatiner } from "./DrawerContainer";
 import { RootStackParamList } from "./models";
-import { useAppSelector } from "../hooks/redux";
+import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import { useCallback, useEffect, useRef, useState } from "react";
+import * as Notifications from "expo-notifications";
+import { registerForPushNotificationsAsync } from "./halpers";
+import { getNotifications } from "../store/reducers/notifications/ActionCreators";
+import { Platform } from "react-native";
+import {
+  ITask,
+  taskManagerSlice,
+} from "../store/reducers/taskManager/TaskManagerSlice";
+import { NotificationSlice } from "../store/reducers/notifications/NotificationSlice";
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const RootNavigationConatiner = () => {
-  const isAuth = useAppSelector(state => state.authReducer.isAuth);
+  const { isAuth, user } = useAppSelector((state) => state.authReducer);
+  const [token, setToken] = useState<string>("");
+  const [channels, setChannels] = useState<Notifications.NotificationChannel[]>(
+    []
+  );
+  const dispatch = useAppDispatch();
+
+  useEffect(
+    useCallback(() => {
+      registerForPushNotificationsAsync().then((token) => {
+        setToken(token);
+        dispatch(NotificationSlice.actions.registerToken(token));
+      });
+
+      if (Platform.OS === "android") {
+        Notifications.getNotificationChannelsAsync().then((value) =>
+          setChannels(value ?? [])
+        );
+      }
+    }, []),
+    []
+  );
 
   return (
     <Stack.Navigator>
       {isAuth ? (
         <Stack.Screen
           name="Home"
-          component={DriwerNavigationConatiner}
           options={{ headerShown: false }}
-        />
+        >
+          { props => <DriwerNavigationConatiner {...props} pushToken={token} />}
+        </Stack.Screen>
       ) : (
         <>
           <Stack.Screen

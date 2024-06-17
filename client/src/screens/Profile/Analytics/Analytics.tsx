@@ -20,7 +20,8 @@ export const Analytics: React.FC<IAnalyticsProps> = ({
   analytics,
 }): React.JSX.Element => {
   const [loading, setLoading] = useState<boolean>(false);
-  const tasks = useAppSelector((state) => state.taskManagerReducer.tasks);
+  const tasksFromManager = useAppSelector((state) => state.taskManagerReducer.tasks);
+  const { taskFlog, taskPomodoro, tasks } = useAppSelector(state => state.techniquesManagerReducer);
   const dispatch = useAppDispatch();
 
   useEffect(
@@ -33,7 +34,7 @@ export const Analytics: React.FC<IAnalyticsProps> = ({
 
       getTasks();
     }, []),
-    [tasks]
+    [tasksFromManager, taskFlog, taskPomodoro, tasks]
   );
 
   const analyticsContent =
@@ -42,7 +43,7 @@ export const Analytics: React.FC<IAnalyticsProps> = ({
     ) : (
       <ContentEmptyAnalytics />
     );
-  const loadingContent = loading ? <Loading /> : analyticsContent;
+  const loadingContent = loading ? <Loading marginTop={25} /> : analyticsContent;
 
   return (
     <List.Section>

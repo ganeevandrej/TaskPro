@@ -1,6 +1,6 @@
 import { View } from "react-native";
 import { FormProvider, UseFormProps, useForm } from "react-hook-form";
-import { List,  useTheme } from "react-native-paper";
+import { List, useTheme } from "react-native-paper";
 import { CustomInput } from "../../custom/TextInput";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import { InputsCreateTask } from "../models";
@@ -13,25 +13,30 @@ import { arrayTransformSelect } from "../Filters/halpers";
 import { createBody } from "./helpers";
 import { createStyles } from "./styles";
 
-const configFormCreateTask: UseFormProps<InputsCreateTask> = {
+const createConfigFormCreateTask = (
+  category: number
+): UseFormProps<InputsCreateTask> => ({
   mode: "onBlur",
   defaultValues: {
     name: "",
     priority: 0,
-    category: 0,
+    category: category,
     time: null,
     date: null,
   },
-};
+});
 
 export interface FormUpdateUserInfoProps {
   hideDialog: () => void;
+  category?: number;
 }
 
 export const FormCreateTask: React.FC<FormUpdateUserInfoProps> = ({
   hideDialog,
+  category,
 }): React.JSX.Element => {
-  const methods = useForm<InputsCreateTask>(configFormCreateTask);
+  const categoryId = category || 0;
+  const methods = useForm<InputsCreateTask>(createConfigFormCreateTask(categoryId));
   const dispatch = useAppDispatch();
   const { colors } = useTheme();
   const styles = createStyles(colors);
@@ -61,11 +66,15 @@ export const FormCreateTask: React.FC<FormUpdateUserInfoProps> = ({
             label="Приоритет"
             name="priority"
           />
-          <CustomSelect
-            data={dataCategories}
-            label="Категории"
-            name="category"
-          />
+          {!category ? (
+            <CustomSelect
+              data={dataCategories}
+              label="Категории"
+              name="category"
+            />
+          ) : (
+            <></>
+          )}
         </View>
         <List.Subheader style={{ paddingHorizontal: 0 }}>
           Укажите сроки выполнения

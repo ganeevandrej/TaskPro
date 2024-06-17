@@ -1,6 +1,5 @@
-import { FlatList } from "react-native";
-import { List } from "react-native-paper";
-import { useAppSelector } from "../../../hooks/redux";
+import { FlatList, View } from "react-native";
+import { List, Text } from "react-native-paper";
 import { useState } from "react";
 import { DialogDetalsTask } from "../../../components/Dialogs/DetalsTask";
 import { DialogUpdateTask } from "../../../components/Dialogs/UpdateTask";
@@ -17,10 +16,16 @@ export const initialTask: ITask = {
 };
 
 interface IListTasks {
-  tasks: ITask[]
+  tasks: ITask[];
+  marginTop: number;
+  categoryId?: number
 }
 
-export const ListTasks: React.FC<IListTasks> = ({tasks}): React.JSX.Element => {
+export const ListTasks: React.FC<IListTasks> = ({
+  tasks,
+  marginTop,
+  categoryId
+}): React.JSX.Element => {
   const [task, setTask] = useState(initialTask);
   const [visibleDialogDetalsTask, setVisibleDialogDetalsTask] =
     useState<boolean>(false);
@@ -47,13 +52,26 @@ export const ListTasks: React.FC<IListTasks> = ({tasks}): React.JSX.Element => {
 
   return (
     <>
-      <List.Section>
-        <List.Subheader>Задачи</List.Subheader>
-        <FlatList
-          data={tasks}
-          renderItem={renderItem}
-          keyExtractor={(item) => String(item.id)}
-        />
+      <List.Section style={{ marginTop: 0 }}>
+        <List.Subheader style={{ marginTop: -10 }}>Задачи</List.Subheader>
+        {tasks.length === 0 ? (
+          <View
+            style={{
+              flexDirection: "row",
+              marginTop: marginTop,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text variant="titleSmall">Список пуст. Добавьте задачи!</Text>
+          </View>
+        ) : (
+          <FlatList
+            data={tasks}
+            renderItem={renderItem}
+            keyExtractor={(item) => String(item.id)}
+          />
+        )}
       </List.Section>
       <DialogDetalsTask
         visible={visibleDialogDetalsTask}
@@ -64,6 +82,7 @@ export const ListTasks: React.FC<IListTasks> = ({tasks}): React.JSX.Element => {
         visible={visibleDialogUpdateTask}
         setVisible={setVisibleDialogUpdateTask}
         task={task}
+        categoryId={categoryId}
       />
     </>
   );

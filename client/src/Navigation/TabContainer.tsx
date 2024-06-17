@@ -45,7 +45,6 @@ export const TabNavigationConatiner = () => {
           name="Техники"
           component={StackTechniquesConatiner}
           options={{
-            unmountOnBlur: true,
             tabBarIcon: ({ color, size }) => (
               <Icon source="lightbulb-on-outline" size={size} color={color} />
             ),

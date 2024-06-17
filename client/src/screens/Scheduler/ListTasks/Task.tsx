@@ -8,16 +8,18 @@ export interface renderItemProps {
   onPressIcon: (item: ITask) => void;
 }
 
+export const renderIconStatus = (status: string): string => {
+  if (status === "Завершена") return "check";
+  if (status === "Активная") return "progress-question";
+  return "alert-remove";
+};
+
 export const Task: React.FC<renderItemProps> = ({
   item,
   onPressCard,
   onPressIcon,
 }): React.JSX.Element => {
-  const renderIconStatus = (status: string): string => {
-    if (status === "Завершена") return "check";
-    if (status === "Активная") return "progress-question";
-    return "alert-remove";
-  };
+  
 
   return (
     <Card style={styles.card} onPress={() => onPressCard(item)}>

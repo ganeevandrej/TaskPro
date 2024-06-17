@@ -7,16 +7,27 @@ import { API_URL } from "../../../http";
 import { AuthResponse } from "../../../models/response/AuthResponse";
 import UserService from "../../../services/UserService";
 import { Inputs, InputsLogin, InputsUpdateUserInfo } from "../../../components/Forms/models";
+import { registerForPushNotificationsAsync } from "../../../Navigation/halpers";
+import { registerTokenToServer, sendNotification } from "../notifications/ActionCreators";
 
 export interface IResponsDataError {
     message: string
 }
 
-export const fetchRegistration = (requestBody: Inputs) => async (dispatch: AppDispatch) => {
+export const fetchRegistration = (requestBody: Inputs, token: string) => async (dispatch: AppDispatch) => {
     try {
         const res = await AuthService.registration(requestBody);
         await AsyncStorage.setItem('accessToken', res.data.accessToken);
         dispatch(userSlice.actions.authFetchingSuccess(res.data.user));
+        await dispatch(registerTokenToServer(res.data.user.id, token));
+        await dispatch(sendNotification({
+            title: "Регистрация",
+            body: "Вы успешно зарегестрировались в системе!",
+            sound: "new_message_tone.wav",
+            data: {
+              userId: res.data.user.id,
+            }
+        }));
     } catch (error) {
         if ((error as AxiosError).response) {
             const axiosError = error as AxiosError<IResponsDataError>;
@@ -51,6 +62,7 @@ export const fetchLogout = () => async (dispatch: AppDispatch) => {
 
 export const fetchActivate = (code: string) => async (dispatch: AppDispatch) => {
     try {
+        dispatch(userSlice.actions.loading());
         await AuthService.activate(code);
         dispatch(userSlice.actions.activate());
     } catch (error) {
@@ -61,7 +73,7 @@ export const fetchActivate = (code: string) => async (dispatch: AppDispatch) => 
 export const fetchSendLetter = (userId: number) => async (dispatch: AppDispatch) => {
     try {
         await AuthService.sendLetter(userId);
-        dispatch(userSlice.actions.activateSuccess());
+        // dispatch(userSlice.actions.activateSuccess());
     } catch (error) {
         console.log(error);
     }
@@ -83,8 +95,8 @@ export interface ISendAvatarToBackendProprs {
 }
 
 export const sendAvatarToBackend = (data: ISendAvatarToBackendProprs) => async (dispatch: AppDispatch) => {
-    console.log(data);
     try {
+        dispatch(userSlice.actions.loading());
         const res = await UserService.uploadAvatar(data);
         dispatch(userSlice.actions.setUserAvatar(res.body));
     } catch (error) {
@@ -94,6 +106,7 @@ export const sendAvatarToBackend = (data: ISendAvatarToBackendProprs) => async (
 
 export const deleteAvatarFromDb = (userId: number) => async (dispatch: AppDispatch) => {
     try {
+        dispatch(userSlice.actions.loading());
         await UserService.deleteAvatar(userId);
         dispatch(userSlice.actions.setUserAvatar(''));
     } catch (error) {
@@ -112,6 +125,7 @@ export const getAvatar = (userId: number) => async (dispatch: AppDispatch) => {
 
 export const updateInfo = (body: InputsUpdateUserInfo, userId: number) => async (dispatch: AppDispatch) => {
     try {
+        dispatch(userSlice.actions.loading());
         const res = await UserService.updateInfoUser(body, userId);
         dispatch(userSlice.actions.authFetchingSuccess(res.data));
     } catch (error) {

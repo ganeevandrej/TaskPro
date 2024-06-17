@@ -2,150 +2,81 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { CustomDrawerContent } from "../components/custom/DriwerContent";
 import { TabNavigationConatiner } from "./TabContainer";
 import { DrawerParamList } from "./models";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { getAvatar } from "../store/reducers/auth/ActionCreators";
 import { TimerProvider } from "../contexts/timer-context";
 import * as Notifications from "expo-notifications";
-import Constants from "expo-constants";
-import * as Device from "expo-device";
-import { Platform } from "react-native";
+import { DriwerProvider } from "../contexts/driwer-context";
 import { getNotifications, registerTokenToServer } from "../store/reducers/notifications/ActionCreators";
-import {
-  ITask,
-  taskManagerSlice,
-} from "../store/reducers/taskManager/TaskManagerSlice";
+import { ITask, taskManagerSlice } from "../store/reducers/taskManager/TaskManagerSlice";
+import { ITaskTechnique, TechniquesSlice } from "../store/reducers/techniques/TechniquesSlice";
 
 const Drawer = createDrawerNavigator<DrawerParamList>();
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-  }),
-});
-
-export const DriwerNavigationConatiner = () => {
+export const DriwerNavigationConatiner: React.FC<{pushToken: string}> = ({pushToken}) => {
   const user = useAppSelector((state) => state.authReducer.user);
   const dispatch = useAppDispatch();
-  const [channels, setChannels] = useState<Notifications.NotificationChannel[]>(
-    []
-  );
   const notificationListener = useRef<Notifications.Subscription>();
   const responseListener = useRef<Notifications.Subscription>();
 
   useEffect(() => {
     dispatch(getAvatar(user.id));
-
-    registerForPushNotificationsAsync().then((token) => {
-      sendPushTokenToServer(user.id, token);
-    });
-
-    if (Platform.OS === "android") {
-      Notifications.getNotificationChannelsAsync().then((value) =>
-        setChannels(value ?? [])
-      );
+    if(pushToken) {
+      dispatch(registerTokenToServer(user.id, pushToken));
     }
+    
 
     notificationListener.current =
-      Notifications.addNotificationReceivedListener((notification) => {
-        dispatch(
-          taskManagerSlice.actions.updateTaskStatus(
-            notification.request.content.data as ITask
-          )
-        );
-        dispatch(getNotifications(user.id));
-      });
+        Notifications.addNotificationReceivedListener((notification) => {
+          if (notification.request.content.data.name) {
+            dispatch(
+              taskManagerSlice.actions.updateTaskStatus(
+                notification.request.content.data as ITask
+              ));
+          } else {
+            dispatch(
+              TechniquesSlice.actions.updateTask(
+                notification.request.content.data as ITaskTechnique
+              ));
+          }
+          dispatch(getNotifications(user.id));
+        });
 
-    responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response);
-      });
+      responseListener.current =
+        Notifications.addNotificationResponseReceivedListener((response) => {
+          console.log(response);
+        });
 
-    return () => {
-      notificationListener.current &&
-        Notifications.removeNotificationSubscription(
-          notificationListener.current
-        );
-      responseListener.current &&
-        Notifications.removeNotificationSubscription(responseListener.current);
-    };
-  }, []);
-
-  async function sendPushNotification(expoPushToken: string) {
-    const message = {
-      to: expoPushToken,
-      sound: "default",
-      title: "Original Title",
-      body: "And here is the body!",
-      data: { created_at: new Date(), status: "Непрочитано", userId: user.id },
-    };
-  }
-
-  async function sendPushTokenToServer(userId: number, token: string) {
-    dispatch(registerTokenToServer(userId, token));
-  }
-
-  async function registerForPushNotificationsAsync(): Promise<string> {
-    let token;
-
-    if (Platform.OS === "android") {
-      await Notifications.setNotificationChannelAsync("default", {
-        name: "default",
-        importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [0, 250, 250, 250],
-        lightColor: "#FF231F7C",
-      });
-    }
-
-    if (Device.isDevice) {
-      const { status: existingStatus } =
-        await Notifications.getPermissionsAsync();
-      let finalStatus = existingStatus;
-      if (existingStatus !== "granted") {
-        const { status } = await Notifications.requestPermissionsAsync();
-        finalStatus = status;
-      }
-      if (finalStatus !== "granted") {
-        alert("Failed to get push token for push notification!");
-        return "";
-      }
-
-      try {
-        const projectId =
-          Constants?.expoConfig?.extra?.eas?.projectId ??
-          Constants?.easConfig?.projectId;
-        if (!projectId) {
-          throw new Error("Project ID not found");
-        }
-        token = (
-          await Notifications.getExpoPushTokenAsync({
-            projectId,
-          })
-        ).data;
-      } catch (e) {
-        token = `${e}`;
-      }
-    } else {
-      alert("Must use physical device for Push Notifications");
-    }
-
-    return token ? token : "";
-  }
+      return () => {
+        notificationListener.current &&
+          Notifications.removeNotificationSubscription(
+            notificationListener.current
+          );
+        responseListener.current &&
+          Notifications.removeNotificationSubscription(
+            responseListener.current
+          );
+      };
+  }, [pushToken]);
 
   return (
     <TimerProvider>
-      <Drawer.Navigator
-        initialRouteName="Scheduler"
-        screenOptions={{ headerShown: false }}
-        drawerContent={(props) => <CustomDrawerContent {...props} />}
-      >
-        <Drawer.Screen name="Scheduler" component={TabNavigationConatiner} />
-        <Drawer.Screen name="Techniques" component={TabNavigationConatiner} />
-        <Drawer.Screen name="Notification" component={TabNavigationConatiner} />
-        <Drawer.Screen name="Profile" component={TabNavigationConatiner} />
-      </Drawer.Navigator>
+      <DriwerProvider>
+        <Drawer.Navigator
+          initialRouteName="Scheduler"
+          screenOptions={{ headerShown: false }}
+          drawerContent={(props) => <CustomDrawerContent {...props} />}
+        >
+          <Drawer.Screen name="Scheduler" component={TabNavigationConatiner} />
+          <Drawer.Screen name="Techniques" component={TabNavigationConatiner} />
+          <Drawer.Screen
+            name="Notification"
+            component={TabNavigationConatiner}
+          />
+          <Drawer.Screen name="Profile" component={TabNavigationConatiner} />
+        </Drawer.Navigator>
+      </DriwerProvider>
     </TimerProvider>
   );
 };
