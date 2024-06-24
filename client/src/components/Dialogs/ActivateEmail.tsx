@@ -41,9 +41,9 @@ export const DialogActivateEmail: React.FC<IVerificationProps> = ({
       <Dialog visible={visible} onDismiss={hideDialog}>
         <Dialog.Title>Подтвердите почту</Dialog.Title>
         <Dialog.Content>
-          <Text variant="bodyMedium">
-            При регистрации аккаунта на вашу почту был отправлен 6-ти значный
-            код.
+          <Text style={{textAlign: "justify"}} variant="bodyMedium">
+            Для подтверждения аккуанта нажмите "Отправить письмо". Вам придет
+            6-ти значный код подтверждения на электронную почу.
           </Text>
           <Verification value={code} setValue={setCode} />
         </Dialog.Content>

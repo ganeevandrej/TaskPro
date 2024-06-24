@@ -6,7 +6,6 @@ import { expo } from "../server.js";
 import {sendPushNotificationCompleted} from "./task-service.js";
 
 let cronJobs = {};
-let messages = [];
 
 const scheduleTaskNotification = (task, userId) => {
   const date = new Date(task.deadline);
@@ -38,7 +37,7 @@ export const sendPushNotification = async (task, userId) => {
 
   await db.query(
     `INSERT INTO notifications (user_id, message, status, created_at) VALUES ($1, $2, $3, $4)`,
-    [userId, `Задача "${task.name}" просрочена!`, false, creatAt]
+    [userId, `Задача "${task.title}" просрочена!`, false, creatAt]
   );
 
   const messages = [];
@@ -155,10 +154,12 @@ class TechniquesService {
       delete cronJobs[taskId];
     }
 
-    console.log(taskId);
-
     const task = res.rows[0];
     sendPushNotificationCompleted(task, task.user_id);
+    
+    const prioritiesFromDb = await TaskService.getPriorities();
+
+    return createTaskDtoTechnique(task, prioritiesFromDb);
   }
 }
 

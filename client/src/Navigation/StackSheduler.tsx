@@ -46,12 +46,12 @@ export const StackShedulerConatiner = () => {
                 callback={() => navigation.openDrawer()}
               />
             ),
-            headerRight: () => (
-              <RenderIcon
-                nameIcon="folder-plus-outline"
-                callback={() => setVisibleDialogCreateCategory(true)}
-              />
-            ),
+            // headerRight: () => (
+            //   <RenderIcon
+            //     nameIcon="folder-plus-outline"
+            //     callback={() => setVisibleDialogCreateCategory(true)}
+            //   />
+            // ),
           })}
         />
       </Stack.Navigator>

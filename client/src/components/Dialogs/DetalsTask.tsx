@@ -137,7 +137,7 @@ export const DialogDetalsTask: React.FC<IVerificationProps> = ({
                   )}
                   right={(props) => (
                     <Text variant="bodyMedium" {...props}>
-                      {task.deadline ? dateToString(task.deadline) : ""}
+                      {task.deadline ? dateToString(task.deadline) : "-"}
                     </Text>
                   )}
                 />
@@ -157,7 +157,7 @@ export const DialogDetalsTask: React.FC<IVerificationProps> = ({
                   )}
                   right={(props) => (
                     <Text variant="bodyMedium" {...props}>
-                      {task.deadline ? timeToString(task.deadline) : ""}
+                      {task.deadline ? timeToString(task.deadline) : "-"}
                     </Text>
                   )}
                 />

@@ -3,8 +3,6 @@ import { $api } from "../http";
 import { ITaskTechnique } from "../store/reducers/techniques/TechniquesSlice";
 import { IBodyCreateTask, IBodyGetTask, IBodyUpdateTask } from "../store/reducers/techniques/ActionCreators";
 
-// TaskTechnique
-
 export default class TechniquesService {
     static async createTask(body: IBodyCreateTask): Promise<AxiosResponse<ITaskTechnique>> {
         return $api.post<ITaskTechnique>(`techniques/tasks/create`, body);

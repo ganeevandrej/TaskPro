@@ -46,7 +46,7 @@ export const sendPushNotification = async (task, userId) => {
   messages.push({
     to: pushToken.rows[0].push_token,
     sound: "default",
-    title: "Задча Просрочилась",
+    title: "Задача Просрочилась",
     body: `Задача "${task.name}" просрочилась!`,
     data: taskOverdue.rows[0],
     icon: "../client/assets/icon.png",
@@ -77,7 +77,7 @@ export const sendPushNotificationCompleted = async (task, userId) => {
   messages.push({
     to: pushToken.rows[0].push_token,
     sound: "default",
-    title: "Задча Завершена",
+    title: "Задача Завершена",
     body: `Задача "${task.title || task.name}" завершена!`,
     data: task,
     icon: "../client/assets/icon.png",
@@ -112,6 +112,8 @@ class TaskService {
     if (!task.id) {
       throw ApiError.BadRequest("Не удалось создать задачу!");
     }
+
+    console.log("hi");
 
     task.deadline && scheduleTaskNotification(task, userId);
     const categoriesFromDb = await categoryService.getCategories(userId);
@@ -176,7 +178,6 @@ class TaskService {
 
 
     if(tasksFromDb.rows[0] === 0) {
-      console.log(tasksFromDb.rows[0]);
       return [];
     }
 

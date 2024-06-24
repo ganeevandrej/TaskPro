@@ -18,7 +18,7 @@ export const CategoryScreen: FC = (): JSX.Element => {
   );
   const { isLoading } = useAppSelector((state) => state.taskManagerReducer);
   const params = route.params;
-  const [progress, setProgress] = useState<number>(0.4);
+  const [progress, setProgress] = useState<number>(0.2);
 
   const onPageScroll = (e: any) => {
     switch (e.nativeEvent.position) {

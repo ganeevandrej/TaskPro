@@ -61,7 +61,7 @@ export const updateTaskTechniques = (body: IBodyCreateTask, taskId: number) => a
 export const completeTaskTechniques = (taskId: number) => async (dispatch: AppDispatch) => {
     try {
         const res = await TechniquesService.completeTask(taskId);
-        dispatch(TechniquesSlice.actions.updateTask(res.data));
+        dispatch(TechniquesSlice.actions.completeTask(res.data));
     } catch (error) {
         console.log(error);
     }

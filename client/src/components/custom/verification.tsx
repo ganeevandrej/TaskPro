@@ -22,7 +22,7 @@ export const Verification: React.FC<IVerificationProps> = ({value, setValue}): R
 
   return (
     <View style={styles.container}>
-      <Text>Введите код для активации email</Text>
+      <Text>Введите код для активации аккуанта</Text>
       <CodeField
         ref={ref}
         {...props}

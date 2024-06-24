@@ -57,8 +57,8 @@ export const FormRegistration: React.FC = (): React.JSX.Element => {
           </Text>
         )}
         <CustomInput name="email" label="Email" />
-        <CustomInput name="password" label="Password" />
-        <CustomInput name="passwordRepeat" label="Confirm password" />
+        <CustomInput name="password" label="Пароль" />
+        <CustomInput name="passwordRepeat" label="Повторите пароль" />
         <Button
           style={styles.button}
           mode="outlined"

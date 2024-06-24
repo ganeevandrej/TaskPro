@@ -38,9 +38,9 @@ class TechniquesController {
     try {
       const taskId = req.params.taskId;
       const body = req.body;
-      await technicuesService.updateTask(taskId, body);
+      const task = await technicuesService.updateTask(taskId, body);
 
-      return res.send("Аватар пользователя успешно удален!");
+      return res.json(task);
     } catch (error) {
       next(error)
     }
@@ -60,10 +60,9 @@ class TechniquesController {
   async completedTask(req, res, next) {
     try {
       const taskId = req.params.taskId;
-      console.log(taskId);
-      await technicuesService.completeTask(taskId);
+      const task = await technicuesService.completeTask(taskId);
 
-      return res.send("Аватар пользователя успешно удален!");
+      return res.json(task);
     } catch (error) {
       next(error)
     }

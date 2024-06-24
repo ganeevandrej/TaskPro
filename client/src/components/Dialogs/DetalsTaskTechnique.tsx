@@ -75,7 +75,7 @@ export const DialogDetalsTaskTechnique: React.FC<IVerificationProps> = ({
               >
                 <List.Item
                   titleStyle={{ fontSize: 14 }}
-                  title="Категория"
+                  title="Техника"
                   left={(props) => (
                     <List.Icon {...props} icon="folder-google-drive" />
                   )}
@@ -148,7 +148,7 @@ export const DialogDetalsTaskTechnique: React.FC<IVerificationProps> = ({
                   )}
                   right={(props) => (
                     <Text variant="bodyMedium" {...props}>
-                      {task.deadline ? dateToString(task.deadline) : ""}
+                      {task.deadline ? dateToString(task.deadline) : "-"}
                     </Text>
                   )}
                 />
@@ -168,7 +168,7 @@ export const DialogDetalsTaskTechnique: React.FC<IVerificationProps> = ({
                   )}
                   right={(props) => (
                     <Text variant="bodyMedium" {...props}>
-                      {task.deadline ? timeToString(task.deadline) : ""}
+                      {task.deadline ? timeToString(task.deadline) : "-"}
                     </Text>
                   )}
                 />

@@ -49,14 +49,28 @@ export const TechniquesSlice = createSlice({
             if(action.payload.technique === "Method") {
                 state.tasks = state.tasks.map(task => {
                     if(task.id === action.payload.id) {
-                        return {
-                            ...action.payload
-                        }
+                        return action.payload;
                     }
                     return task;
                 });
             }
-            state.loading = false;
+        },
+        completeTask(state, action: PayloadAction<ITaskTechnique>) {
+            if(action.payload.technique === "Eat That Flog") {
+                state.taskFlog = action.payload;
+            }
+            if(action.payload.technique === "Pomodoro") {
+                state.taskPomodoro = action.payload;
+            }
+            if(action.payload.technique === "Method") {
+                state.tasks = state.tasks.map(task => {
+                    if(task.id === action.payload.id) {
+                        return action.payload;
+                    } else {
+                        return task;
+                    }
+                });
+            }
         },
         getTask(state, action: PayloadAction<ITaskTechnique>) {
             if(action.payload.technique === "Eat That Flog") {

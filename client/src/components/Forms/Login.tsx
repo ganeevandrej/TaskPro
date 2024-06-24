@@ -58,7 +58,7 @@ export const FormLogin: React.FC = (): React.JSX.Element => {
       )}
       <View>
         <CustomInput name="email" label="Email" />
-        <CustomInput name="password" label="Password" />
+        <CustomInput name="password" label="Пароль" />
         <Button
           style={styles.button}
           mode="outlined"

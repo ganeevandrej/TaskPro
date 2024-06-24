@@ -107,14 +107,6 @@ export const MethodScreen: FC = (): JSX.Element => {
     (task) => task.priority === "Низкий"
   );
 
-  const renderItem = ({ item }: { item: ITaskTechnique }) => (
-    <Task
-      task={item}
-      openDialogDetails={openDialogDetails}
-      openDialogUpdate={openDialogUpdate}
-    />
-  );
-
   const textMedium = mediumTasks.length ? `(${mediumTasks.length} из 3)` : "";
   const textSmall = smallTasks.length ? `(${smallTasks.length} из 5)` : "";
 
@@ -394,7 +386,7 @@ export const MethodScreen: FC = (): JSX.Element => {
           <View>
             {smallTasks?.length ? (
               <>
-                {mediumTasks.map((item) => (
+                {smallTasks.map((item) => (
                   <Task
                     key={item.id}
                     task={item}

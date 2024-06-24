@@ -2,10 +2,12 @@ import { useController, useFormContext } from "react-hook-form";
 import { TextInput, Text, List, useTheme } from "react-native-paper";
 import { View, StyleSheet } from "react-native";
 import { createStyles } from "./TextInput";
+import { IUser } from "../../models/IUser";
 
 export interface CustomInputProps {
   name: string;
   label: string;
+  user?: IUser;
   rules?: {
     required: string;
   };
@@ -15,6 +17,7 @@ export const MyPhoneInput: React.FC<CustomInputProps> = ({
   name,
   label,
   rules,
+  user
 }): React.JSX.Element => {
   const { control } = useFormContext();
   const { colors } = useTheme();
@@ -35,7 +38,7 @@ export const MyPhoneInput: React.FC<CustomInputProps> = ({
         mode="outlined"
         outlineStyle={{ borderWidth: 0, borderRadius: 10 }}
         onBlur={field.onBlur}
-        maxLength={11}
+        maxLength={user?.phone?.length || 11}
         onChangeText={field.onChange}
         value={field.value}
         keyboardType="phone-pad"
