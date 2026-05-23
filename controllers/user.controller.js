@@ -1,6 +1,40 @@
-import db from "../db/index.js";
+import userService from "../service/user-service.js";
 
-export const getUsers = async (req, res) => {
-  const users = await db.query("SELECT * FROM users");
-  res.json(users.rows);
-};
+class UserController {
+  async getAvatar(req, res, next) {
+    try {
+      const userId = req.params.userId;
+      const imageUrl = await userService.getAvatar(userId);
+
+      return res.send(imageUrl);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async updateUserInfo(req, res, next) {
+    try {
+      const userId = req.params.userId;
+      const data = req.body;
+
+      const user = await userService.updateUserInfo(data, userId);
+
+      return res.json(user);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getAnalytics(req, res, next) {
+    try {
+      const userId = req.params.userId;
+      const analytics = await userService.getAnalytics(userId);
+
+      return res.json(analytics);
+    } catch (error) {
+      next(error);
+    }
+  }
+}
+
+export default new UserController();

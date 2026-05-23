@@ -1,8 +1,11 @@
 import Router from "express";
-import {getUsers} from "../controllers/user.controller.js";
+import userController from "../controllers/user.controller.js";
+import { authMiddleware } from "../middlewares/auth-middleware.js";
 
 const router = new Router();
 
-router.get("/user", getUsers);
+router.get("/avatar/:userId", authMiddleware, userController.getAvatar);
+router.get("/:userId/analytics", authMiddleware, userController.getAnalytics);
+router.put("/:userId/update", authMiddleware, userController.updateUserInfo);
 
 export default router;
